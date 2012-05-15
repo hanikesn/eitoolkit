@@ -5,6 +5,7 @@
 #include "EIPacket.h"
 
 #include <vector>
+#include <cstdint>
 
 namespace EI
 {

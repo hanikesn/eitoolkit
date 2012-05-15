@@ -2,6 +2,6 @@
 #define EISender_H__
 
 #include "EISender.h"
-#include "EIReciever.h"
+#include "EIReceiver.h"
 
 #endif
