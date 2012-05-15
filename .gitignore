@@ -1,0 +1,36 @@
+# Backup files
+*~
+
+# Compiled Documents
+*.pdf
+*.ps
+
+# Object files
+*.o
+
+# Libraries
+*.lib
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+
+# Executables
+*.exe
+*.out
+
+#tex
+*.aux
+*.log
+*.synctex.gz
+
+#CMake
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+CMakeLists.txt.user
+
+# Vlt. unnötig
+Makefile
+
+*.pro.user
