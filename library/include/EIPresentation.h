@@ -12,6 +12,8 @@ namespace EI
 
 class Presentation
 {
+public:
+    virtual ~Presentation();
     virtual std::vector<Byte> encode(Packet) = 0;
     virtual Packet decode(std::vector<Byte>) = 0;
 };
