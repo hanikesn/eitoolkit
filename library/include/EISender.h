@@ -6,6 +6,7 @@
 #include "EIPacket.h"
 
 #include <map>
+#include <memory>
 #include <string>
 
 namespace EI {
@@ -24,6 +25,9 @@ private:
     // Disable copying
     Sender(const Sender &);
     Sender &operator=(const Sender &);
+private:
+    class SenderImpl;
+    std::unique_ptr<SenderImpl> pimpl;
 };
 
 }
