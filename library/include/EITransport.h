@@ -23,6 +23,14 @@ public:
     virtual void removeBytePacketObserver(BytePacketObserver*) = 0;
 };
 
+class BytePacketObserver
+{
+public:
+    virtual ~BytePacketObserver();
+    virtual void onBytePacket(Transport::Type, std::vector<Byte>);
+
+};
+
 }
 
 #endif

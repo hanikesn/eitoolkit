@@ -3,7 +3,7 @@
 
 namespace EI
 {
-    typedef unsigned char Byte;
+    typedef char Byte;
 }
 
 #endif

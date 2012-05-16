@@ -10,8 +10,19 @@
 
 namespace EI {
 
-class DataObserver;
-class ControlObserver;
+class DataObserver
+{
+public:
+    virtual ~DataObserver();
+    virtual void onPacket(Packet) = 0;
+};
+
+class ControlObserver
+{
+public:
+    virtual ~ControlObserver();
+    virtual void onPacket(Packet) = 0;
+};
 
 class Receiver
 {
