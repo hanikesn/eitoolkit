@@ -26,9 +26,8 @@ public:
 class BytePacketObserver
 {
 public:
-    virtual ~BytePacketObserver();
-    virtual void onBytePacket(Transport::Type, std::vector<Byte>);
-
+    virtual ~BytePacketObserver() {};
+    virtual void onBytePacket(Transport::Type, std::vector<Byte>) = 0;
 };
 
 }

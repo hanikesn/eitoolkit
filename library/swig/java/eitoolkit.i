@@ -15,9 +15,7 @@ using namespace EI;
 %feature("director") EI::ControlObserver;
 %feature("director") EI::BytePacketObserver;
 
-%include "std_vector.i"
-%include "std_map.i"
-%include "std_string.i"
+%include "stl.i"
 
 %include "EIPrerequisites.h"
 %include "EIPacket.h"
@@ -33,7 +31,7 @@ using namespace EI;
 %pragma(java) jniclasscode=%{
   static {
     try {
-        System.loadLibrary("eitoolkit");
+        System.loadLibrary("eitoolkit-jni");
     } catch (UnsatisfiedLinkError e) {
       System.err.println("Native code library failed to load. \n" + e);
       System.exit(1);

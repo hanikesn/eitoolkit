@@ -13,14 +13,14 @@ namespace EI {
 class DataObserver
 {
 public:
-    virtual ~DataObserver();
+    virtual ~DataObserver() {};
     virtual void onPacket(Packet) = 0;
 };
 
 class ControlObserver
 {
 public:
-    virtual ~ControlObserver();
+    virtual ~ControlObserver() {};
     virtual void onPacket(Packet) = 0;
 };
 
