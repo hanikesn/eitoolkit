@@ -10,7 +10,7 @@ namespace EI
 
 class BytePacketObserver;
 
-class Transport
+class EITOOLKIT_EXPORT Transport
 {
 public:
     enum Type {ALL, DATA, CONTROL};
@@ -23,7 +23,7 @@ public:
     virtual void removeBytePacketObserver(BytePacketObserver*) = 0;
 };
 
-class BytePacketObserver
+class EITOOLKIT_EXPORT BytePacketObserver
 {
 public:
     virtual ~BytePacketObserver() {};

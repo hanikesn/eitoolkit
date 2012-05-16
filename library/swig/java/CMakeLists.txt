@@ -6,5 +6,5 @@ if (JNI_FOUND)
 
   set_source_files_properties(eitoolkit.i PROPERTIES CPLUSPLUS ON)
   swig_add_module(eitoolkit-jni java eitoolkit.i)
-  swig_link_libraries(eitoolkit-jni eitoolkit)
+  swig_link_libraries(eitoolkit-jni EIToolkit)
 endif(JNI_FOUND)

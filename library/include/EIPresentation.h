@@ -10,7 +10,7 @@
 namespace EI
 {
 
-class Presentation
+class EITOOLKIT_EXPORT Presentation
 {
 public:
     virtual ~Presentation();

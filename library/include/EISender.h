@@ -1,6 +1,7 @@
 #ifndef EISender_H__
 #define EISender_H__
 
+#include "EIPrerequisites.h"
 #include "EITransport.h"
 #include "EIPresentation.h"
 #include "EIPacket.h"
@@ -9,9 +10,10 @@
 #include <memory>
 #include <string>
 
-namespace EI {
+namespace EI
+{
 
-class Sender
+class EITOOLKIT_EXPORT Sender
 {
 public:
     /// Erstellt einen UPD Sender mit JSON Darstellung

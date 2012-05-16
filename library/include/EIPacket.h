@@ -1,9 +1,12 @@
 #ifndef EIPacket_H__
 #define EIPacket_H__
 
-namespace EI {
+#include "EIPrerequisites.h"
 
-class Packet
+namespace EI
+{
+
+class EITOOLKIT_EXPORT Packet
 {
 
 };

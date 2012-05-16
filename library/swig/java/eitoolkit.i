@@ -17,13 +17,7 @@ using namespace EI;
 
 %include "stl.i"
 
-%include "EIPrerequisites.h"
-%include "EIPacket.h"
-%include "EITransport.h"
-%include "EIPresentation.h"
-%include "EIPacket.h"
-%include "EISender.h"
-%include "EIReceiver.h"
+%include "../common/eitoolkit.h"
 
 %template(StringMap) std::map<std::string, std::string>;
 %template(ByteVector) std::vector<EI::Byte>;

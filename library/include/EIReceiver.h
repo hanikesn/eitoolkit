@@ -1,6 +1,7 @@
 #ifndef EIReceiver_H__
 #define EIReceiver_H__
 
+#include "EIPrerequisites.h"
 #include "EITransport.h"
 #include "EIPresentation.h"
 
@@ -8,23 +9,24 @@
 #include <memory>
 #include <string>
 
-namespace EI {
+namespace EI
+{
 
-class DataObserver
+class EITOOLKIT_EXPORT DataObserver
 {
 public:
     virtual ~DataObserver() {};
     virtual void onPacket(Packet) = 0;
 };
 
-class ControlObserver
+class EITOOLKIT_EXPORT ControlObserver
 {
 public:
     virtual ~ControlObserver() {};
     virtual void onPacket(Packet) = 0;
 };
 
-class Receiver
+class EITOOLKIT_EXPORT Receiver
 {
 public:
     /// Erstellt einen UPD Sender mit JSON Darstellung
