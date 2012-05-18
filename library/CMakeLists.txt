@@ -1,10 +1,13 @@
 include (GenerateExportHeader)
 
 set(Boost_DEBUG 1)
-find_package(Boost COMPONENTS thread)
+find_package(Boost COMPONENTS system thread)
 IF (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIR})
 	link_directories(${Boost_LIBRARY_DIRS})
+	add_definitions(-DBOOST_ALL_NO_LIB)
+	# for boost::asio
+	add_definitions(-D_WIN32_WINNT=0x0501)
 endif(Boost_FOUND)
 
 set (HEADER_FILES
@@ -15,12 +18,14 @@ set (HEADER_FILES
   include/EISender.h
   include/EIToolkit.h
   include/EITransport.h
+  include/EIUDPTransport.h
   ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_export.h
 )
 
 set (SOURCE_FILES
   src/EISender.cpp
   src/EIReceiver.cpp
+  src/EIUDPTransport.cpp
 )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -1,4 +1,5 @@
 #include "EISender.h"
+#include "EIUDPTransport.h"
 
 #include <memory>
 
@@ -15,7 +16,7 @@ public:
     void sendPacket(Packet);
 
 private:
-	std::unique_ptr<Transport> own_transport;
+	std::unique_ptr<UDPTransport> own_transport;
 	std::unique_ptr<Presentation> own_presentation;
 
 	Transport& transport;
@@ -43,7 +44,7 @@ Sender::~Sender()
 }
 
 Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> options)
-	: options(options), transport(*own_transport), presentation(*own_presentation)
+	: options(options), own_transport(new UDPTransport(options)), transport(*own_transport), presentation(*own_presentation)
 {}
 
 Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> options, Transport& transport, Presentation& presentation)

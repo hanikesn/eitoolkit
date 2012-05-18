@@ -9,6 +9,7 @@ class Packet;
 class Receiver;
 class Sender;
 class Transport;
+class UDPTransport;
 
 class Packet
 {
