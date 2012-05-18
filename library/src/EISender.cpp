@@ -16,13 +16,13 @@ public:
     void sendPacket(Packet);
 
 private:
+    std::map<std::string, std::string> options;
+
 	std::unique_ptr<UDPTransport> own_transport;
 	std::unique_ptr<Presentation> own_presentation;
 
 	Transport& transport;
 	Presentation& presentation;
-
-	std::map<std::string, std::string> options;
 };
 
 Sender::Sender(std::map<std::string, std::string> options)

@@ -24,13 +24,13 @@ public:
     virtual void onBytePacket(Transport::Type, std::vector<Byte>);
 
 private:
+    std::map<std::string, std::string> options;
+
 	std::unique_ptr<Transport> own_transport;
 	std::unique_ptr<Presentation> own_presentation;
 
 	Transport& transport;
 	Presentation& presentation;
-
-	std::map<std::string, std::string> options;
 
     boost::mutex mutex;
     std::vector<DataObserver*> dataObservers;
@@ -141,6 +141,8 @@ void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte
         {
             ob->onPacket(p);
         });
+        break;
+    default:
         break;
     }
 }
