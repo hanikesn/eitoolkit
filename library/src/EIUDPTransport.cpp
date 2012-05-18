@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <boost/thread.hpp>
-#include <boost/asio.hpp>
+#include <boost/asio/ip/udp.hpp>
 
 namespace EI
 {
