@@ -1,6 +1,6 @@
 include (GenerateExportHeader)
 
-find_package(Boost COMPONENTS system thread)
+find_package(Boost REQUIRED system thread)
 IF (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIR})
 	link_directories(${Boost_LIBRARY_DIRS})
