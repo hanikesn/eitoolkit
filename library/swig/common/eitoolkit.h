@@ -2,6 +2,14 @@ namespace EI
 {
 typedef char Byte;
 
+class BytePacketObserver;
+class ControlObserver;
+class DataObserver;
+class Packet;
+class Receiver;
+class Sender;
+class Transport;
+
 class Packet
 {
 };
@@ -54,8 +62,6 @@ public:
 
     void sendPacket(Packet);
 };
-
-class BytePacketObserver;
 
 class Transport
 {
