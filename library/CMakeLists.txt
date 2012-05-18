@@ -1,5 +1,12 @@
 include (GenerateExportHeader)
 
+set(Boost_DEBUG 1)
+find_package(Boost COMPONENTS thread)
+IF (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+	link_directories(${Boost_LIBRARY_DIRS})
+endif(Boost_FOUND)
+
 set (HEADER_FILES
   include/EIPacket.h
   include/EIPrerequisites.h
@@ -21,6 +28,8 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/incl
 add_compiler_export_flags()
 
 add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
+
+target_link_libraries(EIToolkit ${Boost_LIBRARIES})
 
 generate_export_header(EIToolkit)
 
