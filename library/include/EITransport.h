@@ -15,7 +15,7 @@ class EITOOLKIT_EXPORT Transport
 public:
     enum Type {ALL, DATA, CONTROL};
 
-    virtual ~Transport();
+    virtual ~Transport() {};
 
     virtual void sendBytePacket(Type, std::vector<Byte>) = 0;
     // startet automatisch einen Thread o.ä. wenn es einen observer gibt und killt ihn auch wieder

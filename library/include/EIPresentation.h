@@ -13,7 +13,7 @@ namespace EI
 class EITOOLKIT_EXPORT Presentation
 {
 public:
-    virtual ~Presentation();
+    virtual ~Presentation() {};
     virtual std::vector<Byte> encode(Packet) = 0;
     virtual Packet decode(std::vector<Byte>) = 0;
 };
