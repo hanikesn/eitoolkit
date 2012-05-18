@@ -20,7 +20,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/incl
 
 add_compiler_export_flags()
 
-add_library(EIToolkit SHARED ${SOURCE_FILES})
+add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 generate_export_header(EIToolkit)
 
