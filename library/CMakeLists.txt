@@ -1,6 +1,5 @@
 include (GenerateExportHeader)
 
-set(Boost_DEBUG 1)
 find_package(Boost COMPONENTS system thread)
 IF (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIR})
