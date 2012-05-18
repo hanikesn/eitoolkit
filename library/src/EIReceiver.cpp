@@ -32,6 +32,11 @@ Receiver::Receiver(std::map<std::string, std::string> options, Transport& transp
     pimpl(new ReceiverImpl(options, transport, presentation))
 {}
 
+Receiver::~Receiver()
+{
+	delete pimpl;
+}
+
 void Receiver::sendDiscover()
 {
     pimpl->sendDiscover();

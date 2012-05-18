@@ -26,4 +26,9 @@ void Sender::sendPacket(Packet packet)
     pimpl->sendPacket(packet);
 }
 
+Sender::~Sender()
+{
+	delete pimpl;
+}
+
 }

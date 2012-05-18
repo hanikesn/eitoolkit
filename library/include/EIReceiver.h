@@ -6,7 +6,6 @@
 #include "EIPresentation.h"
 
 #include <map>
-#include <memory>
 #include <string>
 
 namespace EI
@@ -49,7 +48,7 @@ private:
     Receiver &operator=(const Receiver &);
 private:
     class ReceiverImpl;
-    std::unique_ptr<ReceiverImpl> pimpl;
+    ReceiverImpl* const pimpl;
 };
 
 }

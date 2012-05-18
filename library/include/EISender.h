@@ -7,7 +7,6 @@
 #include "EIPacket.h"
 
 #include <map>
-#include <memory>
 #include <string>
 
 namespace EI
@@ -29,7 +28,7 @@ private:
     Sender &operator=(const Sender &);
 private:
     class SenderImpl;
-    std::unique_ptr<SenderImpl> pimpl;
+    SenderImpl* const pimpl;
 };
 
 }
