@@ -1,5 +1,8 @@
 #include "EIReceiver.h"
 
+#include "EIJSONPresentation.h"
+#include "EIUDPTransport.h"
+
 #include <boost/thread/mutex.hpp>
 
 namespace EI
@@ -23,6 +26,8 @@ public:
 
     virtual void onBytePacket(Transport::Type, std::vector<Byte>);
 
+private:
+    void init();
 private:
     std::map<std::string, std::string> options;
 
@@ -80,19 +85,32 @@ void Receiver::removeControlListener(ControlObserver * observer)
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(std::map<std::string, std::string> options)
-	: options(options), transport(*own_transport), presentation(*own_presentation)
-{}
+    : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)), transport(*own_transport), presentation(*own_presentation)
+{
+    init();
+}
 
 Receiver::ReceiverImpl::ReceiverImpl(std::map<std::string, std::string> options, Transport& transport)
-	: options(options), transport(transport), presentation(*own_presentation)
-{}
+    : options(options), own_presentation(new JSONPresentation(options)), transport(transport), presentation(*own_presentation)
+{
+    init();
+}
 
 Receiver::ReceiverImpl::ReceiverImpl(std::map<std::string, std::string> options, Transport& transport, Presentation& presentation)
 	: options(options), transport(transport), presentation(presentation)
-{}
+{
+    init();
+}
 
 Receiver::ReceiverImpl::~ReceiverImpl()
-{}
+{
+    transport.removeBytePacketObserver(this);
+}
+
+void Receiver::ReceiverImpl::init()
+{
+    transport.addBytePacketObserver(Transport::DATA, this);
+}
 
 void Receiver::ReceiverImpl::sendDiscover()
 {

@@ -1,5 +1,6 @@
 #include "EISender.h"
 #include "EIUDPTransport.h"
+#include "EIJSONPresentation.h"
 
 #include <memory>
 
@@ -44,7 +45,7 @@ Sender::~Sender()
 }
 
 Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> options)
-	: options(options), own_transport(new UDPTransport(options)), transport(*own_transport), presentation(*own_presentation)
+    : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)),  transport(*own_transport), presentation(*own_presentation)
 {}
 
 Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> options, Transport& transport, Presentation& presentation)
