@@ -1,5 +1,5 @@
-#ifndef EISender_H__
-#define EISender_H__
+#ifndef EIToolkit_H__
+#define EIToolkit_H__
 
 #include "EIPrerequisites.h"
 #include "EISender.h"
