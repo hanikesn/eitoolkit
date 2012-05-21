@@ -10,6 +10,7 @@ IF (Boost_FOUND)
 endif(Boost_FOUND)
 
 set (HEADER_FILES
+  include/EIJSONPresentation.h
   include/EIPacket.h
   include/EIPrerequisites.h
   include/EIPresentation.h
@@ -22,6 +23,7 @@ set (HEADER_FILES
 )
 
 set (SOURCE_FILES
+  src/EIJSONPresentation.cpp
   src/EISender.cpp
   src/EIReceiver.cpp
   src/EIUDPTransport.cpp
