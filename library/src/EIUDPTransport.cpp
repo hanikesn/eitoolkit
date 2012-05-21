@@ -2,25 +2,50 @@
 
 #include <vector>
 #include <memory>
+#include <boost/array.hpp>
 #include <boost/thread.hpp>
 #include <boost/asio/ip/udp.hpp>
 
 namespace EI
 {
 
+namespace ba = boost::asio;
+namespace bs = boost;
+
 class Worker
 {
 public:
-    Worker(boost::asio::io_service&);
+    Worker(ba::ip::udp::socket& socket, BytePacketObserver& ob)
+        : socket(socket), ob(ob), recv_buffer(1500)
+    {
+        start_receive();
+    }
 
-    boost::asio::ip::udp::socket socket;
+private:
+    void start_receive()
+    {
+        socket.async_receive(ba::buffer(recv_buffer), [this](const bs::system::error_code& error,
+                                                 std::size_t bytes_transferred) {
+                                  this->handle_receive(error, bytes_transferred);
+        });
+    }
+
+    void handle_receive(const bs::system::error_code& error,
+                        std::size_t bytes_transferred)
+    {
+        if (!error || error == boost::asio::error::message_size)
+        {
+            ob.onBytePacket(Transport::DATA, recv_buffer);
+            start_receive();
+        }
+    }
+
+private:
+    ba::ip::udp::socket& socket;
+    BytePacketObserver& ob;
+
+    std::vector<Byte> recv_buffer;
 };
-
-Worker::Worker(boost::asio::io_service& io_service)
-    : socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 31337))
-{
-}
-
 
 class UDPTransport::UDPTransportImpl : public BytePacketObserver
 {
@@ -37,8 +62,9 @@ private:
     std::unique_ptr<Worker> worker;
     boost::thread thread;
     boost::mutex mutex;
-    boost::asio::io_service io_service;
-    boost::asio::ip::udp::socket socket;
+    ba::io_service io_service;
+    ba::ip::udp::socket socket;
+    ba::ip::udp::endpoint endpoint;
 
     std::vector<BytePacketObserver*> controlObservers;
     std::vector<BytePacketObserver*> dataObservers;
@@ -69,9 +95,11 @@ void UDPTransport::removeBytePacketObserver(BytePacketObserver* ob)
 }
 
 UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> options)
-    : socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 31337))
+    : socket(io_service, ba::ip::udp::v4()) , endpoint(ba::ip::address_v4::broadcast(), 31337)
 {
-    socket.set_option(boost::asio::socket_base::broadcast(true));
+    socket.set_option(ba::socket_base::reuse_address(true));
+    socket.set_option(ba::socket_base::broadcast(true));
+    socket.bind(ba::ip::udp::endpoint(boost::asio::ip::address_v4::broadcast(), 31337));
 }
 
 UDPTransport::UDPTransportImpl::~UDPTransportImpl()
@@ -79,11 +107,18 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
     thread.join();
 }
 
-void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type, BytePacketObserver*)
+void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type, BytePacketObserver* ob)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
+
+    if(type == Transport::ALL || Transport::DATA)
+        dataObservers.push_back(ob);
+
+    if(type == Transport::ALL || Transport::CONTROL)
+        controlObservers.push_back(ob);
+
     if(!worker) {
-        worker.reset(new Worker(io_service));
+        worker.reset(new Worker(socket, *this));
         thread = boost::thread([this](){this->io_service.run();});
     }
 }
@@ -115,7 +150,7 @@ void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vec
 
 void UDPTransport::UDPTransportImpl::sendBytePacket(Transport::Type type, std::vector<Byte> p)
 {
-    socket.send(boost::asio::buffer(p));
+    socket.send_to(boost::asio::buffer(p), endpoint);
 }
 
 }
