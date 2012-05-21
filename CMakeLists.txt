@@ -16,3 +16,4 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_subdirectory(library)
+add_subdirectory(examples)
