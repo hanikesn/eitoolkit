@@ -13,52 +13,68 @@ class UDPTransport;
 
 class Packet
 {
+public:
+    Packet(std::string const& name, std::string const& type);
+
+    std::string getName() const;
+    std::string getType() const;
+};
+
+class DataPacket : public Packet
+{
+public:
+    DataPacket(std::string const& name);
+
+    void setString(std::string const&, std::string  const&);
+    std::string getString(std::string  const&);
+
+    void setDouble(std::string  const&, double);
+    double getDouble(std::string const&);
 };
 
 class Presentation
 {
 public:
     virtual ~Presentation();
-    virtual std::vector<Byte> encode(Packet) = 0;
-    virtual Packet decode(std::vector<Byte>) = 0;
+    virtual std::vector<Byte> encode(Packet const&) = 0;
 };
 
 class DataObserver
 {
 public:
-    virtual ~DataObserver() {};
-    virtual void onPacket(Packet) = 0;
+    virtual ~DataObserver() {}
+    virtual void onPacket(DataPacket const&) = 0;
 };
 
 class ControlObserver
 {
 public:
-    virtual ~ControlObserver() {};
-    virtual void onPacket(Packet) = 0;
+    virtual ~ControlObserver() {}
+    virtual void onPacket(Packet const&) = 0;
 };
 
 class Receiver
 {
 public:
-    Receiver(std::map<std::string, std::string> options);
-    Receiver(std::map<std::string, std::string> options, Transport&);
-    Receiver(std::map<std::string, std::string> options, Transport&, Presentation&);
+    Receiver(std::map<std::string, std::string> const& options);
+    Receiver(std::map<std::string, std::string> const& options, Transport&);
+    Receiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Receiver();
 
     void sendDiscover();
 
-    void addDataListener(DataObserver*);
-    void removeDataListener(DataObserver*);
+    void addDataListener(DataObserver&);
+    void removeDataListener(DataObserver&);
 
-    void addControlListener(ControlObserver*);
-    void removeControlListener(ControlObserver*);
+    void addControlListener(ControlObserver&);
+    void removeControlListener(ControlObserver&);
 };
 
 class Sender
 {
 public:
-    Sender(std::map<std::string, std::string> options);
-    Sender(std::map<std::string, std::string> options, Transport&, Presentation&);
+    Sender(std::map<std::string, std::string> const& options);
+    Sender(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
     void sendPacket(Packet);
@@ -71,16 +87,16 @@ public:
 
     virtual ~Transport();
 
-    virtual void sendBytePacket(Type, std::vector<Byte>) = 0;
-    virtual void addBytePacketObserver(Type, BytePacketObserver*) = 0;
-    virtual void removeBytePacketObserver(BytePacketObserver*) = 0;
+    virtual void sendBytePacket(Type, std::vector<Byte> const&) = 0;
+    virtual void addBytePacketObserver(Type, BytePacketObserver&) = 0;
+    virtual void removeBytePacketObserver(BytePacketObserver&) = 0;
 };
 
 class BytePacketObserver
 {
 public:
-    virtual ~BytePacketObserver() {};
-    virtual void onBytePacket(Transport::Type, std::vector<Byte>) = 0;
+    virtual ~BytePacketObserver() {}
+    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&) = 0;
 };
 
 }

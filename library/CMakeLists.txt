@@ -1,16 +1,17 @@
-include (GenerateExportHeader)
+include(GenerateExportHeader)
 
 find_package(Boost REQUIRED system thread)
-IF (Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIR})
-	link_directories(${Boost_LIBRARY_DIRS})
-	add_definitions(-DBOOST_ALL_NO_LIB)
-	# for boost::asio
-	add_definitions(-D_WIN32_WINNT=0x0501)
+if(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIR})
+  link_directories(${Boost_LIBRARY_DIRS})
+  add_definitions(-DBOOST_ALL_NO_LIB)
+  # for boost::asio
+  add_definitions(-D_WIN32_WINNT=0x0501)
 endif(Boost_FOUND)
 
-set (HEADER_FILES
+set(HEADER_FILES
   include/EIJSONPresentation.h
+  include/EIDataPacket.h
   include/EIPacket.h
   include/EIPrerequisites.h
   include/EIPresentation.h
@@ -22,8 +23,10 @@ set (HEADER_FILES
   ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_export.h
 )
 
-set (SOURCE_FILES
+set(SOURCE_FILES
   src/EIJSONPresentation.cpp
+  src/EIDataPacket.cpp
+  src/EIPacket.cpp
   src/EISender.cpp
   src/EIReceiver.cpp
   src/EIUDPTransport.cpp

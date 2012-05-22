@@ -17,11 +17,11 @@ class EITOOLKIT_EXPORT Sender
 public:
     /// Erstellt einen UPD Sender mit JSON Darstellung
     /// Options: z.B. Name = asd etc.
-    Sender(std::map<std::string, std::string> options);
-    Sender(std::map<std::string, std::string> options, Transport&, Presentation&);
+    Sender(std::map<std::string, std::string> const& options);
+    Sender(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
-    void sendPacket(Packet);
+    void sendPacket(const Packet&);
 private:
     // Disable copying
     Sender(const Sender &);

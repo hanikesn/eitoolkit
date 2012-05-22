@@ -15,19 +15,18 @@ class EITOOLKIT_EXPORT Transport
 public:
     enum Type {ALL, DATA, CONTROL};
 
-    virtual ~Transport() {};
+    virtual ~Transport() {}
 
-    virtual void sendBytePacket(Type, std::vector<Byte>) = 0;
-    // startet automatisch einen Thread o.ä. wenn es einen observer gibt und killt ihn auch wieder
-    virtual void addBytePacketObserver(Type, BytePacketObserver*) = 0;
-    virtual void removeBytePacketObserver(BytePacketObserver*) = 0;
+    virtual void sendBytePacket(Type, std::vector<Byte>  const&) = 0;
+    virtual void addBytePacketObserver(Type, BytePacketObserver&) = 0;
+    virtual void removeBytePacketObserver(BytePacketObserver&) = 0;
 };
 
 class EITOOLKIT_EXPORT BytePacketObserver
 {
 public:
-    virtual ~BytePacketObserver() {};
-    virtual void onBytePacket(Transport::Type, std::vector<Byte>) = 0;
+    virtual ~BytePacketObserver() {}
+    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&) = 0;
 };
 
 }

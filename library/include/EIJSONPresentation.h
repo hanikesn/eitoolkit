@@ -13,11 +13,11 @@ namespace EI
 class EITOOLKIT_EXPORT JSONPresentation : public Presentation
 {
 public:
-    JSONPresentation(std::map<std::string, std::string> options);
+    JSONPresentation(std::map<std::string, std::string> const& options);
     virtual ~JSONPresentation();
 
-    virtual std::vector<Byte> encode(Packet);
-    virtual Packet decode(std::vector<Byte>);
+    virtual std::vector<Byte> encode(Packet const&);
+    virtual std::shared_ptr<Packet> decode(std::vector<Byte> const&);
 
 private:
     class JSONPresentationImpl;

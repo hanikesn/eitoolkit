@@ -51,14 +51,14 @@ private:
 class UDPTransport::UDPTransportImpl : public BytePacketObserver
 {
 public:
-    UDPTransportImpl(std::map<std::string, std::string> options);
+    UDPTransportImpl(std::map<std::string, std::string> const& options);
     ~UDPTransportImpl();
 
-    void sendBytePacket(Transport::Type, std::vector<Byte>);
-    void addBytePacketObserver(Transport::Type, BytePacketObserver*);
-    void removeBytePacketObserver(BytePacketObserver*);
+    void sendBytePacket(Transport::Type, std::vector<Byte> const&);
+    void addBytePacketObserver(Transport::Type, BytePacketObserver&);
+    void removeBytePacketObserver(BytePacketObserver&);
 
-    virtual void onBytePacket(Transport::Type, std::vector<Byte>);
+    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&);
 private:
     boost::thread thread;
     boost::mutex mutex;
@@ -75,7 +75,7 @@ private:
     std::vector<BytePacketObserver*> controlObservers;
 };
 
-UDPTransport::UDPTransport(std::map<std::string, std::string> options)
+UDPTransport::UDPTransport(std::map<std::string, std::string> const& options )
     : pimpl(new UDPTransportImpl(options))
 {}
 
@@ -84,26 +84,26 @@ UDPTransport::~UDPTransport()
     delete pimpl;
 }
 
-void UDPTransport::sendBytePacket(Type type, std::vector<Byte> packet)
+void UDPTransport::sendBytePacket(Type type, std::vector<Byte> const& packet)
 {
     pimpl->sendBytePacket(type, packet);
 }
     
-void UDPTransport::addBytePacketObserver(Type type, BytePacketObserver* ob)
+void UDPTransport::addBytePacketObserver(Type type, BytePacketObserver& ob)
 {
     pimpl->addBytePacketObserver(type, ob);
 }
 
-void UDPTransport::removeBytePacketObserver(BytePacketObserver* ob)
+void UDPTransport::removeBytePacketObserver(BytePacketObserver& ob)
 {
     pimpl->removeBytePacketObserver(ob);
 }
 
-UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> options)
+UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const& options)
     : dataSocket(io_service, ba::ip::udp::v4()),
       controlSocket(io_service, ba::ip::udp::v4()),
-      dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
-      controlEndpoint(ba::ip::address_v4::broadcast(), 31338),
+      dataEndpoint(ba::ip::address_v4::broadcast(), 31338),
+      controlEndpoint(ba::ip::address_v4::broadcast(), 31337),
       dataWorker(dataSocket, Transport::DATA, *this),
       controlWorker(controlSocket, Transport::CONTROL, *this)
 
@@ -123,33 +123,33 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
     thread.join();
 }
 
-void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type, BytePacketObserver* ob)
+void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type, BytePacketObserver& ob)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
 
     if(type == Transport::ALL || Transport::DATA)
-        dataObservers.push_back(ob);
+        dataObservers.push_back(&ob);
 
     if(type == Transport::ALL || Transport::CONTROL)
-        controlObservers.push_back(ob);
+        controlObservers.push_back(&ob);
 
     if(!thread.joinable()) {
         thread = boost::thread([this](){this->io_service.run();});
     }
 }
 
-void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver* ob)
+void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver& ob)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
-    std::remove(std::begin(controlObservers), std::end(controlObservers), ob);
-    std::remove(std::begin(dataObservers), std::end(dataObservers), ob);
+    std::remove(std::begin(controlObservers), std::end(controlObservers), &ob);
+    std::remove(std::begin(dataObservers), std::end(dataObservers), &ob);
     if(dataObservers.empty() && controlObservers.empty()) {
         io_service.stop();
         thread.join();
     }
 }
 
-void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vector<Byte> p)
+void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& p)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
 
@@ -162,7 +162,7 @@ void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vec
         });
 }
 
-void UDPTransport::UDPTransportImpl::sendBytePacket(Transport::Type type, std::vector<Byte> p)
+void UDPTransport::UDPTransportImpl::sendBytePacket(Transport::Type type, std::vector<Byte> const& p)
 {
     switch(type)
     {

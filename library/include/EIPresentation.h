@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <memory>
 
 namespace EI
 {
@@ -13,9 +14,9 @@ namespace EI
 class EITOOLKIT_EXPORT Presentation
 {
 public:
-    virtual ~Presentation() {};
-    virtual std::vector<Byte> encode(Packet) = 0;
-    virtual Packet decode(std::vector<Byte>) = 0;
+    virtual ~Presentation() {}
+    virtual std::vector<Byte> encode(Packet const&) = 0;
+    virtual std::shared_ptr<Packet> decode(std::vector<Byte> const&) = 0;
 };
 
 }

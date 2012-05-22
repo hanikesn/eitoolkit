@@ -10,11 +10,11 @@ namespace EI
 class Sender::SenderImpl
 {
 public:
-    SenderImpl(std::map<std::string, std::string> options);
-    SenderImpl(std::map<std::string, std::string> options, Transport&, Presentation&);
+    SenderImpl(std::map<std::string, std::string> const& options);
+    SenderImpl(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~SenderImpl();
 
-    void sendPacket(Packet);
+    void sendPacket(Packet const&);
 
 private:
     std::map<std::string, std::string> options;
@@ -26,15 +26,15 @@ private:
 	Presentation& presentation;
 };
 
-Sender::Sender(std::map<std::string, std::string> options)
+Sender::Sender(std::map<std::string, std::string> const& options)
     : pimpl(new SenderImpl(options))
 {}
 
-Sender::Sender(std::map<std::string, std::string> options, Transport& transport, Presentation& presentation)
+Sender::Sender(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation)
 	: pimpl(new SenderImpl(options, transport, presentation))
 {}
 
-void Sender::sendPacket(Packet packet)
+void Sender::sendPacket(Packet const& packet)
 {
     pimpl->sendPacket(packet);
 }
@@ -44,20 +44,20 @@ Sender::~Sender()
 	delete pimpl;
 }
 
-Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> options)
+Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> const& options)
     : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)),  transport(*own_transport), presentation(*own_presentation)
 {}
 
-Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> options, Transport& transport, Presentation& presentation)
+Sender::SenderImpl::SenderImpl(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation)
 	: options(options), transport(transport), presentation(presentation)
 {}
 
 Sender::SenderImpl::~SenderImpl()
 {}
 
-void Sender::SenderImpl::sendPacket(Packet packet)
+void Sender::SenderImpl::sendPacket(Packet const& packet)
 {
-	transport.sendBytePacket(Transport::DATA, presentation.encode(packet));
+    transport.sendBytePacket(packet.getType() == "data" ? Transport::DATA :  Transport::CONTROL, presentation.encode(packet));
 }
 
 }
