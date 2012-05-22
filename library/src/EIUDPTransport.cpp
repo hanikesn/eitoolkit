@@ -15,13 +15,10 @@ namespace bs = boost;
 class Worker
 {
 public:
-    Worker(ba::ip::udp::socket& socket, BytePacketObserver& ob)
-        : socket(socket), ob(ob), recv_buffer(1500)
-    {
-        start_receive();
-    }
+    Worker(ba::ip::udp::socket& socket, Transport::Type type, BytePacketObserver& ob)
+        : socket(socket), type(type), ob(ob), recv_buffer(1500)
+    {}
 
-private:
     void start_receive()
     {
         socket.async_receive(ba::buffer(recv_buffer), [this](const bs::system::error_code& error,
@@ -30,18 +27,22 @@ private:
         });
     }
 
+private:
     void handle_receive(const bs::system::error_code& error,
                         std::size_t bytes_transferred)
     {
         if (!error || error == boost::asio::error::message_size)
         {
-            ob.onBytePacket(Transport::DATA, recv_buffer);
+            std::vector<Byte> out_buffer(bytes_transferred);
+            copy(std::begin(recv_buffer), std::begin(recv_buffer)+bytes_transferred, std::begin(out_buffer));
+            ob.onBytePacket(type, out_buffer);
             start_receive();
         }
     }
 
 private:
     ba::ip::udp::socket& socket;
+    Transport::Type type;
     BytePacketObserver& ob;
 
     std::vector<Byte> recv_buffer;
@@ -59,15 +60,19 @@ public:
 
     virtual void onBytePacket(Transport::Type, std::vector<Byte>);
 private:
-    std::unique_ptr<Worker> worker;
     boost::thread thread;
     boost::mutex mutex;
     ba::io_service io_service;
-    ba::ip::udp::socket socket;
-    ba::ip::udp::endpoint endpoint;
+    ba::ip::udp::socket dataSocket;
+    ba::ip::udp::socket controlSocket;
+    ba::ip::udp::endpoint dataEndpoint;
+    ba::ip::udp::endpoint controlEndpoint;
 
-    std::vector<BytePacketObserver*> controlObservers;
+    Worker dataWorker;
+    Worker controlWorker;
+
     std::vector<BytePacketObserver*> dataObservers;
+    std::vector<BytePacketObserver*> controlObservers;
 };
 
 UDPTransport::UDPTransport(std::map<std::string, std::string> options)
@@ -95,11 +100,22 @@ void UDPTransport::removeBytePacketObserver(BytePacketObserver* ob)
 }
 
 UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> options)
-    : socket(io_service, ba::ip::udp::v4()) , endpoint(ba::ip::address_v4::broadcast(), 31337)
-{
-    socket.set_option(ba::socket_base::reuse_address(true));
-    socket.set_option(ba::socket_base::broadcast(true));
-    socket.bind(ba::ip::udp::endpoint(boost::asio::ip::address_v4::broadcast(), 31337));
+    : dataSocket(io_service, ba::ip::udp::v4()),
+      controlSocket(io_service, ba::ip::udp::v4()),
+      dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
+      controlEndpoint(ba::ip::address_v4::broadcast(), 31338),
+      dataWorker(dataSocket, Transport::DATA, *this),
+      controlWorker(controlSocket, Transport::CONTROL, *this)
+
+{   dataSocket.set_option(ba::socket_base::reuse_address(true));
+    dataSocket.set_option(ba::socket_base::broadcast(true));
+    dataSocket.bind(dataEndpoint);
+    dataWorker.start_receive();
+
+    controlSocket.set_option(ba::socket_base::reuse_address(true));
+    controlSocket.set_option(ba::socket_base::broadcast(true));
+    controlSocket.bind(controlEndpoint);
+    controlWorker.start_receive();
 }
 
 UDPTransport::UDPTransportImpl::~UDPTransportImpl()
@@ -117,8 +133,7 @@ void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type,
     if(type == Transport::ALL || Transport::CONTROL)
         controlObservers.push_back(ob);
 
-    if(!worker) {
-        worker.reset(new Worker(socket, *this));
+    if(!thread.joinable()) {
         thread = boost::thread([this](){this->io_service.run();});
     }
 }
@@ -131,7 +146,6 @@ void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver
     if(dataObservers.empty() && controlObservers.empty()) {
         io_service.stop();
         thread.join();
-        worker.release();
     }
 }
 
@@ -150,7 +164,17 @@ void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vec
 
 void UDPTransport::UDPTransportImpl::sendBytePacket(Transport::Type type, std::vector<Byte> p)
 {
-    socket.send_to(boost::asio::buffer(p), endpoint);
+    switch(type)
+    {
+    case Transport::DATA:
+        dataSocket.send_to(boost::asio::buffer(p), dataEndpoint);
+        break;
+    case Transport::CONTROL:
+        controlSocket.send_to(boost::asio::buffer(p), controlEndpoint);
+        break;
+    case Transport::ALL:
+        break;
+    }
 }
 
 }
