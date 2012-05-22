@@ -102,19 +102,20 @@ void UDPTransport::removeBytePacketObserver(BytePacketObserver& ob)
 UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const& options)
     : dataSocket(io_service, ba::ip::udp::v4()),
       controlSocket(io_service, ba::ip::udp::v4()),
-      dataEndpoint(ba::ip::address_v4::broadcast(), 31338),
-      controlEndpoint(ba::ip::address_v4::broadcast(), 31337),
+      dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
+      controlEndpoint(ba::ip::address_v4::broadcast(), 31338),
       dataWorker(dataSocket, Transport::DATA, *this),
       controlWorker(controlSocket, Transport::CONTROL, *this)
 
-{   dataSocket.set_option(ba::socket_base::reuse_address(true));
+{   
+    dataSocket.set_option(ba::socket_base::reuse_address(true));
     dataSocket.set_option(ba::socket_base::broadcast(true));
-    dataSocket.bind(dataEndpoint);
+    dataSocket.bind(ba::ip::udp::endpoint(ba::ip::address_v4::any(), 31337));
     dataWorker.start_receive();
 
     controlSocket.set_option(ba::socket_base::reuse_address(true));
     controlSocket.set_option(ba::socket_base::broadcast(true));
-    controlSocket.bind(controlEndpoint);
+    controlSocket.bind(ba::ip::udp::endpoint(ba::ip::address_v4::any(), 31337));
     controlWorker.start_receive();
 }
 
