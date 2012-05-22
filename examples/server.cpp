@@ -26,7 +26,7 @@ public:
 
 int main()
 {
-    std::map<std::string, std::string> options = {{"name","Test"}};
+    std::map<std::string, std::string> options;
     DataListener dataListener;
     ControlListener controlListener;
 
