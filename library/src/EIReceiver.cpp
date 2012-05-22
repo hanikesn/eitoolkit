@@ -109,7 +109,7 @@ Receiver::ReceiverImpl::~ReceiverImpl()
 
 void Receiver::ReceiverImpl::init()
 {
-    transport.addBytePacketObserver(Transport::DATA, *this);
+    transport.addBytePacketObserver(Transport::ALL, *this);
 }
 
 void Receiver::ReceiverImpl::sendDiscover()
