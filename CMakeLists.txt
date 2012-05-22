@@ -15,5 +15,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
+add_subdirectory(json_spirit)
 add_subdirectory(library)
 add_subdirectory(examples)

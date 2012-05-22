@@ -38,7 +38,7 @@ add_compiler_export_flags()
 
 add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
-target_link_libraries(EIToolkit ${Boost_LIBRARIES})
+target_link_libraries(EIToolkit ${Boost_LIBRARIES} json_spirit)
 
 generate_export_header(EIToolkit)
 
