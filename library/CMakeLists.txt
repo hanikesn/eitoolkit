@@ -47,7 +47,7 @@ set(SOURCE_FILES
   src/EIUDPTransport.cpp
 )
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../json_spirit)
 
 add_compiler_export_flags()
 

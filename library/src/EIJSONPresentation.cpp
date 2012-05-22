@@ -1,5 +1,6 @@
 #include "EIJSONPresentation.h"
 #include "EIDataPacket.h"
+#include "json_spirit.h"
 
 namespace EI
 {
