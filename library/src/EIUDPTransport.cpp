@@ -128,10 +128,10 @@ void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type,
 {
     boost::lock_guard<boost::mutex> lock(mutex);
 
-    if(type == Transport::ALL || Transport::DATA)
+    if(type == Transport::ALL || type == Transport::DATA)
         dataObservers.push_back(&ob);
 
-    if(type == Transport::ALL || Transport::CONTROL)
+    if(type == Transport::ALL || type == Transport::CONTROL)
         controlObservers.push_back(&ob);
 
     if(!thread.joinable()) {
