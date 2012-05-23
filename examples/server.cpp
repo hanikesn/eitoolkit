@@ -9,7 +9,7 @@ class DataListener : public EI::DataObserver
 public:
     virtual ~DataListener() {}
     virtual void onPacket(EI::DataPacket const& p) {
-        std::cout << "Data: " << &p << std::endl;
+        std::cout << "Data: " << p.getName() << " " << p.getType() << std::endl;
     }
 
 };
@@ -19,7 +19,7 @@ class ControlListener : public EI::ControlObserver
 public:
     virtual ~ControlListener() {}
     virtual void onPacket(EI::Packet const& p) {
-        std::cout << "Control: " << &p << std::endl;
+        std::cout << "Control: " << p.getName() << " " << p.getType() << std::endl;
     }
 
 };
@@ -40,5 +40,7 @@ int main()
     server.sendPacket(EI::Packet("Discover", "discover"));
     server.sendPacket(EI::DataPacket("Data"));
 
-    while(true);
+    std::cin.get();
+
+    std::cout << "end" << std::endl;
 }
