@@ -11,7 +11,7 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
 endif()
 
-add_executable(server server.cpp)
-target_link_libraries(server EIToolkit)
+add_executable(combined combined.cpp)
+target_link_libraries(combined EIToolkit)
 
 include_directories("${CMAKE_SOURCE_DIR}/library/include" "${CMAKE_BINARY_DIR}/library/")
