@@ -1,5 +1,7 @@
+include(CheckCXXCompilerFlag)
+
 macro(enable_Warnings)
-if(CMAKE_COMPILER_IS_GNUCXX OR (COMPILER_ID STREQUAL CLANG))
+  if(CMAKE_COMPILER_IS_GNUCXX OR (COMPILER_ID STREQUAL CLANG))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
   endif()
   if(MSVC)

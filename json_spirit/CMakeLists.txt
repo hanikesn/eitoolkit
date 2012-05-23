@@ -1,3 +1,7 @@
+include(EnableCXX11)
+
+enable_CXX11()
+
 set(JSON_SPIRIT_SRCS
 json_spirit_reader.cpp json_spirit_reader.h
 json_spirit_value.cpp json_spirit_value.h

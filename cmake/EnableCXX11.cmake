@@ -1,6 +1,7 @@
-macro(enable_CXX11)
+include(CheckCXXCompilerFlag)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR (COMPILER_ID STREQUAL CLANG))
+macro(enable_CXX11)
+  if(CMAKE_COMPILER_IS_GNUCXX OR (COMPILER_ID STREQUAL CLANG))
     check_cxx_compiler_flag(-std=c++11 HAS_CXX11)
     if(HAS_CXX11)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
