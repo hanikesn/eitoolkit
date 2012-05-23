@@ -10,7 +10,10 @@ int main()
 
     while(true)
     {
-        sender.sendPacket(EI::DataPacket("Data"));
+        EI::DataPacket p("simple_server");
+        p.setString("x", "24");
+        p.setString("y", "35");
+        sender.sendPacket(p);
         std::cin.get();
     }
 }

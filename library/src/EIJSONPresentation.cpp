@@ -41,9 +41,22 @@ JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(std::map<std::strin
 static std::vector<Byte> encodeDataPacket(DataPacket const& p)
 {
     js::mObject obj;
+    js::mObject values;
 
     obj["msgtype"] = p.getMsgtype();
     obj["sender"] = p.getSender();
+
+    auto stringValues = p.getStringValues();
+
+    std::for_each(stringValues.begin(), stringValues.end(),
+                  [&values](std::pair<const
+
+                            std::string, std::string>& pair)
+    {
+                  values.insert(pair);
+    });
+
+    obj["values"] = values;
 
     auto result = js::write(obj);
     return std::move(std::vector<Byte>(std::begin(result), std::end(result)));
@@ -73,6 +86,15 @@ static std::shared_ptr<Packet> decodeDataPacket(js::mObject & obj)
 {
     auto sender = obj["sender"].get_str();
     auto packet = std::make_shared<DataPacket>(sender);
+
+    auto val = obj["values"].get_obj();
+
+    std::for_each(val.begin(), val.end(),
+                  [&packet](std::pair<const std::string, js::mValue>& v)
+    {
+                  if(v.second.type() ==  js::str_type)
+                    packet->setString(v.first, v.second.get_str());
+    });
 
     return packet;
 }
