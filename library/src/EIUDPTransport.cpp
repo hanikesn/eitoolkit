@@ -142,8 +142,9 @@ void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type,
 void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver& ob)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
-    std::remove(std::begin(controlObservers), std::end(controlObservers), &ob);
-    std::remove(std::begin(dataObservers), std::end(dataObservers), &ob);
+
+    controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
+    dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
     if(dataObservers.empty() && controlObservers.empty()) {
         io_service.stop();
         thread.join();

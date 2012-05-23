@@ -127,7 +127,7 @@ void Receiver::ReceiverImpl::addDataListener(DataObserver& ob)
 void Receiver::ReceiverImpl::removeDataListener(DataObserver& ob)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
-    std::remove(std::begin(dataObservers), std::end(dataObservers), &ob);
+    dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
 }
 
 void Receiver::ReceiverImpl::addControlListener(ControlObserver& ob)
@@ -139,7 +139,7 @@ void Receiver::ReceiverImpl::addControlListener(ControlObserver& ob)
 void Receiver::ReceiverImpl::removeControlListener(ControlObserver& ob)
 {
     boost::lock_guard<boost::mutex> lock(mutex);
-    std::remove(std::begin(controlObservers), std::end(controlObservers), &ob);
+    controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
 }
 
 void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& data)
