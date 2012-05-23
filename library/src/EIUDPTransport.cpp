@@ -115,7 +115,7 @@ UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::stri
 
     controlSocket.set_option(ba::socket_base::reuse_address(true));
     controlSocket.set_option(ba::socket_base::broadcast(true));
-    controlSocket.bind(ba::ip::udp::endpoint(ba::ip::address_v4::any(), 31337));
+    controlSocket.bind(ba::ip::udp::endpoint(ba::ip::address_v4::any(), 31338));
     controlWorker.start_receive();
 }
 
