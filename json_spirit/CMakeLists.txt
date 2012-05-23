@@ -1,4 +1,4 @@
-SET(JSON_SPIRIT_SRCS
+set(JSON_SPIRIT_SRCS
 json_spirit_reader.cpp json_spirit_reader.h
 json_spirit_value.cpp json_spirit_value.h
 json_spirit_writer.cpp json_spirit_writer.h
@@ -8,10 +8,18 @@ json_spirit_reader_template.h
 json_spirit_stream_reader.h
 json_spirit_utils.h
 json_spirit_writer_options.h
-json_spirit_writer_template.h )
+json_spirit_writer_template.h)
  
-FIND_PACKAGE(Boost 1.34 REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+find_package(Boost 1.34 REQUIRED)
 
-ADD_LIBRARY(json_spirit STATIC ${JSON_SPIRIT_SRCS})
+include_directories(${Boost_INCLUDE_DIR})
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+    # On Linux amd64 we need position independent code if we want a shared library to link with us
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+  endif()
+endif()
+
+add_library(json_spirit STATIC ${JSON_SPIRIT_SRCS})
 
