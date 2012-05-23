@@ -4,6 +4,7 @@
 #include "EIUDPTransport.h"
 
 #include <boost/thread/mutex.hpp>
+#include <iostream>
 
 namespace EI
 {
@@ -143,7 +144,14 @@ void Receiver::ReceiverImpl::removeControlListener(ControlObserver& ob)
 
 void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& data)
 {
-    std::shared_ptr<Packet> p = presentation.decode(std::move(data));
+    std::shared_ptr<Packet> p;
+    try {
+        p = presentation.decode(std::move(data));
+    } catch(std::exception& e) {
+        std::cerr << "Error: Invalid packet: " << e.what();
+        return;
+    }
+
     boost::lock_guard<boost::mutex> lock(mutex);    
     switch(type) {
     case Transport::DATA:
