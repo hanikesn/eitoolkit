@@ -3,8 +3,8 @@
 namespace EI
 {
 
-DataPacket::DataPacket(std::string const& name) :
-    Packet(name, "data")
+DataPacket::DataPacket(std::string const& sender) :
+    Packet(sender, "data")
 {
 }
 

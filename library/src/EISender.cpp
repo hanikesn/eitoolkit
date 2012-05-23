@@ -57,7 +57,7 @@ Sender::SenderImpl::~SenderImpl()
 
 void Sender::SenderImpl::sendPacket(Packet const& packet)
 {
-    transport.sendBytePacket(packet.getType() == "data" ? Transport::DATA :  Transport::CONTROL, presentation.encode(packet));
+    transport.sendBytePacket(packet.getMsgtype() == "data" ? Transport::DATA :  Transport::CONTROL, presentation.encode(packet));
 }
 
 }

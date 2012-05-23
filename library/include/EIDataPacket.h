@@ -11,7 +11,7 @@ namespace EI
 class EITOOLKIT_EXPORT DataPacket : public Packet
 {
 public:
-    DataPacket(std::string const& name);
+    DataPacket(std::string const& sender);
     virtual ~DataPacket();
 
     void setString(std::string const&, std::string const&);

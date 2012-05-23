@@ -11,14 +11,14 @@ namespace EI
 class EITOOLKIT_EXPORT Packet
 {
 public:
-    Packet(std::string const& name, std::string const& type) : name(name), type(type) {}
+    Packet(std::string const& sender, std::string const& msgtype) : sender(sender), msgtype(msgtype) {}
     virtual ~Packet() {}
 
-    std::string getName() const {return name;}
-    std::string getType() const {return type;}
+    std::string getSender() const {return sender;}
+    std::string getMsgtype() const {return msgtype;}
 private:
-    const std::string name;
-    const std::string type;
+    const std::string sender;
+    const std::string msgtype;
 };
 
 }

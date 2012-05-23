@@ -14,10 +14,10 @@ class UDPTransport;
 class Packet
 {
 public:
-    Packet(std::string const& name, std::string const& type);
+    Packet(std::string const& sender, std::string const& msgtype);
 
-    std::string getName() const;
-    std::string getType() const;
+    std::string getSender() const;
+    std::string getMsgtype() const;
 };
 
 class DataPacket : public Packet
