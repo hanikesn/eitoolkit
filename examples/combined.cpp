@@ -41,6 +41,4 @@ int main()
     server.sendPacket(EI::DataPacket("Data"));
 
     std::cin.get();
-
-    std::cout << "end" << std::endl;
 }

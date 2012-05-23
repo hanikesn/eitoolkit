@@ -12,6 +12,10 @@ if(MSVC)
 endif()
 
 add_executable(combined combined.cpp)
+add_executable(simple_server simple_server.cpp)
+add_executable(simple_receiver simple_receiver.cpp)
 target_link_libraries(combined EIToolkit)
+target_link_libraries(simple_server EIToolkit)
+target_link_libraries(simple_receiver EIToolkit)
 
 include_directories("${CMAKE_SOURCE_DIR}/library/include" "${CMAKE_BINARY_DIR}/library/")
