@@ -16,7 +16,7 @@ class Worker
 {
 public:
     Worker(ba::ip::udp::socket& socket, Transport::Type type, BytePacketObserver& ob)
-        : socket(socket), type(type), ob(ob), recv_buffer(1500)
+        : socket(socket), type(type), ob(ob), recv_buffer(8000)
     {}
 
     void start_receive()
@@ -169,10 +169,14 @@ void UDPTransport::UDPTransportImpl::sendBytePacket(Transport::Type type, std::v
     switch(type)
     {
     case Transport::DATA:
-        dataSocket.send_to(boost::asio::buffer(p), dataEndpoint);
+        if(dataSocket.send_to(boost::asio::buffer(p), dataEndpoint) != p.size()) {
+            throw std::exception();
+        }
         break;
     case Transport::CONTROL:
-        controlSocket.send_to(boost::asio::buffer(p), controlEndpoint);
+        if(controlSocket.send_to(boost::asio::buffer(p), controlEndpoint) != p.size()) {
+            throw std::exception();
+        }
         break;
     case Transport::ALL:
         break;
