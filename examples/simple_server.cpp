@@ -4,16 +4,18 @@
 
 int main()
 {
+    std::cout << "simple_server" << std::endl;
+
     std::map<std::string, std::string> options;
 
     EI::Sender sender(options);
 
     while(true)
     {
+        std::string message;
+        std::getline(std::cin, message);
         EI::DataPacket p("simple_server");
-        p.setString("x", "24");
-        p.setString("y", "35");
+        p.setString("msg",  message);
         sender.sendPacket(p);
-        std::cin.get();
     }
 }
