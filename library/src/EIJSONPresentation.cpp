@@ -41,22 +41,23 @@ JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(std::map<std::strin
 static std::vector<Byte> encodeDataPacket(DataPacket const& p)
 {
     js::mObject obj;
-    js::mObject values;
+    js::mObject valuesObj;
 
     obj["msgtype"] = p.getMsgtype();
     obj["sender"] = p.getSender();
 
-    auto stringValues = p.getStringValues();
+    auto values = p.getValues();
 
-    std::for_each(stringValues.begin(), stringValues.end(),
-                  [&values](std::pair<const
-
-                            std::string, std::string>& pair)
+    std::for_each(values.begin(), values.end(),
+                  [&valuesObj](std::pair<const std::string, Value>& pair)
     {
-                  values.insert(pair);
+            if(pair.second.getType() == Value::STRING)
+                valuesObj[pair.first] = pair.second.asString();
+            else if(pair.second.getType() == Value::DOUBLE)
+                valuesObj[pair.first] = pair.second.asDouble();
     });
 
-    obj["values"] = values;
+    obj["values"] = valuesObj;
 
     auto result = js::write(obj);
     return std::move(std::vector<Byte>(std::begin(result), std::end(result)));
