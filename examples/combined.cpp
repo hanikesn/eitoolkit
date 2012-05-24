@@ -39,6 +39,4 @@ int main()
     receiver.addControlListener(controlListener);
     server.sendPacket(EI::Packet("Discover", "discover"));
     server.sendPacket(EI::DataPacket("Data"));
-
-    std::cin.get();
 }
