@@ -49,6 +49,8 @@ configure_file (
   "${CMAKE_CURRENT_BINARY_DIR}/include/EIToolkitConfig.h"
   )
 
+set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/EIToolkitConfig.h GENERATED)
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../json_spirit)
 
 add_compiler_export_flags()
