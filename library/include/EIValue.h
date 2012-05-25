@@ -28,6 +28,8 @@ private:
     ValueImpl* const pimpl;
 };
 
+EITOOLKIT_EXPORT std::ostream& operator<< (std::ostream& stream, const Value& value);
+
 }
 
 #endif

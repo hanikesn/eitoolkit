@@ -9,11 +9,13 @@ add_executable(simple_server simple_server.cpp)
 add_executable(simple_receiver simple_receiver.cpp)
 add_executable(push push.cpp)
 add_executable(count count.cpp)
+add_executable(generic_receiver generic_receiver.cpp)
 target_link_libraries(combined EIToolkit)
 target_link_libraries(simple_server EIToolkit)
 target_link_libraries(simple_receiver EIToolkit)
 target_link_libraries(push EIToolkit)
 target_link_libraries(count EIToolkit)
+target_link_libraries(generic_receiver EIToolkit)
 
 if(WIN32)
 add_custom_target(CopyDLL ALL DEPENDS EIToolkit

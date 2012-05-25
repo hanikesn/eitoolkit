@@ -1,12 +1,17 @@
 #include "EIValue.h"
+#include "boost/variant.hpp"
 
 namespace EI
 {
 
-class Value::ValueImpl
+struct Value::ValueImpl
 {
-public:
-    Type type;
+    ValueImpl() : type(EMPTY) {}
+    ValueImpl(double val) : type(DOUBLE), value(val) {}
+    ValueImpl(std::string const& val) : type(STRING), value(val) {}
+
+    const Type type;
+    const boost::variant< double, std::string > value;
 };
 
 Value::Value(Value const& other)
@@ -17,19 +22,16 @@ Value::Value(Value const& other)
 Value::Value()
     : pimpl(new ValueImpl)
 {
-    pimpl->type = EMPTY;
 }
 
 Value::Value(std::string const& value)
-    : pimpl(new ValueImpl)
+    : pimpl(new ValueImpl(value))
 {
-    pimpl->type = DOUBLE;
 }
 
 Value::Value(double value)
-    : pimpl(new ValueImpl)
+    : pimpl(new ValueImpl(value))
 {
-    pimpl->type = STRING;
 }
 
 Value::~Value()
@@ -46,12 +48,34 @@ static const std::string empty;
 
 std::string const& Value::asString() const
 {
-    return empty;
+    if(pimpl->type == STRING)
+        return boost::get<std::string const&>(pimpl->value);
+    else
+        return empty;
 }
 
 double Value::asDouble() const
 {
-    return 0.0;
+    if(pimpl->type == DOUBLE)
+        return boost::get<double>(pimpl->value);
+    else
+        return 0.0;
+}
+
+std::ostream& operator<< (std::ostream& stream, const Value& value)
+{
+    switch(value.getType()) {
+    case Value::DOUBLE:
+        stream << value.asDouble();
+        break;
+    case Value::STRING:
+        stream << value.asString();
+        break;
+    default:
+        break;
+    }
+
+    return stream;
 }
 
 }

@@ -8,13 +8,17 @@ class ExampleListener : public EI::DataObserver
 public:
     void onPacket(EI::DataPacket const& p) {
         std::cout << "Data: " << p.getSender() << " " << p.getMsgtype() << std::endl;
-        std::cout << "Msg: " << p.getString("msg") << std::endl;
+        std::for_each(p.getValues().begin(), p.getValues().end(),
+                      [](std::pair<const std::string, EI::Value> const& pair)
+        {
+                      std::cout << pair.first << " " << pair.second << std::endl;
+        });
     }
 };
 
 int main()
 {
-    std::cout << "simple_receiver" << std::endl;
+    std::cout << "generic_receiver" << std::endl;
 
     std::map<std::string, std::string> options;
 
@@ -25,3 +29,4 @@ int main()
 
     std::cin.get();
 }
+

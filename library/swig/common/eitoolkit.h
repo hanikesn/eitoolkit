@@ -79,7 +79,7 @@ public:
     Sender(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
-    void sendPacket(Packet);
+    void sendPacket(Packet const&);
 };
 
 class Transport
