@@ -12,7 +12,7 @@ if(JNI_FOUND)
   find_package(Java REQUIRED)
   #if(Java_FOUND)
     include(UseJava)
-    set(SOURCE_FILES
+    set(JAVA_SOURCE_FILES
 ${CMAKE_CURRENT_BINARY_DIR}/BytePacketObserver.java
 ${CMAKE_CURRENT_BINARY_DIR}/ByteVector.java
 ${CMAKE_CURRENT_BINARY_DIR}/ControlObserver.java
@@ -27,7 +27,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/Sender.java
 ${CMAKE_CURRENT_BINARY_DIR}/StringMap.java
 ${CMAKE_CURRENT_BINARY_DIR}/Transport.java
 )
-    add_jar(eitoolkit-jni-jar ${SOURCE_FILES})
+    set_source_files_properties(${JAVA_SOURCE_FILES} GENERATED)
+    add_jar(eitoolkit-jni-jar ${JAVA_SOURCE_FILES})
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libeitoolkit-jni.so DESTINATION jar)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit-jni-jar.jar DESTINATION jar)
