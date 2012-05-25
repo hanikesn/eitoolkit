@@ -1,0 +1,4 @@
+// the configured options and settings for EIToolkit
+#define EIToolkit_VERSION_MAJOR @EIToolkit_VERSION_MAJOR@
+#define EIToolkit_VERSION_MINOR @EIToolkit_VERSION_MINOR@
+#define EIToolkit_VERSION_PATCH @EIToolkit_VERSION_PATCH@

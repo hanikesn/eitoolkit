@@ -31,6 +31,7 @@ set(HEADER_FILES
   include/EIUDPTransport.h
   include/EIValue.h
   ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_export.h
+  ${CMAKE_CURRENT_BINARY_DIR}/EIToolkitConfig.h
 )
 
 set(SOURCE_FILES
@@ -42,6 +43,11 @@ set(SOURCE_FILES
   src/EIUDPTransport.cpp
   src/EIValue.cpp
 )
+
+configure_file (
+  "${CMAKE_CURRENT_SOURCE_DIR}/EIToolkitConfig.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/include/EIToolkitConfig.h"
+  )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../json_spirit)
 
