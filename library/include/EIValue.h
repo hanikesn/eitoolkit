@@ -19,10 +19,10 @@ public:
     Value(Value const&);
     ~Value();
 
-    Type getType();
+    Type getType() const;
 
-    std::string asString();
-    double asDouble();
+    std::string const& asString() const;
+    double asDouble() const;
 private:
     class ValueImpl;
     ValueImpl* const pimpl;

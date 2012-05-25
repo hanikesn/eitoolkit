@@ -37,17 +37,19 @@ Value::~Value()
     delete pimpl;
 }
 
-Value::Type Value::getType()
+Value::Type Value::getType() const
 {
     return pimpl->type;
 }
 
-std::string Value::asString()
+static const std::string empty;
+
+std::string const& Value::asString() const
 {
-    return "";
+    return empty;
 }
 
-double Value::asDouble()
+double Value::asDouble() const
 {
     return 0.0;
 }

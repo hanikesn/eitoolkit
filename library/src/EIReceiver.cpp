@@ -41,6 +41,8 @@ private:
     boost::mutex mutex;
     std::vector<DataObserver*> dataObservers;
     std::vector<ControlObserver*> controlObservers;
+
+    std::vector<Byte> buffer;
 };
 
 Receiver::Receiver(std::map<std::string, std::string> const& options)
@@ -115,7 +117,8 @@ void Receiver::ReceiverImpl::init()
 
 void Receiver::ReceiverImpl::sendDiscover()
 {
-    transport.sendBytePacket(Transport::CONTROL, presentation.encode(Packet("name", "discover")));
+    presentation.encode(Packet("name", "discover"), buffer);
+    transport.sendBytePacket(Transport::CONTROL, buffer);
 }
 
 void Receiver::ReceiverImpl::addDataListener(DataObserver& ob)

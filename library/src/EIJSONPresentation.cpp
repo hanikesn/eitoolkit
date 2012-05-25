@@ -4,6 +4,13 @@
 
 namespace js = json_spirit;
 
+struct wrap_vector_as_istream : std::streambuf
+{
+    wrap_vector_as_istream(std::vector<EI::Byte> & vec ) {
+        this->setg(&vec[0], &vec[0], &vec[0]+vec.size() );
+    }
+};
+
 namespace EI
 {
 
@@ -12,7 +19,7 @@ class JSONPresentation::JSONPresentationImpl
 public:
     JSONPresentationImpl(std::map<std::string, std::string> const& options);
 
-    std::vector<Byte> encode(Packet const&);
+    void encode(Packet const&, std::vector<Byte> & out);
     std::shared_ptr<Packet> decode(std::vector<Byte> const&);
 };
 
@@ -25,9 +32,9 @@ JSONPresentation::~JSONPresentation()
     delete pimpl;
 }
 
-std::vector<Byte> JSONPresentation::encode(Packet const& p)
+void JSONPresentation::encode(Packet const& p, std::vector<Byte> & out)
 {
-    return pimpl->encode(p);
+    return pimpl->encode(p, out);
 }
 
 std::shared_ptr<Packet> JSONPresentation::decode(std::vector<Byte> const& bytes)
@@ -35,10 +42,10 @@ std::shared_ptr<Packet> JSONPresentation::decode(std::vector<Byte> const& bytes)
     return pimpl->decode(bytes);
 }
 
-JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(std::map<std::string, std::string> const& options)
+JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(std::map<std::string, std::string> const&)
 {}
 
-static std::vector<Byte> encodeDataPacket(DataPacket const& p)
+static void encodeDataPacket(DataPacket const& p, std::vector<Byte> & out)
 {
     js::mObject obj;
     js::mObject valuesObj;
@@ -60,10 +67,10 @@ static std::vector<Byte> encodeDataPacket(DataPacket const& p)
     obj["values"] = valuesObj;
 
     auto result = js::write(obj);
-    return std::move(std::vector<Byte>(std::begin(result), std::end(result)));
+    out.assign(result.begin(), result.end());
 }
 
-static std::vector<Byte> encodePacket(Packet const& p)
+static void encodePacket(Packet const& p, std::vector<Byte> & out)
 {
     js::mObject obj;
 
@@ -71,15 +78,15 @@ static std::vector<Byte> encodePacket(Packet const& p)
     obj["sender"] = p.getSender();
 
     auto result = js::write(obj);
-    return std::move(std::vector<Byte>(std::begin(result), std::end(result)));
+    out.assign(result.begin(), result.end());
 }
 
-std::vector<Byte> JSONPresentation::JSONPresentationImpl::encode(Packet const& p)
+void JSONPresentation::JSONPresentationImpl::encode(Packet const& p, std::vector<Byte>& out)
 {
     if(p.getMsgtype() == "data") {
-        return encodeDataPacket(dynamic_cast<DataPacket const&>(p));
+        encodeDataPacket(dynamic_cast<DataPacket const&>(p), out);
     } else {
-        return encodePacket(p);
+        encodePacket(p, out);
     }
 }
 
@@ -102,7 +109,7 @@ static std::shared_ptr<Packet> decodeDataPacket(js::mObject & obj)
 
 std::shared_ptr<Packet> JSONPresentation::JSONPresentationImpl::decode(std::vector<Byte> const& bytes)
 {
-    std::string str(std::begin(bytes), std::end(bytes));
+    auto str = std::string(bytes.begin(), bytes.end());
     js::mValue val;
     if(!js::read(str, val))
         throw std::exception();

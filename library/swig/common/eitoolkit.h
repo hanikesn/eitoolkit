@@ -15,9 +15,11 @@ class Packet
 {
 public:
     Packet(std::string const& sender, std::string const& msgtype);
+    Packet(Packet const& other);
+    virtual ~Packet();
 
-    std::string getSender() const;
-    std::string getMsgtype() const;
+    std::string const& getSender() const;
+    std::string const& getMsgtype() const;
 };
 
 class DataPacket : public Packet
@@ -36,7 +38,7 @@ class Presentation
 {
 public:
     virtual ~Presentation();
-    virtual std::vector<Byte> encode(Packet const&) = 0;
+    void encode(Packet const&, std::vector<Byte> &) = 0;
 };
 
 class DataObserver

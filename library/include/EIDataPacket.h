@@ -18,11 +18,11 @@ public:
     ~DataPacket();
 
     void set(std::string const&, Value const&);
-    Value get(std::string const&) const;
+    Value const& get(std::string const&) const;
     std::map<std::string, Value> const& getValues() const;
 
     void setString(std::string const&, std::string const&);
-    std::string getString(std::string const&) const;
+    std::string const& getString(std::string const&) const;
 
     void setDouble(std::string const&, double);
     double getDouble(std::string const&) const;

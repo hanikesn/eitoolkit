@@ -14,10 +14,10 @@ class EITOOLKIT_EXPORT JSONPresentation : public Presentation
 {
 public:
     JSONPresentation(std::map<std::string, std::string> const& options);
-    virtual ~JSONPresentation();
+    ~JSONPresentation();
 
-    virtual std::vector<Byte> encode(Packet const&);
-    virtual std::shared_ptr<Packet> decode(std::vector<Byte> const&);
+    void encode(Packet const&, std::vector<Byte> &);
+    std::shared_ptr<Packet> decode(std::vector<Byte> const&);
 
 private:
     class JSONPresentationImpl;

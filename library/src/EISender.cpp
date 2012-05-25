@@ -24,6 +24,8 @@ private:
 
 	Transport& transport;
 	Presentation& presentation;
+
+    std::vector<Byte> buffer;
 };
 
 Sender::Sender(std::map<std::string, std::string> const& options)
@@ -57,7 +59,8 @@ Sender::SenderImpl::~SenderImpl()
 
 void Sender::SenderImpl::sendPacket(Packet const& packet)
 {
-    transport.sendBytePacket(packet.getMsgtype() == "data" ? Transport::DATA :  Transport::CONTROL, presentation.encode(packet));
+    presentation.encode(packet, buffer);
+    transport.sendBytePacket(packet.getMsgtype() == "data" ? Transport::DATA :  Transport::CONTROL, buffer);
 }
 
 }

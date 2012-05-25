@@ -3,11 +3,13 @@
 namespace EI
 {
 
+static Value emptyValue;
+
 class DataPacket::DataPacketImpl
 {
 public:
     void set(std::string const&, Value const&);
-    Value get(std::string const&) const;
+    Value const& get(std::string const&) const;
     std::map<std::string, Value> const& getValues() const;
 private:
     std::map<std::string, Value> values;
@@ -34,7 +36,7 @@ void DataPacket::setString(std::string const& key, std::string const& value)
     pimpl->set(key, Value(value));
 }
 
-std::string DataPacket::getString(std::string const& key) const
+std::string const& DataPacket::getString(std::string const& key) const
 {
     return pimpl->get(key).asString();
 }
@@ -64,13 +66,13 @@ std::map<std::string, Value> const& DataPacket::DataPacketImpl::getValues() cons
     return values;
 }
 
-Value DataPacket::DataPacketImpl::get(const std::string & key) const
+Value const& DataPacket::DataPacketImpl::get(const std::string & key) const
 {
     auto val = values.find(key);
     if(val != values.end())
         return val->second;
     else
-        return Value();
+        return emptyValue;
 }
 
 }
