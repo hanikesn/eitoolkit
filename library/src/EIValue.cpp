@@ -4,8 +4,9 @@
 namespace EI
 {
 
-struct Value::ValueImpl
+class Value::ValueImpl
 {
+public:
     ValueImpl() : type(EMPTY) {}
     ValueImpl(double val) : type(DOUBLE), value(val) {}
     ValueImpl(std::string const& val) : type(STRING), value(val) {}
