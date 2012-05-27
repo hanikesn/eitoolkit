@@ -13,7 +13,7 @@ macro(check_CXX11)
         message(SEND_ERROR "Can't enable C++11 support")
       endif()
     endif()
-  elseif(MSVC10 or MSVC11)
+  elseif(MSVC10 OR MSVC11)
     # Nothing to do
   else()
     message(WARNING "Unsupported compiler")
