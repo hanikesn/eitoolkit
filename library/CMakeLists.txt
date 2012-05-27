@@ -1,15 +1,27 @@
 include(GenerateExportHeader)
+include(CheckIncludeFileCXX)
 include(CheckCXXCompilerFlag)
 include(EnableCXX11)
 include(EnableWarnings)
 
-enable_CXX11()
+check_CXX11()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_FLAG}")
 enable_Warnings()
+
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${CXX11_FLAG}")
+check_include_file_CXX(thread HAVE_THREAD_H)
 
 if(MSVC)
   set(Boost_USE_STATIC_LIBS ON)
 endif()
-find_package(Boost COMPONENTS system thread REQUIRED)
+
+set(BOOST_components system)
+
+if(NOT HAVE_THREAD_H)
+  list(APPEND BOOST_components thread)
+endif()
+
+find_package(Boost COMPONENTS ${BOOST_components} REQUIRED)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIR})
   link_directories(${Boost_LIBRARY_DIRS})
@@ -42,11 +54,12 @@ set(SOURCE_FILES
   src/EIReceiver.cpp
   src/EIUDPTransport.cpp
   src/EIValue.cpp
+  src/EIThread.h
 )
 
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/EIToolkitConfig.h.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/include/EIToolkitConfig.h"
+  "${CMAKE_CURRENT_BINARY_DIR}/EIToolkitConfig.h"
   )
 
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/EIToolkitConfig.h GENERATED)

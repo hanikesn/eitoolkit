@@ -1,6 +1,7 @@
 include(EnableCXX11)
 
-enable_CXX11()
+check_CXX11()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_FLAG}")
 
 set(JSON_SPIRIT_SRCS
 json_spirit_reader.cpp json_spirit_reader.h

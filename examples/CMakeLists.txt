@@ -1,8 +1,9 @@
 include(EnableCXX11)
 include(EnableWarnings)
 
-enable_CXX11()
 enable_Warnings()
+check_CXX11()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_FLAG}")
 
 add_executable(combined combined.cpp)
 add_executable(simple_server simple_server.cpp)

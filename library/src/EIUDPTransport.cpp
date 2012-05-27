@@ -2,8 +2,8 @@
 
 #include <vector>
 #include <memory>
-#include <boost/array.hpp>
-#include <boost/thread.hpp>
+#include <algorithm>
+#include "EIThread.h"
 #include <boost/asio/ip/udp.hpp>
 
 namespace EI
@@ -60,8 +60,8 @@ public:
 
     virtual void onBytePacket(Transport::Type, std::vector<Byte> const&);
 private:
-    boost::thread thread;
-    boost::mutex mutex;
+    Thread::thread thread;
+    Thread::mutex mutex;
     ba::io_service io_service;
     ba::ip::udp::socket dataSocket;
     ba::ip::udp::socket controlSocket;
@@ -99,7 +99,7 @@ void UDPTransport::removeBytePacketObserver(BytePacketObserver& ob)
     pimpl->removeBytePacketObserver(ob);
 }
 
-UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const& options)
+UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const&)
     : dataSocket(io_service, ba::ip::udp::v4()),
       controlSocket(io_service, ba::ip::udp::v4()),
       dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
@@ -121,12 +121,13 @@ UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::stri
 
 UDPTransport::UDPTransportImpl::~UDPTransportImpl()
 {
-    thread.join();
+    if(thread.joinable())
+        thread.join();
 }
 
 void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type, BytePacketObserver& ob)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
 
     if(type == Transport::ALL || type == Transport::DATA)
         dataObservers.push_back(&ob);
@@ -135,13 +136,13 @@ void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type,
         controlObservers.push_back(&ob);
 
     if(!thread.joinable()) {
-        thread = boost::thread([this](){this->io_service.run();});
+        thread = Thread::thread([this](){this->io_service.run();});
     }
 }
 
 void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver& ob)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
 
     controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
     dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
@@ -153,7 +154,7 @@ void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver
 
 void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& p)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
 
     auto& observers = type == Transport::DATA ? dataObservers : controlObservers;
 
