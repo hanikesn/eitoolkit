@@ -9,28 +9,23 @@ if(JNI_FOUND)
   swig_add_module(eitoolkit_swig_java java eitoolkit.i)
   swig_link_libraries(eitoolkit_swig_java EIToolkit)
 
-  find_package(Java REQUIRED)
-  #if(Java_FOUND)
+  find_package(Java COMPONENTS Development)
+  if(Java_Development_FOUND)
     include(UseJava)
-    set(JAVA_SOURCE_FILES
-${CMAKE_CURRENT_BINARY_DIR}/BytePacketObserver.java
-${CMAKE_CURRENT_BINARY_DIR}/ByteVector.java
-${CMAKE_CURRENT_BINARY_DIR}/ControlObserver.java
-${CMAKE_CURRENT_BINARY_DIR}/DataObserver.java
-${CMAKE_CURRENT_BINARY_DIR}/DataPacket.java
-${CMAKE_CURRENT_BINARY_DIR}/EIToolkit.java
-${CMAKE_CURRENT_BINARY_DIR}/EIToolkitJNI.java
-${CMAKE_CURRENT_BINARY_DIR}/Packet.java
-${CMAKE_CURRENT_BINARY_DIR}/Presentation.java
-${CMAKE_CURRENT_BINARY_DIR}/Receiver.java
-${CMAKE_CURRENT_BINARY_DIR}/Sender.java
-${CMAKE_CURRENT_BINARY_DIR}/StringMap.java
-${CMAKE_CURRENT_BINARY_DIR}/Transport.java
-)
+
+    foreach(class ${SWIG_CLASSES})
+        list(APPEND JAVA_SOURCE_FILES "${CMAKE_CURRENT_BINARY_DIR}/${class}.java")
+    endforeach()
+
+    list(APPEND JAVA_SOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_swig_java.java)
+    list(APPEND JAVA_SOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_swig_javaJNI.java)
+
     set_source_files_properties(${JAVA_SOURCE_FILES} GENERATED)
+    source_group(Generated FILES ${JAVA_SOURCE_FILES})
+    # TODO problems with parallel make
     add_jar(eitoolkit_swig_java-jni ${JAVA_SOURCE_FILES} DEPENDS eitoolkit_swig_java)
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libeitoolkit-jni.so DESTINATION jar)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_swig_java-jni.jar DESTINATION jar)
-  #endif()
+  endif()
 endif(JNI_FOUND)

@@ -27,7 +27,9 @@ if(Boost_FOUND)
   link_directories(${Boost_LIBRARY_DIRS})
   add_definitions(-DBOOST_ALL_NO_LIB)
   # for boost::asio
-  add_definitions(-D_WIN32_WINNT=0x0501)
+  if(WIN32)
+    add_definitions(-D_WIN32_WINNT=0x0501)
+  endif()
 endif(Boost_FOUND)
 
 set(HEADER_FILES
