@@ -6,8 +6,8 @@ if(JNI_FOUND)
   set(CMAKE_SWIG_FLAGS -package de.uni_stuttgart.eitoolkit -Wall)
 
   set_source_files_properties(eitoolkit.i PROPERTIES CPLUSPLUS ON)
-  swig_add_module(eitoolkit-jni java eitoolkit.i)
-  swig_link_libraries(eitoolkit-jni EIToolkit)
+  swig_add_module(eitoolkit_swig_java java eitoolkit.i)
+  swig_link_libraries(eitoolkit_swig_java EIToolkit)
 
   find_package(Java REQUIRED)
   #if(Java_FOUND)
@@ -28,9 +28,9 @@ ${CMAKE_CURRENT_BINARY_DIR}/StringMap.java
 ${CMAKE_CURRENT_BINARY_DIR}/Transport.java
 )
     set_source_files_properties(${JAVA_SOURCE_FILES} GENERATED)
-    add_jar(eitoolkit-jni-jar ${JAVA_SOURCE_FILES})
+    add_jar(eitoolkit_swig_java-jni ${JAVA_SOURCE_FILES} DEPENDS eitoolkit_swig_java)
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libeitoolkit-jni.so DESTINATION jar)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit-jni-jar.jar DESTINATION jar)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_swig_java-jni.jar DESTINATION jar)
   #endif()
 endif(JNI_FOUND)
