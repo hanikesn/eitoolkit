@@ -1,15 +1,15 @@
 include(CheckCXXCompilerFlag)
 
 macro(enable_Warnings)
-  if(CMAKE_COMPILER_IS_GNUCXX OR (COMPILER_ID STREQUAL CLANG))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+  if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
   elseif(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /wd4512")
   endif()
 endmacro()
 
 macro(disable_WarningUnused)
-  if(CMAKE_COMPILER_IS_GNUCXX OR (COMPILER_ID STREQUAL CLANG))
+  if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused")
   endif()
 endmacro()

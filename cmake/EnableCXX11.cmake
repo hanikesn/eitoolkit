@@ -1,7 +1,7 @@
 include(CheckCXXCompilerFlag)
 
 macro(check_CXX11)
-  if(CMAKE_COMPILER_IS_GNUCXX OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+  if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
     check_cxx_compiler_flag(-std=c++11 HAS_CXX11)
     if(HAS_CXX11)
       set(CXX11_FLAG "-std=c++11")
