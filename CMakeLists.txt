@@ -11,4 +11,5 @@ include(CPack)
 
 add_subdirectory(json_spirit)
 add_subdirectory(library)
+add_subdirectory(doc)
 add_subdirectory(examples)
