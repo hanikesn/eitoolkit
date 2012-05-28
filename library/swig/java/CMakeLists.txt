@@ -11,20 +11,21 @@ if(JNI_FOUND)
 
   install(TARGETS eitoolkit_java DESTINATION java)
 
+  foreach(class ${SWIG_CLASSES})
+    list(APPEND JAVA_SOURCE_FILES "${CMAKE_CURRENT_BINARY_DIR}/${class}.java")
+  endforeach()
+
+  list(APPEND JAVA_SOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_java.java)
+  list(APPEND JAVA_SOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_javaJNI.java)
+
+  set_source_files_properties(${JAVA_SOURCE_FILES} GENERATED)
+  source_group(Generated FILES ${JAVA_SOURCE_FILES})
+  set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${JAVA_SOURCE_FILES}")
+
   find_package(Java COMPONENTS Development)
   if(Java_Development_FOUND)
     include(UseJava)
 
-    foreach(class ${SWIG_CLASSES})
-        list(APPEND JAVA_SOURCE_FILES "${CMAKE_CURRENT_BINARY_DIR}/${class}.java")
-    endforeach()
-
-    list(APPEND JAVA_SOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_java.java)
-    list(APPEND JAVA_SOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_javaJNI.java)
-
-    set_source_files_properties(${JAVA_SOURCE_FILES} GENERATED)
-    source_group(Generated FILES ${JAVA_SOURCE_FILES})
-    # TODO problems with parallel make
     add_jar(eitoolkit_java_jni ${JAVA_SOURCE_FILES})
     add_dependencies(eitoolkit_java_jni eitoolkit_java)
 
