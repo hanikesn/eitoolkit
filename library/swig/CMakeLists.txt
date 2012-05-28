@@ -17,6 +17,8 @@ if(SWIG_FOUND)
     Transport
   )
 
+  disable_WarningUnused()
+
   add_subdirectory(java)
   add_subdirectory(csharp)
 endif(SWIG_FOUND)
