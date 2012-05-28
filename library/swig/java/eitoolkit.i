@@ -1,4 +1,4 @@
-%module(directors="1") eitoolkit_swig_java
+%module(directors="1") eitoolkit_java
 
 %{
 #include <map>

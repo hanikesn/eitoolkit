@@ -1,4 +1,4 @@
-%module(directors="1") eitoolkit_swig_csharp
+%module(directors="1") eitoolkit_csharp
 
 %{
 #include <map>

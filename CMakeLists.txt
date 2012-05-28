@@ -7,6 +7,8 @@ set(EIToolkit_VERSION_PATCH 1)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+include(CPack)
+
 add_subdirectory(json_spirit)
 add_subdirectory(library)
 add_subdirectory(examples)
