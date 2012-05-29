@@ -148,7 +148,8 @@ void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver
     dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
     if(dataObservers.empty() && controlObservers.empty()) {
         io_service.stop();
-        thread.join();
+        if(thread.joinable())
+            thread.join();
     }
 }
 

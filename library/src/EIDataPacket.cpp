@@ -3,7 +3,8 @@
 namespace EI
 {
 
-static Value emptyValue;
+static const Value emptyValue;
+char const* const DataPacket::IDENTIFIER = "data";
 
 class DataPacket::DataPacketImpl
 {
@@ -16,12 +17,12 @@ private:
 };
 
 DataPacket::DataPacket(std::string const& sender) :
-    Packet(sender, "data"), pimpl(new DataPacketImpl())
+    Packet(sender, DataPacket::IDENTIFIER), pimpl(new DataPacketImpl())
 {
 }
 
 DataPacket::DataPacket(DataPacket const& other) :
-    Packet(other.getSender(), "data"), pimpl(new DataPacketImpl(*other.pimpl))
+    Packet(other.getSender(), DataPacket::IDENTIFIER), pimpl(new DataPacketImpl(*other.pimpl))
 {
 
 }

@@ -17,6 +17,7 @@ public:
     Value(std::string const&);
     Value(double);
     Value(Value const&);
+    Value& operator=(const Value & other);
     ~Value();
 
     Type getType() const;
@@ -25,7 +26,7 @@ public:
     double asDouble() const;
 private:
     class ValueImpl;
-    ValueImpl* const pimpl;
+    ValueImpl* pimpl;
 };
 
 EITOOLKIT_EXPORT std::ostream& operator<< (std::ostream& stream, const Value& value);

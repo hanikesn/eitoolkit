@@ -11,6 +11,30 @@ class Sender;
 class Transport;
 class UDPTransport;
 
+class Value
+{
+public:
+    enum Type {EMPTY, DOUBLE, STRING};
+
+    Value();
+    Value(std::string const&);
+    Value(double);
+    Value(Value const&);
+    ~Value();
+
+    Type getType() const;
+
+    std::string const& asString();
+};
+
+class Description
+{
+public:
+    void addDataStream(std::string const& name, std::pair<Value::Type, std::string> const& info);
+
+    std::map<std::string, std::pair<Value::Type, std::string> > values();
+};
+
 class Packet
 {
 public:
@@ -22,16 +46,41 @@ public:
     std::string const& getMsgtype() const;
 };
 
+class DescriptionPacket : public Packet
+{
+public:
+    DescriptionPacket(std::string const& sender, Description const& description);
+
+    Description const& getDescription();
+
+    static char const* const IDENTIFIER;
+};
+
+class DiscoverPacket : public Packet
+{
+public:
+    DiscoverPacket(std::string const& sender);
+
+    static char const* const IDENTIFIER;
+};
+
 class DataPacket : public Packet
 {
 public:
-    DataPacket(std::string const& name);
+    DataPacket(std::string const& sender);
+    DataPacket(DataPacket const& other);
 
-    void setString(std::string const&, std::string  const&);
-    std::string getString(std::string  const&);
+    void set(std::string const&, Value const&);
+    Value const& get(std::string const&) const;
+    std::map<std::string, Value> const& getValues() const;
 
-    void setDouble(std::string  const&, double);
-    double getDouble(std::string const&);
+    void setString(std::string const&, std::string const&);
+    std::string const& getString(std::string const&) const;
+
+    void setDouble(std::string const&, double);
+    double getDouble(std::string const&) const;
+
+    static char const* const IDENTIFIER;
 };
 
 class Presentation
@@ -39,6 +88,8 @@ class Presentation
 public:
     virtual ~Presentation();
     void encode(Packet const&, std::vector<Byte> &) = 0;
+    // Shared Pointer machen probleme
+    // virtual std::shared_ptr<Packet> decode(std::vector<Byte> const&) = 0;
 };
 
 class DataObserver
@@ -75,8 +126,8 @@ public:
 class Sender
 {
 public:
-    Sender(std::map<std::string, std::string> const& options);
-    Sender(std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    Sender(Description const&, std::map<std::string, std::string> const& options);
+    Sender(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
     void sendPacket(Packet const&);

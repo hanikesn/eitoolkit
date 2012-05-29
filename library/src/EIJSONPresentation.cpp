@@ -83,7 +83,7 @@ static void encodePacket(Packet const& p, std::vector<Byte> & out)
 
 void JSONPresentation::JSONPresentationImpl::encode(Packet const& p, std::vector<Byte>& out)
 {
-    if(p.getMsgtype() == "data") {
+    if(p.getMsgtype() == DataPacket::IDENTIFIER) {
         encodeDataPacket(dynamic_cast<DataPacket const&>(p), out);
     } else {
         encodePacket(p, out);
@@ -119,7 +119,7 @@ std::shared_ptr<Packet> JSONPresentation::JSONPresentationImpl::decode(std::vect
     auto msgtype = obj["msgtype"].get_str();
     auto sender = obj["sender"].get_str();
 
-    if(msgtype=="data")
+    if(msgtype==DataPacket::IDENTIFIER)
         return decodeDataPacket(obj);
     else
         return std::make_shared<Packet>(sender, msgtype);

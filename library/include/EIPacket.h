@@ -18,6 +18,7 @@ public:
     std::string const& getSender() const;
     std::string const& getMsgtype() const;
 private:
+    Packet& operator=(Packet const& other);
     class PacketImpl;
     PacketImpl* pimpl;
 };

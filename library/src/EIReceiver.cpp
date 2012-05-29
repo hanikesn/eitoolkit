@@ -1,10 +1,13 @@
 #include "EIReceiver.h"
 
+#include "EIDataPacket.h"
 #include "EIJSONPresentation.h"
 #include "EIUDPTransport.h"
+#include "EIDiscoverPacket.h"
+#include "EIThread.h"
 
-#include <boost/thread/mutex.hpp>
 #include <iostream>
+#include <algorithm>
 
 namespace EI
 {
@@ -38,7 +41,7 @@ private:
 	Transport& transport;
 	Presentation& presentation;
 
-    boost::mutex mutex;
+    Thread::mutex mutex;
     std::vector<DataObserver*> dataObservers;
     std::vector<ControlObserver*> controlObservers;
 
@@ -117,31 +120,31 @@ void Receiver::ReceiverImpl::init()
 
 void Receiver::ReceiverImpl::sendDiscover()
 {
-    presentation.encode(Packet("name", "discover"), buffer);
+    presentation.encode(DiscoverPacket("Receiver"), buffer);
     transport.sendBytePacket(Transport::CONTROL, buffer);
 }
 
 void Receiver::ReceiverImpl::addDataListener(DataObserver& ob)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
     dataObservers.push_back(&ob);
 }
 
 void Receiver::ReceiverImpl::removeDataListener(DataObserver& ob)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
     dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
 }
 
 void Receiver::ReceiverImpl::addControlListener(ControlObserver& ob)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
     controlObservers.push_back(&ob);
 }
 
 void Receiver::ReceiverImpl::removeControlListener(ControlObserver& ob)
 {
-    boost::lock_guard<boost::mutex> lock(mutex);
+    Thread::lock_guard lock(mutex);
     controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
 }
 
@@ -155,7 +158,7 @@ void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte
         return;
     }
 
-    boost::lock_guard<boost::mutex> lock(mutex);    
+    Thread::lock_guard lock(mutex);
     switch(type) {
     case Transport::DATA:
         std::for_each(std::begin(dataObservers), std::end(dataObservers),

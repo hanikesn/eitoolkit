@@ -10,6 +10,7 @@ public:
     ValueImpl() : type(EMPTY) {}
     ValueImpl(double val) : type(DOUBLE), value(val) {}
     ValueImpl(std::string const& val) : type(STRING), value(val) {}
+    ValueImpl(ValueImpl const& other) : type(other.type), value(other.value) {}
 
     const Type type;
     const boost::variant< double, std::string > value;
@@ -33,6 +34,15 @@ Value::Value(std::string const& value)
 Value::Value(double value)
     : pimpl(new ValueImpl(value))
 {
+}
+
+Value& Value::operator=(const Value & other)
+{
+    Value tmp(other);
+
+    std::swap(pimpl, tmp.pimpl);
+
+    return *this;
 }
 
 Value::~Value()

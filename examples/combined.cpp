@@ -32,13 +32,13 @@ int main()
 
     EI::UDPTransport transport(options);
     EI::JSONPresentation presentation(options);
-    EI::Sender server(options, transport, presentation);
+    EI::Sender server(EI::Description(), options, transport, presentation);
     EI::Receiver receiver(options, transport);
 
     receiver.addDataListener(dataListener);
     receiver.addControlListener(controlListener);
-    server.sendPacket(EI::Packet("Discover", "discover"));
-    EI::DataPacket data("Data");
+    server.sendPacket(EI::DiscoverPacket("combined"));
+    EI::DataPacket data("combined");
     data.setDouble("asd", 5.0);
     data.setString("dfsdf", "Hallo Welt");
     server.sendPacket(data);

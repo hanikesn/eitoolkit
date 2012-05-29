@@ -9,12 +9,19 @@ if(SWIG_FOUND)
     ControlObserver
     DataObserver
     DataPacket
+    DiscoverPacket
+    Description
+    DescriptionPacket
+    DescriptionPair
+    DescriptionMap
     Packet
     Presentation
     Receiver
     Sender
     StringMap
     Transport
+    Value
+    ValueMap
   )
 
   disable_WarningUnused()

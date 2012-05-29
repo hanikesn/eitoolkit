@@ -8,7 +8,9 @@ int main()
 
     std::map<std::string, std::string> options;
 
-    EI::Sender sender(options);
+    EI::Description desc;
+
+    EI::Sender sender(desc, options);
 
     while(true)
     {

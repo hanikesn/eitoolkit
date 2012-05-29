@@ -26,6 +26,9 @@ public:
 
     void setDouble(std::string const&, double);
     double getDouble(std::string const&) const;
+
+    static char const* const IDENTIFIER;
+
 private:
     class DataPacketImpl;
     DataPacketImpl* const pimpl;

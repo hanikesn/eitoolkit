@@ -5,6 +5,7 @@
 #include "EITransport.h"
 #include "EIPresentation.h"
 #include "EIPacket.h"
+#include "EIDescription.h"
 
 #include <map>
 #include <string>
@@ -17,8 +18,8 @@ class EITOOLKIT_EXPORT Sender
 public:
     /// Erstellt einen UPD Sender mit JSON Darstellung
     /// Options: z.B. Name = asd etc.
-    Sender(std::map<std::string, std::string> const& options);
-    Sender(std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    Sender(Description const&, std::map<std::string, std::string> const& options);
+    Sender(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
     void sendPacket(const Packet&);
