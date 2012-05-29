@@ -12,10 +12,12 @@ using namespace EI;
 %include <std_shared_ptr.i>
 %include <stl.i>
 
+/*
 %shared_ptr(EI::Packet)
 %shared_ptr(EI::DataPacket)
 %shared_ptr(EI::DescriptionPacket)
 %shared_ptr(EI::DiscoverPacket)
+*/
 
 %feature("director") EI::DataObserver;
 %feature("director") EI::ControlObserver;
