@@ -24,6 +24,8 @@ if(SWIG_FOUND)
     ValueMap
   )
 
+  set(SWIG_MODULE_EXTRA_DEPS "../common/eitoolkit.h" "../common/eitoolkit.i")
+
   disable_WarningUnused()
 
   add_subdirectory(java)

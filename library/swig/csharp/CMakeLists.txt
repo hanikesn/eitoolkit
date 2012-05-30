@@ -1,7 +1,7 @@
 set(CMAKE_SWIG_FLAGS -namespace de.uni_stuttgart.eitoolkit -Wall)
 
 set_source_files_properties("eitoolkit.i" PROPERTIES CPLUSPLUS ON)
-set(SWIG_MODULE_eitoolkit_csharp_EXTRA_DEPS "../common/eitoolkit.h")
+set(SWIG_MODULE_eitoolkit_csharp_EXTRA_DEPS ${SWIG_MODULE_EXTRA_DEPS})
 swig_add_module(eitoolkit_csharp csharp eitoolkit.i)
 swig_link_libraries(eitoolkit_csharp EIToolkit)
 

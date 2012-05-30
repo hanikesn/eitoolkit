@@ -10,7 +10,7 @@ if(JNI_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing")
   endif()
   set_source_files_properties(eitoolkit.i PROPERTIES CPLUSPLUS ON)
-  set(SWIG_MODULE_eitoolkit_java_EXTRA_DEPS "../common/eitoolkit.h")
+  set(SWIG_MODULE_eitoolkit_java_EXTRA_DEPS ${SWIG_MODULE_EXTRA_DEPS})
   swig_add_module(eitoolkit_java java eitoolkit.i)
   swig_link_libraries(eitoolkit_java EIToolkit)
 
