@@ -32,7 +32,7 @@ int main()
 
     EI::UDPTransport transport(options);
     EI::JSONPresentation presentation(options);
-    EI::Sender server(EI::Description(), options, transport, presentation);
+    EI::Sender server(EI::Description("test"), options, transport, presentation);
     EI::Receiver receiver(options, transport);
 
     receiver.addDataListener(dataListener);

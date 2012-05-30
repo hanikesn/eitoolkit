@@ -5,11 +5,13 @@ namespace EI
 
 class Description::DescriptionImpl
 {
-
+public:
+    DescriptionImpl(const std::string& device_type) : device_type(device_type) {}
+    const std::string device_type;
 };
 
-Description::Description()
-    : pimpl(new DescriptionImpl())
+Description::Description(const std::string& device_type)
+    : pimpl(new DescriptionImpl(device_type))
 {
 }
 

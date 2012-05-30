@@ -14,9 +14,9 @@ public:
     enum Type {EMPTY, DOUBLE, STRING};
 
     Value();
-    Value(std::string const&);
-    Value(double);
-    Value(Value const&);
+    Value(std::string const& value);
+    Value(double value );
+    Value(Value const& other);
     Value& operator=(const Value & other);
     ~Value();
 

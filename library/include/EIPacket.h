@@ -11,7 +11,7 @@ namespace EI
 class EITOOLKIT_EXPORT Packet
 {
 public:
-    Packet(std::string const& sender, std::string const& msgtype);
+    Packet(std::string const& sender, std::string const& msg_type);
     Packet(Packet const& other);
     virtual ~Packet();
 

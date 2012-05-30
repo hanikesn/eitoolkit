@@ -6,6 +6,7 @@
 using namespace EI;
 %}
 
+
 %include <enums.swg>
 %include <std_shared_ptr.i>
 %include <stl.i>
@@ -20,6 +21,9 @@ using namespace EI;
 %feature("director") EI::DataObserver;
 %feature("director") EI::ControlObserver;
 %feature("director") EI::BytePacketObserver;
+
+// DataPacket doesn't have a default constructor, but this constructor would require one, so don't generate it
+%ignore std::vector<EI::DataPacket>::vector(size_type);
 
 %include "eitoolkit.h"
 

@@ -8,7 +8,7 @@ int main()
 
     std::map<std::string, std::string> options;
 
-    EI::Description desc;
+    EI::Description desc("asd");
 
     EI::Sender sender(desc, options);
 

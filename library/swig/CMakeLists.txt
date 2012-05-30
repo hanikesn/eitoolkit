@@ -12,6 +12,7 @@ if(SWIG_FOUND)
     DataPacket
     DataPacketVector
     DiscoverPacket
+    DataSeriesInfo
     Description
     DescriptionPacket
     DescriptionPair

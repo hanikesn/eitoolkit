@@ -9,7 +9,7 @@ int main()
 
     std::map<std::string, std::string> options;
 
-    EI::Sender sender(EI::Description(), options);
+    EI::Sender sender(EI::Description("asd"), options);
 
     int start = clock();
 

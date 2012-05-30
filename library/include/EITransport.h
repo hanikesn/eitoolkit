@@ -17,7 +17,7 @@ public:
 
     virtual ~Transport() {}
 
-    virtual void sendBytePacket(Type, std::vector<Byte>  const&) = 0;
+    virtual void sendBytePacket(Type, std::vector<Byte> const& packet) = 0;
     virtual void addBytePacketObserver(Type, BytePacketObserver&) = 0;
     virtual void removeBytePacketObserver(BytePacketObserver&) = 0;
 };
