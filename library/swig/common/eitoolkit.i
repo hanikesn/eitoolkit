@@ -26,5 +26,6 @@ using namespace EI;
 %template(StringMap) std::map<std::string, std::string>;
 %template(ValueMap) std::map<std::string, EI::Value>;
 %template(ByteVector) std::vector<EI::Byte>;
+%template(DataPacketVector) std::vector<EI::DataPacket>;
 %template(DescriptionPair) std::pair<EI::Value::Type, std::string>;
 %template(DescriptionMap) std::map<std::string, std::pair<EI::Value::Type, std::string> >;

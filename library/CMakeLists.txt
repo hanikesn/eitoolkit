@@ -34,6 +34,7 @@ endif(Boost_FOUND)
 
 set(HEADER_FILES
   include/EIJSONPresentation.h
+  include/EIBlockingReceiver.h
   include/EIDataPacket.h
   include/EIDiscoverPacket.h
   include/EIDescription.h
@@ -52,6 +53,7 @@ set(HEADER_FILES
 )
 
 set(SOURCE_FILES
+  src/EIBlockingReceiver.cpp
   src/EIJSONPresentation.cpp
   src/EIDataPacket.cpp
   src/EIDiscoverPacket.cpp

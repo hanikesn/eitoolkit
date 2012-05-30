@@ -4,6 +4,7 @@
 #include "EIPrerequisites.h"
 #include "EISender.h"
 #include "EIReceiver.h"
+#include "EIBlockingReceiver.h"
 #include "EIUDPTransport.h"
 #include "EIJSONPresentation.h"
 #include "EIPacket.h"

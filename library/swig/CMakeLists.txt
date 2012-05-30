@@ -4,11 +4,13 @@ if(SWIG_FOUND)
   include(${SWIG_USE_FILE})
 
   set(SWIG_CLASSES
+    BlockingReceiver
     BytePacketObserver
     ByteVector
     ControlObserver
     DataObserver
     DataPacket
+    DataPacketVector
     DiscoverPacket
     Description
     DescriptionPacket

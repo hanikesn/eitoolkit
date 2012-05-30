@@ -32,6 +32,15 @@ DataPacket::~DataPacket()
     delete pimpl;
 }
 
+DataPacket& DataPacket::operator=(DataPacket const& other)
+{
+    DataPacket tmp(other);
+
+    std::swap(pimpl, tmp.pimpl);
+
+    return *this;
+}
+
 void DataPacket::setString(std::string const& key, std::string const& value)
 {
     pimpl->set(key, Value(value));

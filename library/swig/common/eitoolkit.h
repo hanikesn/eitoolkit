@@ -152,4 +152,17 @@ public:
     virtual void onBytePacket(Transport::Type, std::vector<Byte> const&) = 0;
 };
 
+class BlockingReceiver
+{
+public:
+    BlockingReceiver(std::map<std::string, std::string> const& options);
+    BlockingReceiver(std::map<std::string, std::string> const& options, Transport&);
+    BlockingReceiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    ~BlockingReceiver();
+
+    void waitForPackets(int timeout);
+    int hasPackets();
+    std::vector<DataPacket> getPackets();
+};
+
 }
