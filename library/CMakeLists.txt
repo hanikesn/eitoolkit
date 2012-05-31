@@ -21,6 +21,8 @@ if(NOT HAVE_THREAD_H)
   list(APPEND BOOST_components thread)
 endif()
 
+set(Boost_DEBUG FALSE CACHE BOOL "Set this to debug the finding of boost")
+
 find_package(Boost COMPONENTS ${BOOST_components} REQUIRED)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIR})
