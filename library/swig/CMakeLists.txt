@@ -9,8 +9,8 @@ if(SWIG_FOUND)
     ByteVector
     ControlObserver
     DataObserver
-    DataPacket
-    DataPacketVector
+    DataMessage
+    DataMessageVector
     DiscoverPacket
     DataSeriesInfo
     Description

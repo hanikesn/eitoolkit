@@ -16,7 +16,7 @@ class EITOOLKIT_EXPORT DataObserver
 {
 public:
     virtual ~DataObserver() {}
-    virtual void onPacket(DataPacket const&) = 0;
+    virtual void onPacket(DataMessage const&) = 0;
 };
 
 class EITOOLKIT_EXPORT ControlObserver

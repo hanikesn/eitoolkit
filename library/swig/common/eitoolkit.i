@@ -13,7 +13,7 @@ using namespace EI;
 
 /*
 %shared_ptr(EI::Packet)
-%shared_ptr(EI::DataPacket)
+%shared_ptr(EI::DataMessage)
 %shared_ptr(EI::DescriptionPacket)
 %shared_ptr(EI::DiscoverPacket)
 */
@@ -23,13 +23,13 @@ using namespace EI;
 %feature("director") EI::BytePacketObserver;
 
 // DataPacket doesn't have a default constructor, but this constructor would require one, so don't generate it
-%ignore std::vector<EI::DataPacket>::vector(size_type);
+%ignore std::vector<EI::DataMessage>::vector(size_type);
 
 %include "eitoolkit.h"
 
 %template(StringMap) std::map<std::string, std::string>;
 %template(ValueMap) std::map<std::string, EI::Value>;
 %template(ByteVector) std::vector<EI::Byte>;
-%template(DataPacketVector) std::vector<EI::DataPacket>;
+%template(DataMessageVector) std::vector<EI::DataMessage>;
 %template(DescriptionPair) std::pair<EI::Value::Type, std::string>;
 %template(DescriptionMap) std::map<std::string, std::pair<EI::Value::Type, std::string> >;

@@ -72,7 +72,7 @@ Sender::SenderImpl::~SenderImpl()
 void Sender::SenderImpl::sendPacket(Packet const& packet)
 {
     presentation.encode(packet, buffer);
-    transport.sendBytePacket(packet.getMsgtype() == DataPacket::IDENTIFIER ? Transport::DATA :  Transport::CONTROL, buffer);
+    transport.sendBytePacket(packet.getMsgtype() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::CONTROL, buffer);
 }
 
 void Sender::SenderImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& bytes)

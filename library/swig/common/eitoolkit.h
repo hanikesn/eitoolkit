@@ -88,12 +88,14 @@ public:
     static char const* const IDENTIFIER;
 };
 
-class DataPacket : public Packet
+class DataMessage : public Packet
 {
 public:
-    DataPacket(std::string const& sender);
-    DataPacket(DataPacket const& other);
-    ~DataPacket();
+    static char const* const IDENTIFIER;
+
+    DataMessage(std::string const& sender);
+    DataMessage(DataMessage const& other);
+    ~DataMessage();
 
     void set(std::string const& name, Value const& value);
     Value const& get(std::string const& name) const;
@@ -104,8 +106,6 @@ public:
 
     void setDouble(std::string const& name, double value);
     double getDouble(std::string const& name) const;
-
-    static char const* const IDENTIFIER;
 };
 
 class Presentation
@@ -121,7 +121,7 @@ class DataObserver
 {
 public:
     virtual ~DataObserver() {}
-    virtual void onPacket(DataPacket const&) = 0;
+    virtual void onPacket(DataMessage const&) = 0;
 };
 
 class ControlObserver
@@ -185,7 +185,7 @@ public:
     BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
     ~BlockingReceiver();
 
-    std::vector<DataPacket> getPackets();
+    std::vector<DataMessage> getMessages();
     int hasPackets();
     void waitForPackets(int milliseconds);
 };

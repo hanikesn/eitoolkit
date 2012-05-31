@@ -164,7 +164,7 @@ void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte
         std::for_each(std::begin(dataObservers), std::end(dataObservers),
         [&p](DataObserver* ob)
         {
-            std::shared_ptr<DataPacket> dp = std::dynamic_pointer_cast<DataPacket>(p);
+            std::shared_ptr<DataMessage> dp = std::dynamic_pointer_cast<DataMessage>(p);
             if(dp)
                 ob->onPacket(std::move(*dp));
         });

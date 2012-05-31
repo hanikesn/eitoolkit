@@ -4,9 +4,9 @@ namespace EI
 {
 
 static const Value emptyValue;
-char const* const DataPacket::IDENTIFIER = "data";
+char const* const DataMessage::IDENTIFIER = "data";
 
-class DataPacket::DataPacketImpl
+class DataMessage::DataMessageImpl
 {
 public:
     void set(std::string const&, Value const&);
@@ -16,67 +16,67 @@ private:
     std::map<std::string, Value> values;
 };
 
-DataPacket::DataPacket(std::string const& sender) :
-    Packet(sender, DataPacket::IDENTIFIER), pimpl(new DataPacketImpl())
+DataMessage::DataMessage(std::string const& sender) :
+    Packet(sender, DataMessage::IDENTIFIER), pimpl(new DataMessageImpl())
 {
 }
 
-DataPacket::DataPacket(DataPacket const& other) :
-    Packet(other.getSender(), DataPacket::IDENTIFIER), pimpl(new DataPacketImpl(*other.pimpl))
+DataMessage::DataMessage(DataMessage const& other) :
+    Packet(other.getSender(), DataMessage::IDENTIFIER), pimpl(new DataMessageImpl(*other.pimpl))
 {
 
 }
 
-DataPacket::~DataPacket()
+DataMessage::~DataMessage()
 {
     delete pimpl;
 }
 
-DataPacket& DataPacket::operator=(DataPacket const& other)
+DataMessage& DataMessage::operator=(DataMessage const& other)
 {
-    DataPacket tmp(other);
+    DataMessage tmp(other);
 
     std::swap(pimpl, tmp.pimpl);
 
     return *this;
 }
 
-void DataPacket::setString(std::string const& key, std::string const& value)
+void DataMessage::setString(std::string const& key, std::string const& value)
 {
     pimpl->set(key, Value(value));
 }
 
-std::string DataPacket::getString(std::string const& key) const
+std::string DataMessage::getString(std::string const& key) const
 {
     return pimpl->get(key).asString();
 }
 
-void DataPacket::setDouble(std::string const& key, double value)
+void DataMessage::setDouble(std::string const& key, double value)
 {
     pimpl->set(key, Value(value));
 }
 
-double DataPacket::getDouble(std::string const& key) const
+double DataMessage::getDouble(std::string const& key) const
 {
     return pimpl->get(key).asDouble();
 }
 
-std::map<std::string, Value> DataPacket::getValues() const
+std::map<std::string, Value> DataMessage::getValues() const
 {
     return pimpl->getValues();
 }
 
-void DataPacket::DataPacketImpl::set(const std::string & key, const Value & value)
+void DataMessage::DataMessageImpl::set(const std::string & key, const Value & value)
 {
     values.insert(std::pair<const std::string, Value>(key, value));
 }
 
-std::map<std::string, Value> const& DataPacket::DataPacketImpl::getValues() const
+std::map<std::string, Value> const& DataMessage::DataMessageImpl::getValues() const
 {
     return values;
 }
 
-Value const& DataPacket::DataPacketImpl::get(const std::string & key) const
+Value const& DataMessage::DataMessageImpl::get(const std::string & key) const
 {
     auto val = values.find(key);
     if(val != values.end())

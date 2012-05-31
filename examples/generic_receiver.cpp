@@ -6,7 +6,7 @@
 class ExampleListener : public EI::DataObserver
 {
 public:
-    void onPacket(EI::DataPacket const& p) {
+    void onPacket(EI::DataMessage const& p) {
         std::cout << "Data: " << p.getSender() << " " << p.getMsgtype() << std::endl;
         std::for_each(p.getValues().begin(), p.getValues().end(),
                       [](std::pair<const std::string, EI::Value> const& pair)

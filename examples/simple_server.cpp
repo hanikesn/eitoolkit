@@ -16,7 +16,7 @@ int main()
     {
         std::string message;
         std::getline(std::cin, message);
-        EI::DataPacket p("simple_server");
+        EI::DataMessage p("simple_server");
         p.setString("msg",  message);
         sender.sendPacket(p);
     }

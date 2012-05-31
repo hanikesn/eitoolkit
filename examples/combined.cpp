@@ -8,7 +8,7 @@ class DataListener : public EI::DataObserver
 {
 public:
     virtual ~DataListener() {}
-    virtual void onPacket(EI::DataPacket const& p) {
+    virtual void onPacket(EI::DataMessage const& p) {
         std::cout << "Data: " << p.getSender() << " " << p.getMsgtype() << std::endl;
     }
 
@@ -38,7 +38,7 @@ int main()
     receiver.addDataListener(dataListener);
     receiver.addControlListener(controlListener);
     server.sendPacket(EI::DiscoverPacket("combined"));
-    EI::DataPacket data("combined");
+    EI::DataMessage data("combined");
     data.setDouble("asd", 5.0);
     data.setString("dfsdf", "Hallo Welt");
     server.sendPacket(data);

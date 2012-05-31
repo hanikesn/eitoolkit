@@ -20,7 +20,7 @@ public:
     BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
     ~BlockingReceiver();
 
-    std::vector<DataPacket> getPackets();
+    std::vector<DataMessage> getMessages();
     int hasPackets();
     void waitForPackets(int milliseconds);
 

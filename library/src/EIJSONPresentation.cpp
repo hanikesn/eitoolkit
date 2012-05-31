@@ -45,7 +45,7 @@ std::shared_ptr<Packet> JSONPresentation::decode(std::vector<Byte> const& bytes)
 JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(std::map<std::string, std::string> const&)
 {}
 
-static void encodeDataPacket(DataPacket const& p, std::vector<Byte> & out)
+static void encodeDataMessage(DataMessage const& p, std::vector<Byte> & out)
 {
     js::mObject obj;
     js::mObject valuesObj;
@@ -83,17 +83,17 @@ static void encodePacket(Packet const& p, std::vector<Byte> & out)
 
 void JSONPresentation::JSONPresentationImpl::encode(Packet const& p, std::vector<Byte>& out)
 {
-    if(p.getMsgtype() == DataPacket::IDENTIFIER) {
-        encodeDataPacket(dynamic_cast<DataPacket const&>(p), out);
+    if(p.getMsgtype() == DataMessage::IDENTIFIER) {
+        encodeDataMessage(dynamic_cast<DataMessage const&>(p), out);
     } else {
         encodePacket(p, out);
     }
 }
 
-static std::shared_ptr<Packet> decodeDataPacket(js::mObject & obj)
+static std::shared_ptr<Packet> decodeDataMessage(js::mObject & obj)
 {
     auto sender = obj["sender"].get_str();
-    auto packet = std::make_shared<DataPacket>(sender);
+    auto packet = std::make_shared<DataMessage>(sender);
 
     auto val = obj["values"].get_obj();
 
@@ -119,8 +119,8 @@ std::shared_ptr<Packet> JSONPresentation::JSONPresentationImpl::decode(std::vect
     auto msgtype = obj["msgtype"].get_str();
     auto sender = obj["sender"].get_str();
 
-    if(msgtype==DataPacket::IDENTIFIER)
-        return decodeDataPacket(obj);
+    if(msgtype==DataMessage::IDENTIFIER)
+        return decodeDataMessage(obj);
     else
         return std::make_shared<Packet>(sender, msgtype);
 }

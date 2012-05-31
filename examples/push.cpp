@@ -18,7 +18,7 @@ int main()
     const std::string msg("msg");
     const std::string message("message");
 
-    EI::DataPacket p("simple_server");
+    EI::DataMessage p("simple_server");
     while(clock() < start + CLOCKS_PER_SEC*5)
     {
         p.setString(msg,  message);

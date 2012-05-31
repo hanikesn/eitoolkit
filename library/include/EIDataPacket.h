@@ -1,5 +1,5 @@
-#ifndef EIDataPacket_H
-#define EIDataPacket_H
+#ifndef EIDataMessage_H
+#define EIDataMessage_H
 
 #include "EIPrerequisites.h"
 #include "EIValue.h"
@@ -10,17 +10,17 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT DataPacket : public Packet
+class EITOOLKIT_EXPORT DataMessage : public Packet
 {
 public:
     static char const* const IDENTIFIER;
 
-    DataPacket(std::string const& sender);
-    DataPacket(DataPacket const& other);
-    ~DataPacket();
+    DataMessage(std::string const& sender);
+    DataMessage(DataMessage const& other);
+    ~DataMessage();
 
-    // needed for the bindings of BlockingReceiver (std::vector<DataPacket>)
-    DataPacket& operator=(DataPacket const& other);
+    // needed for the bindings of BlockingReceiver (std::vector<DataMessage>)
+    DataMessage& operator=(DataMessage const& other);
 
     void set(std::string const& name, Value const& value);
     Value const& get(std::string const& name) const;
@@ -33,8 +33,8 @@ public:
     double getDouble(std::string const& name) const;
 
 private:
-    class DataPacketImpl;
-    DataPacketImpl* pimpl;
+    class DataMessageImpl;
+    DataMessageImpl* pimpl;
 };
 
 }

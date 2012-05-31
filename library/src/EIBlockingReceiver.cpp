@@ -12,9 +12,9 @@ public:
     BlockingReceiverImpl(std::map<std::string, std::string> const& options, Transport& transport) : receiver(options, transport) {}
     BlockingReceiverImpl(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation) : receiver(options, transport, presentation) {}
 
-    void onPacket(const DataPacket &);
+    void onPacket(const DataMessage &);
 
-    std::vector<DataPacket> buffer;
+    std::vector<DataMessage> buffer;
     Receiver receiver;
     Thread::mutex mutex;
     Thread::condition_variable buffer_not_empty;
@@ -40,7 +40,7 @@ BlockingReceiver::~BlockingReceiver()
     delete pimpl;
 }
 
-void BlockingReceiver::BlockingReceiverImpl::onPacket(const DataPacket & packet)
+void BlockingReceiver::BlockingReceiverImpl::onPacket(const DataMessage & packet)
 {
     {
         Thread::lock_guard lock(mutex);
@@ -71,7 +71,7 @@ int BlockingReceiver::hasPackets()
     return pimpl->buffer.size();
 }
 
-std::vector<DataPacket> BlockingReceiver::getPackets()
+std::vector<DataMessage> BlockingReceiver::getMessages()
 {
     Thread::lock_guard lock(pimpl->mutex);
 
