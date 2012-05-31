@@ -1,4 +1,4 @@
-#include "EIPacket.h"
+#include "EIMessage.h"
 
 namespace EI
 {

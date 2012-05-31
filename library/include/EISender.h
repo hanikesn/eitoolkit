@@ -4,7 +4,7 @@
 #include "EIPrerequisites.h"
 #include "EITransport.h"
 #include "EIPresentation.h"
-#include "EIPacket.h"
+#include "EIMessage.h"
 #include "EIDescription.h"
 
 #include <map>

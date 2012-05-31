@@ -7,9 +7,9 @@
 #include "EIBlockingReceiver.h"
 #include "EIUDPTransport.h"
 #include "EIJSONPresentation.h"
-#include "EIPacket.h"
+#include "EIMessage.h"
 #include "EIDataMessage.h"
-#include "EIDiscoverPacket.h"
-#include "EIDescriptionPacket.h"
+#include "EIDiscoverMessage.h"
+#include "EIDescriptionMessage.h"
 
 #endif

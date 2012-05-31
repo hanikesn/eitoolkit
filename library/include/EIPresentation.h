@@ -2,7 +2,7 @@
 #define EIPresentation_H__
 
 #include "EIPrerequisites.h"
-#include "EIPacket.h"
+#include "EIMessage.h"
 
 #include <vector>
 #include <cstdint>

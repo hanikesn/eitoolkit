@@ -3,7 +3,7 @@
 
 #include "EIPrerequisites.h"
 #include "EIValue.h"
-#include "EIPacket.h"
+#include "EIMessage.h"
 
 #include <map>
 

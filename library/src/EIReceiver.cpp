@@ -3,7 +3,7 @@
 #include "EIDataMessage.h"
 #include "EIJSONPresentation.h"
 #include "EIUDPTransport.h"
-#include "EIDiscoverPacket.h"
+#include "EIDiscoverMessage.h"
 #include "EIThread.h"
 
 #include <iostream>

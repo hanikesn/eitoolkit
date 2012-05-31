@@ -2,7 +2,7 @@
 #define EIDiscoverMessage_H
 
 #include "EIPrerequisites.h"
-#include "EIPacket.h"
+#include "EIMessage.h"
 
 #include <string>
 

@@ -2,7 +2,7 @@
 #define EIDescriptionMessage_H
 
 #include "EIPrerequisites.h"
-#include "EIPacket.h"
+#include "EIMessage.h"
 #include "EIDescription.h"
 
 namespace EI

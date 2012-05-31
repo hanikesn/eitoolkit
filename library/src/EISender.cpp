@@ -2,8 +2,8 @@
 #include "EIUDPTransport.h"
 #include "EIJSONPresentation.h"
 #include "EIDescription.h"
-#include "EIDescriptionPacket.h"
-#include "EIDiscoverPacket.h"
+#include "EIDescriptionMessage.h"
+#include "EIDiscoverMessage.h"
 #include "EIDataMessage.h"
 
 #include <memory>
