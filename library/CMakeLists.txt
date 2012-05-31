@@ -84,7 +84,7 @@ add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(EIToolkit ${Boost_LIBRARIES} json_spirit)
 
-if(HAVE_THREAD_H AND GCC)
+if(HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
   target_link_libraries(EIToolkit pthread)
 endif()
 
