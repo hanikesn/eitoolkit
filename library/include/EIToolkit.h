@@ -9,7 +9,7 @@
 #include "EIJSONPresentation.h"
 #include "EIMessage.h"
 #include "EIDataMessage.h"
-#include "EIDiscoverMessage.h"
+#include "EIDiscoveryMessage.h"
 #include "EIDescriptionMessage.h"
 
 #endif

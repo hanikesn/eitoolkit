@@ -1,4 +1,4 @@
-#include "EIDiscoverMessage.h"
+#include "EIDiscoveryMessage.h"
 
 namespace EI
 {

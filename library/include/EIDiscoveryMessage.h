@@ -1,5 +1,5 @@
-#ifndef EIDiscoverMessage_H
-#define EIDiscoverMessage_H
+#ifndef EIDiscoveryMessage_H
+#define EIDiscoveryMessage_H
 
 #include "EIPrerequisites.h"
 #include "EIMessage.h"

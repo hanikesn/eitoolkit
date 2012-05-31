@@ -36,7 +36,7 @@ set(HEADER_FILES
   include/EIJSONPresentation.h
   include/EIBlockingReceiver.h
   include/EIDataMessage.h
-  include/EIDiscoverMessage.h
+  include/EIDiscoveryMessage.h
   include/EIDescription.h
   include/EIDescriptionMessage.h
   include/EIMessage.h
@@ -56,7 +56,7 @@ set(SOURCE_FILES
   src/EIBlockingReceiver.cpp
   src/EIJSONPresentation.cpp
   src/EIDataMessage.cpp
-  src/EIDiscoverMessage.cpp
+  src/EIDiscoveryMessage.cpp
   src/EIDescription.cpp
   src/EIDescriptionMessage.cpp
   src/EIMessage.cpp

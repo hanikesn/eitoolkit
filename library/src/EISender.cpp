@@ -3,7 +3,7 @@
 #include "EIJSONPresentation.h"
 #include "EIDescription.h"
 #include "EIDescriptionMessage.h"
-#include "EIDiscoverMessage.h"
+#include "EIDiscoveryMessage.h"
 #include "EIDataMessage.h"
 
 #include <memory>
