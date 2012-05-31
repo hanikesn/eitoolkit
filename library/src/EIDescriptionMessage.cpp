@@ -18,9 +18,27 @@ DescriptionMessage::DescriptionMessage(const std::string &sender, const Descript
 {
 }
 
+DescriptionMessage::DescriptionMessage(DescriptionMessage&& other)
+    : Message(0), pimpl(0)
+{
+    swap(other);
+}
+
+DescriptionMessage& DescriptionMessage::operator=(DescriptionMessage other)
+{
+    swap(other);
+    return *this;
+}
+
 DescriptionMessage::~DescriptionMessage()
 {
     delete pimpl;
+}
+
+void DescriptionMessage::swap(DescriptionMessage &other) throw ()
+{
+    Message::swap(other);
+    std::swap(pimpl, other.pimpl);
 }
 
 }

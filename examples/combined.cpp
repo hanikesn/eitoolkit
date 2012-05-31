@@ -30,6 +30,10 @@ int main()
     DataListener dataListener;
     CommunicationListener controlListener;
 
+    EI::DiscoveryMessage msg = EI::DiscoveryMessage("asd");
+
+    msg = EI::DiscoveryMessage("asd");
+
     EI::UDPTransport transport(options);
     EI::JSONPresentation presentation(options);
     EI::Sender server(EI::Description("test"), options, transport, presentation);

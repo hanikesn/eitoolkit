@@ -15,6 +15,12 @@ Description::Description(const std::string& device_type)
 {
 }
 
+Description::Description(Description&& other)
+    : pimpl(0)
+{
+    swap(other);
+}
+
 Description::~Description()
 {
     delete pimpl;
@@ -25,11 +31,15 @@ Description::Description(Description const& other)
 {
 }
 
-Description& Description::operator=(Description const& other)
+Description& Description::operator=(Description other)
 {
-    Description tmp(other);
-    std::swap(pimpl, tmp.pimpl);
+    swap(other);
     return *this;
+}
+
+void Description::swap(Description &other) throw ()
+{
+    std::swap(pimpl, other.pimpl);
 }
 
 }

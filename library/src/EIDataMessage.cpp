@@ -27,17 +27,27 @@ DataMessage::DataMessage(DataMessage const& other) :
 
 }
 
+DataMessage::DataMessage(DataMessage && other)
+    : Message(0), pimpl(0)
+{
+    swap(other);
+}
+
 DataMessage::~DataMessage()
 {
     delete pimpl;
 }
 
-DataMessage& DataMessage::operator=(DataMessage const& other)
+void DataMessage::swap(DataMessage &other) throw ()
 {
-    DataMessage tmp(other);
+    Message::swap(other);
 
-    std::swap(pimpl, tmp.pimpl);
+    std::swap(pimpl, other.pimpl);
+}
 
+DataMessage& DataMessage::operator=(DataMessage other)
+{
+    swap(other);
     return *this;
 }
 

@@ -16,14 +16,20 @@ public:
     Value();
     Value(std::string const& value);
     Value(double value );
+
+    Value(Value&& other);
     Value(Value const& other);
-    Value& operator=(const Value & other);
+    Value& operator=(Value other);
     ~Value();
 
     Type getType() const;
 
     std::string const& asString() const;
     double asDouble() const;
+
+private:
+    void swap(Value& other) throw ();
+
 private:
     class ValueImpl;
     ValueImpl* pimpl;

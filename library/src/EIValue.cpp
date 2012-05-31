@@ -26,6 +26,12 @@ Value::Value()
 {
 }
 
+Value::Value(Value&& other)
+    : pimpl(0)
+{
+    swap(other);
+}
+
 Value::Value(std::string const& value)
     : pimpl(new ValueImpl(value))
 {
@@ -36,12 +42,14 @@ Value::Value(double value)
 {
 }
 
-Value& Value::operator=(const Value & other)
+void Value::swap(Value &other) throw ()
 {
-    Value tmp(other);
+    std::swap(pimpl, other.pimpl);
+}
 
-    std::swap(pimpl, tmp.pimpl);
-
+Value& Value::operator=(Value other)
+{
+    swap(other);
     return *this;
 }
 

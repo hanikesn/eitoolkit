@@ -17,14 +17,36 @@ Message::Message(std::string const& sender, std::string const& msgtype)
 {
 }
 
+Message::Message(void*)
+    : pimpl(0)
+{
+}
+
 Message::Message(Message const& other)
     : pimpl(new MessageImpl(other.getSender(), other.getMsgType()))
 {
 }
 
+Message::Message(Message && other)
+    : pimpl(0)
+{
+    swap(other);
+}
+
 Message::~Message()
 {
     delete pimpl;
+}
+
+Message& Message::operator=(Message other)
+{
+    other.swap(*this);
+    return *this;
+}
+
+void Message::swap(Message &other) throw ()
+{
+    std::swap(pimpl, other.pimpl);
 }
 
 std::string const& Message::getSender() const

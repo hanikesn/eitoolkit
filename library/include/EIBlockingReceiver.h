@@ -25,6 +25,10 @@ public:
     void waitForMessages(int milliseconds);
 
 private:
+    // Disable copying
+    BlockingReceiver(const BlockingReceiver &);
+    BlockingReceiver &operator=(const BlockingReceiver &);
+private:
     class BlockingReceiverImpl;
     BlockingReceiverImpl* pimpl;
 };

@@ -20,6 +20,10 @@ public:
     std::shared_ptr<Message> decode(std::vector<Byte> const& in_buffer);
 
 private:
+    // Disable copying
+    JSONPresentation(const JSONPresentation &);
+    JSONPresentation &operator=(const JSONPresentation &);
+private:
     class JSONPresentationImpl;
     JSONPresentationImpl* const pimpl;
 };

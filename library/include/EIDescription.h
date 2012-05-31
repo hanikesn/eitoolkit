@@ -35,13 +35,17 @@ class EITOOLKIT_EXPORT Description
 public:
     Description(const std::string& device_type);
     Description(const Description& other);
+    Description(Description&& other);
     ~Description();
-    Description& operator=(const Description& other);
+    Description& operator=(Description other);
 
     std::string getDeviceType() const;
 
     void addDataSeries(const std::string& name, const DataSeriesInfo& info);
     std::map<std::string, std::pair<Value::Type, std::string> > values() const;
+
+private:
+    void swap(Description& other) throw ();
 
 private:
     class DescriptionImpl;

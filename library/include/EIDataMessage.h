@@ -17,10 +17,11 @@ public:
 
     DataMessage(std::string const& sender);
     DataMessage(DataMessage const& other);
+    DataMessage(DataMessage && other);
     ~DataMessage();
 
     // needed for the bindings of BlockingReceiver (std::vector<DataMessage>)
-    DataMessage& operator=(DataMessage const& other);
+    DataMessage& operator=(DataMessage other);
 
     void set(std::string const& name, Value const& value);
     Value const& get(std::string const& name) const;
@@ -31,6 +32,9 @@ public:
 
     void setDouble(std::string const& name, double value);
     double getDouble(std::string const& name) const;
+
+private:
+    void swap(DataMessage& other) throw ();
 
 private:
     class DataMessageImpl;

@@ -12,10 +12,11 @@ namespace EI
 class EITOOLKIT_EXPORT DiscoveryMessage : public Message
 {
 public:
-    DiscoveryMessage(std::string const& sender);
-    virtual ~DiscoveryMessage();
-
     static char const* const IDENTIFIER;
+
+    DiscoveryMessage(std::string const& sender);
+    DiscoveryMessage(const DiscoveryMessage &);
+    virtual ~DiscoveryMessage();
 };
 
 }
