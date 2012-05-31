@@ -46,7 +46,7 @@ void DataPacket::setString(std::string const& key, std::string const& value)
     pimpl->set(key, Value(value));
 }
 
-std::string const& DataPacket::getString(std::string const& key) const
+std::string DataPacket::getString(std::string const& key) const
 {
     return pimpl->get(key).asString();
 }
@@ -61,7 +61,7 @@ double DataPacket::getDouble(std::string const& key) const
     return pimpl->get(key).asDouble();
 }
 
-std::map<std::string, Value> const& DataPacket::getValues() const
+std::map<std::string, Value> DataPacket::getValues() const
 {
     return pimpl->getValues();
 }

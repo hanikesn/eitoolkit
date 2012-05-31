@@ -93,16 +93,17 @@ class DataPacket : public Packet
 public:
     DataPacket(std::string const& sender);
     DataPacket(DataPacket const& other);
+    ~DataPacket();
 
-    void set(std::string const&, Value const&);
-    Value const& get(std::string const&) const;
-    std::map<std::string, Value> const& getValues() const;
+    void set(std::string const& name, Value const& value);
+    Value const& get(std::string const& name) const;
+    std::map<std::string, Value> getValues() const;
 
-    void setString(std::string const&, std::string const&);
-    std::string const& getString(std::string const&) const;
+    void setString(std::string const& name, std::string const& value);
+    std::string getString(std::string const& name) const;
 
-    void setDouble(std::string const&, double);
-    double getDouble(std::string const&) const;
+    void setDouble(std::string const& name, double value);
+    double getDouble(std::string const& name) const;
 
     static char const* const IDENTIFIER;
 };

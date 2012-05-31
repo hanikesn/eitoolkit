@@ -13,30 +13,26 @@ namespace EI
 class EITOOLKIT_EXPORT DataPacket : public Packet
 {
 public:
+    static char const* const IDENTIFIER;
+
     DataPacket(std::string const& sender);
     DataPacket(DataPacket const& other);
     ~DataPacket();
 
+    // needed for the bindings of BlockingReceiver (std::vector<DataPacket>)
     DataPacket& operator=(DataPacket const& other);
 
     void set(std::string const& name, Value const& value);
     Value const& get(std::string const& name) const;
-    std::map<std::string, Value> const& getValues() const;
+    std::map<std::string, Value> getValues() const;
 
     void setString(std::string const& name, std::string const& value);
-    std::string const& getString(std::string const& name) const;
+    std::string getString(std::string const& name) const;
 
     void setDouble(std::string const& name, double value);
     double getDouble(std::string const& name) const;
 
-    static char const* const IDENTIFIER;
-
 private:
-    DataPacket();
-    #ifdef SWIGJAVA
-    friend jlong Java_de_uni_1stuttgart_eitoolkit_eitoolkit_1javaJNI_new_1DataPacketVector_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1);
-    #endif
-
     class DataPacketImpl;
     DataPacketImpl* pimpl;
 };
