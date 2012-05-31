@@ -61,7 +61,7 @@ double DataMessage::getDouble(std::string const& key) const
     return pimpl->get(key).asDouble();
 }
 
-std::map<std::string, Value> DataMessage::getValues() const
+std::map<std::string, Value> DataMessage::getContent() const
 {
     return pimpl->getValues();
 }

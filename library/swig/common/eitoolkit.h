@@ -99,7 +99,7 @@ public:
 
     void set(std::string const& name, Value const& value);
     Value const& get(std::string const& name) const;
-    std::map<std::string, Value> getValues() const;
+    std::map<std::string, Value> getContent() const;
 
     void setString(std::string const& name, std::string const& value);
     std::string getString(std::string const& name) const;

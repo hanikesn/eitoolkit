@@ -53,7 +53,7 @@ static void encodeDataMessage(DataMessage const& p, std::vector<Byte> & out)
     obj["msgtype"] = p.getMsgtype();
     obj["sender"] = p.getSender();
 
-    auto values = p.getValues();
+    auto values = p.getContent();
 
     std::for_each(values.begin(), values.end(),
                   [&valuesObj](std::pair<const std::string, Value>& pair)
