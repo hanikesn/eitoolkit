@@ -1,4 +1,7 @@
 %{
+
+#define EI_FOR_SWIG
+
 #include <map>
 #include <string>
 #include "EIToolkit.h"
@@ -31,5 +34,4 @@ using namespace EI;
 %template(ValueMap) std::map<std::string, EI::Value>;
 %template(ByteVector) std::vector<EI::Byte>;
 %template(DataMessageVector) std::vector<EI::DataMessage>;
-%template(DescriptionPair) std::pair<EI::Value::Type, std::string>;
-%template(DescriptionMap) std::map<std::string, std::pair<EI::Value::Type, std::string> >;
+%template(DataSeriesInfoMap) std::map<std::string, EI::DataSeriesInfo>;

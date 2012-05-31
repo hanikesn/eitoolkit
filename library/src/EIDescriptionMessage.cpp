@@ -14,7 +14,7 @@ public:
 };
 
 DescriptionMessage::DescriptionMessage(const std::string &sender, const Description &description)
-    : Message(sender, "description"), pimpl(new DescriptionMessageImpl(description))
+    : Message(sender, DescriptionMessage::IDENTIFIER), pimpl(new DescriptionMessageImpl(description))
 {
 }
 

@@ -41,7 +41,7 @@ int main()
 
     receiver.addDataListener(dataListener);
     receiver.addCommunicationListener(controlListener);
-    server.sendMessage(EI::DiscoveryMessage("combined"));
+    receiver.discoverSenders();
     EI::DataMessage data("combined");
     data.setDouble("asd", 5.0);
     data.setString("dfsdf", "Hallo Welt");

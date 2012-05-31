@@ -56,7 +56,7 @@ public:
     std::string getDeviceType() const;
 
     void addDataSeries(const std::string& name, const DataSeriesInfo& info);
-    std::map<std::string, std::pair<Value::Type, std::string> > values() const;
+    std::map<std::string, DataSeriesInfo> getDataSeries() const;
 };
 
 class Message

@@ -12,9 +12,8 @@ if(SWIG_FOUND)
     DataMessageVector
     DataSeriesInfo
     Description
-    DescriptionMap
+    DataSeriesInfoMap
     DescriptionMessage
-    DescriptionPair
     DiscoveryMessage
     Message
     PacketListener
