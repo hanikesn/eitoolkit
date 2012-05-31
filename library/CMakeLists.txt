@@ -33,12 +33,12 @@ if(Boost_FOUND)
 endif(Boost_FOUND)
 
 set(HEADER_FILES
-  include/EIJSONPresentation.h
   include/EIBlockingReceiver.h
   include/EIDataMessage.h
-  include/EIDiscoveryMessage.h
   include/EIDescription.h
   include/EIDescriptionMessage.h
+  include/EIDiscoveryMessage.h
+  include/EIJSONPresentation.h
   include/EIMessage.h
   include/EIPrerequisites.h
   include/EIPresentation.h
@@ -54,17 +54,17 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
   src/EIBlockingReceiver.cpp
-  src/EIJSONPresentation.cpp
   src/EIDataMessage.cpp
-  src/EIDiscoveryMessage.cpp
   src/EIDescription.cpp
   src/EIDescriptionMessage.cpp
+  src/EIDiscoveryMessage.cpp
+  src/EIJSONPresentation.cpp
   src/EIMessage.cpp
-  src/EISender.cpp
   src/EIReceiver.cpp
+  src/EISender.cpp
+  src/EIThread.h
   src/EIUDPTransport.cpp
   src/EIValue.cpp
-  src/EIThread.h
 )
 
 configure_file (

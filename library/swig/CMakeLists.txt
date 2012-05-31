@@ -5,19 +5,19 @@ if(SWIG_FOUND)
 
   set(SWIG_CLASSES
     BlockingReceiver
-    PacketListener
     ByteVector
     CommunicationListener
     DataListener
     DataMessage
     DataMessageVector
-    DiscoveryMessage
     DataSeriesInfo
     Description
+    DescriptionMap
     DescriptionMessage
     DescriptionPair
-    DescriptionMap
+    DiscoveryMessage
     Message
+    PacketListener
     Presentation
     Receiver
     Sender
