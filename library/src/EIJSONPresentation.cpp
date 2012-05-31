@@ -50,7 +50,7 @@ static void encodeDataMessage(DataMessage const& p, std::vector<Byte> & out)
     js::mObject obj;
     js::mObject valuesObj;
 
-    obj["msgtype"] = p.getMsgtype();
+    obj["msgtype"] = p.getMsgType();
     obj["sender"] = p.getSender();
 
     auto values = p.getContent();
@@ -74,7 +74,7 @@ static void encodeMessage(Message const& p, std::vector<Byte> & out)
 {
     js::mObject obj;
 
-    obj["msgtype"] = p.getMsgtype();
+    obj["msgtype"] = p.getMsgType();
     obj["sender"] = p.getSender();
 
     auto result = js::write(obj);
@@ -83,7 +83,7 @@ static void encodeMessage(Message const& p, std::vector<Byte> & out)
 
 void JSONPresentation::JSONPresentationImpl::encode(Message const& p, std::vector<Byte>& out)
 {
-    if(p.getMsgtype() == DataMessage::IDENTIFIER) {
+    if(p.getMsgType() == DataMessage::IDENTIFIER) {
         encodeDataMessage(dynamic_cast<DataMessage const&>(p), out);
     } else {
         encodeMessage(p, out);

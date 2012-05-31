@@ -18,7 +18,7 @@ Message::Message(std::string const& sender, std::string const& msgtype)
 }
 
 Message::Message(Message const& other)
-    : pimpl(new MessageImpl(other.getSender(), other.getMsgtype()))
+    : pimpl(new MessageImpl(other.getSender(), other.getMsgType()))
 {
 }
 
@@ -33,7 +33,7 @@ std::string const& Message::getSender() const
 }
 
 
-std::string const& Message::getMsgtype() const
+std::string const& Message::getMsgType() const
 {
     return pimpl->msgtype;
 }
