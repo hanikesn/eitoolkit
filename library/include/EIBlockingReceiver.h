@@ -12,17 +12,17 @@
 namespace EI
 {
 
-class BlockingReceiver
+class EITOOLKIT_EXPORT BlockingReceiver
 {
 public:
     BlockingReceiver(std::map<std::string, std::string> const& options);
-    BlockingReceiver(std::map<std::string, std::string> const& options, Transport&);
-    BlockingReceiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport);
+    BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
     ~BlockingReceiver();
 
-    void waitForPackets(int milliseconds);
-    int hasPackets();
     std::vector<DataPacket> getPackets();
+    int hasPackets();
+    void waitForPackets(int milliseconds);
 
 private:
     class BlockingReceiverImpl;
