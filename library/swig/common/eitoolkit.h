@@ -80,10 +80,10 @@ public:
     static char const* const IDENTIFIER;
 };
 
-class DiscoverMessage : public Message
+class DiscoveryMessage : public Message
 {
 public:
-    DiscoverMessage(std::string const& sender);
+    DiscoveryMessage(std::string const& sender);
 
     static char const* const IDENTIFIER;
 };
@@ -139,7 +139,7 @@ public:
     Receiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Receiver();
 
-    void sendDiscover();
+    void discoverSenders();
 
     void addDataListener(DataObserver&);
     void removeDataListener(DataObserver&);

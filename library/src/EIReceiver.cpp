@@ -20,7 +20,7 @@ public:
     ReceiverImpl(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~ReceiverImpl();
 
-    void sendDiscover();
+    void discoverSenders();
 
     void addDataListener(DataObserver&);
     void removeDataListener(DataObserver&);
@@ -65,9 +65,9 @@ Receiver::~Receiver()
 	delete pimpl;
 }
 
-void Receiver::sendDiscover()
+void Receiver::discoverSenders()
 {
-    pimpl->sendDiscover();
+    pimpl->discoverSenders();
 }
 
 void Receiver::addDataListener(DataObserver& observer)
@@ -118,9 +118,9 @@ void Receiver::ReceiverImpl::init()
     transport.addPacketObserver(Transport::ALL, *this);
 }
 
-void Receiver::ReceiverImpl::sendDiscover()
+void Receiver::ReceiverImpl::discoverSenders()
 {
-    presentation.encode(DiscoverMessage("Receiver"), buffer);
+    presentation.encode(DiscoveryMessage("Receiver"), buffer);
     transport.sendPacket(Transport::CONTROL, buffer);
 }
 

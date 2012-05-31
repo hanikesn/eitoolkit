@@ -9,10 +9,10 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT DiscoverMessage : public Message
+class EITOOLKIT_EXPORT DiscoveryMessage : public Message
 {
 public:
-    DiscoverMessage(std::string const& sender);
+    DiscoveryMessage(std::string const& sender);
 
     static char const* const IDENTIFIER;
 };

@@ -3,10 +3,10 @@
 namespace EI
 {
 
-char const* const DiscoverMessage::IDENTIFIER = "discover";
+char const* const DiscoveryMessage::IDENTIFIER = "discover";
 
-DiscoverMessage::DiscoverMessage(std::string const& sender)
-    : Message(sender, DiscoverMessage::IDENTIFIER)
+DiscoveryMessage::DiscoveryMessage(std::string const& sender)
+    : Message(sender, DiscoveryMessage::IDENTIFIER)
 {}
 
 }

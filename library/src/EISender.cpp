@@ -82,7 +82,7 @@ void Sender::SenderImpl::onPacket(Transport::Type type, std::vector<Byte> const&
 
     auto p = presentation.decode(bytes);
 
-    if(p->getMsgtype() == DiscoverMessage::IDENTIFIER) {
+    if(p->getMsgtype() == DiscoveryMessage::IDENTIFIER) {
         std::vector<Byte> buffer;
         presentation.encode(DescriptionMessage("Sender", description), buffer);
         transport.sendPacket(Transport::CONTROL, buffer);

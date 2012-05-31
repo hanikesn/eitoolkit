@@ -34,7 +34,7 @@ public:
     Receiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Receiver();
 
-    void sendDiscover();
+    void discoverSenders();
 
     void addDataListener(DataObserver&);
     void removeDataListener(DataObserver&);

@@ -11,7 +11,7 @@ if(SWIG_FOUND)
     DataObserver
     DataMessage
     DataMessageVector
-    DiscoverMessage
+    DiscoveryMessage
     DataSeriesInfo
     Description
     DescriptionMessage
