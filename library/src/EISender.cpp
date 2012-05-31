@@ -4,23 +4,23 @@
 #include "EIDescription.h"
 #include "EIDescriptionPacket.h"
 #include "EIDiscoverPacket.h"
-#include "EIDataPacket.h"
+#include "EIDataMessage.h"
 
 #include <memory>
 
 namespace EI
 {
 
-class Sender::SenderImpl : public EI::BytePacketObserver
+class Sender::SenderImpl : public EI::PacketObserver
 {
 public:
     SenderImpl(Description const&, std::map<std::string, std::string> const& options);
     SenderImpl(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~SenderImpl();
 
-    void sendPacket(Packet const&);
+    void sendMessage(Message const&);
 
-    void onBytePacket(Transport::Type, std::vector<Byte> const&);
+    void onPacket(Transport::Type, std::vector<Byte> const&);
 
 private:
     std::map<std::string, std::string> options;
@@ -44,9 +44,9 @@ Sender::Sender(Description const& description, std::map<std::string, std::string
     : pimpl(new SenderImpl(description, options, transport, presentation))
 {}
 
-void Sender::sendPacket(Packet const& packet)
+void Sender::sendMessage(Message const& packet)
 {
-    pimpl->sendPacket(packet);
+    pimpl->sendMessage(packet);
 }
 
 Sender::~Sender()
@@ -61,31 +61,31 @@ Sender::SenderImpl::SenderImpl(Description const& description, std::map<std::str
 Sender::SenderImpl::SenderImpl(Description const& description, std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation)
     : options(options), transport(transport), presentation(presentation), description(description)
 {
-    transport.addBytePacketObserver(Transport::CONTROL, *this);
+    transport.addPacketObserver(Transport::CONTROL, *this);
 }
 
 Sender::SenderImpl::~SenderImpl()
 {
-    transport.removeBytePacketObserver(*this);
+    transport.removePacketObserver(*this);
 }
 
-void Sender::SenderImpl::sendPacket(Packet const& packet)
+void Sender::SenderImpl::sendMessage(Message const& packet)
 {
     presentation.encode(packet, buffer);
-    transport.sendBytePacket(packet.getMsgtype() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::CONTROL, buffer);
+    transport.sendPacket(packet.getMsgtype() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::CONTROL, buffer);
 }
 
-void Sender::SenderImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& bytes)
+void Sender::SenderImpl::onPacket(Transport::Type type, std::vector<Byte> const& bytes)
 {
     if(type != Transport::CONTROL)
         return;
 
     auto p = presentation.decode(bytes);
 
-    if(p->getMsgtype() == DiscoverPacket::IDENTIFIER) {
+    if(p->getMsgtype() == DiscoverMessage::IDENTIFIER) {
         std::vector<Byte> buffer;
-        presentation.encode(DescriptionPacket("Sender", description), buffer);
-        transport.sendBytePacket(Transport::CONTROL, buffer);
+        presentation.encode(DescriptionMessage("Sender", description), buffer);
+        transport.sendPacket(Transport::CONTROL, buffer);
     }
 }
 

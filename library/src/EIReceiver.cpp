@@ -1,6 +1,6 @@
 #include "EIReceiver.h"
 
-#include "EIDataPacket.h"
+#include "EIDataMessage.h"
 #include "EIJSONPresentation.h"
 #include "EIUDPTransport.h"
 #include "EIDiscoverPacket.h"
@@ -12,7 +12,7 @@
 namespace EI
 {
 
-class Receiver::ReceiverImpl : public BytePacketObserver
+class Receiver::ReceiverImpl : public PacketObserver
 {
 public:
     ReceiverImpl(std::map<std::string, std::string> const& options);
@@ -28,7 +28,7 @@ public:
     void addControlListener(ControlObserver&);
     void removeControlListener(ControlObserver&);
 
-    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&);
+    virtual void onPacket(Transport::Type, std::vector<Byte> const&);
 
 private:
     void init();
@@ -110,18 +110,18 @@ Receiver::ReceiverImpl::ReceiverImpl(std::map<std::string, std::string> const& o
 
 Receiver::ReceiverImpl::~ReceiverImpl()
 {
-    transport.removeBytePacketObserver(*this);
+    transport.removePacketObserver(*this);
 }
 
 void Receiver::ReceiverImpl::init()
 {
-    transport.addBytePacketObserver(Transport::ALL, *this);
+    transport.addPacketObserver(Transport::ALL, *this);
 }
 
 void Receiver::ReceiverImpl::sendDiscover()
 {
-    presentation.encode(DiscoverPacket("Receiver"), buffer);
-    transport.sendBytePacket(Transport::CONTROL, buffer);
+    presentation.encode(DiscoverMessage("Receiver"), buffer);
+    transport.sendPacket(Transport::CONTROL, buffer);
 }
 
 void Receiver::ReceiverImpl::addDataListener(DataObserver& ob)
@@ -148,9 +148,9 @@ void Receiver::ReceiverImpl::removeControlListener(ControlObserver& ob)
     controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
 }
 
-void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& data)
+void Receiver::ReceiverImpl::onPacket(Transport::Type type, std::vector<Byte> const& data)
 {
-    std::shared_ptr<Packet> p;
+    std::shared_ptr<Message> p;
     try {
         p = presentation.decode(std::move(data));
     } catch(std::exception& e) {
@@ -166,14 +166,14 @@ void Receiver::ReceiverImpl::onBytePacket(Transport::Type type, std::vector<Byte
         {
             std::shared_ptr<DataMessage> dp = std::dynamic_pointer_cast<DataMessage>(p);
             if(dp)
-                ob->onPacket(std::move(*dp));
+                ob->onMessage(std::move(*dp));
         });
         break;
     case Transport::CONTROL:
         std::for_each(std::begin(controlObservers), std::end(controlObservers),
         [&p](ControlObserver* ob)
         {
-            ob->onPacket(std::move(*p));
+            ob->onMessage(std::move(*p));
         });
         break;
     default:

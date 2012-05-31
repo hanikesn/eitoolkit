@@ -8,7 +8,7 @@ volatile int count = 0;
 class ExampleListener : public EI::DataObserver
 {
 public:
-    void onPacket(EI::DataMessage const& p) {
+    void onMessage(EI::DataMessage const& p) {
        std::string test =  p.getString("msg");
        count++;
     }

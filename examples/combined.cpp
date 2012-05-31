@@ -8,7 +8,7 @@ class DataListener : public EI::DataObserver
 {
 public:
     virtual ~DataListener() {}
-    virtual void onPacket(EI::DataMessage const& p) {
+    virtual void onMessage(EI::DataMessage const& p) {
         std::cout << "Data: " << p.getSender() << " " << p.getMsgtype() << std::endl;
     }
 
@@ -18,7 +18,7 @@ class ControlListener : public EI::ControlObserver
 {
 public:
     virtual ~ControlListener() {}
-    virtual void onPacket(EI::Packet const& p) {
+    virtual void onMessage(EI::Message const& p) {
         std::cout << "Control: " << p.getSender() << " " << p.getMsgtype() << std::endl;
     }
 
@@ -37,11 +37,11 @@ int main()
 
     receiver.addDataListener(dataListener);
     receiver.addControlListener(controlListener);
-    server.sendPacket(EI::DiscoverPacket("combined"));
+    server.sendMessage(EI::DiscoverMessage("combined"));
     EI::DataMessage data("combined");
     data.setDouble("asd", 5.0);
     data.setString("dfsdf", "Hallo Welt");
-    server.sendPacket(data);
+    server.sendMessage(data);
 
     std::cin.get();
 }

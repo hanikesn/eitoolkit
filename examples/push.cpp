@@ -22,7 +22,7 @@ int main()
     while(clock() < start + CLOCKS_PER_SEC*5)
     {
         p.setString(msg,  message);
-        sender.sendPacket(p);
+        sender.sendMessage(p);
         cnt++;
     }
     std::cout << cnt << std::endl;

@@ -8,7 +8,7 @@
 namespace EI
 {
 
-class BytePacketObserver;
+class PacketObserver;
 
 class EITOOLKIT_EXPORT Transport
 {
@@ -17,16 +17,16 @@ public:
 
     virtual ~Transport() {}
 
-    virtual void sendBytePacket(Type, std::vector<Byte> const& packet) = 0;
-    virtual void addBytePacketObserver(Type, BytePacketObserver&) = 0;
-    virtual void removeBytePacketObserver(BytePacketObserver&) = 0;
+    virtual void sendPacket(Type, std::vector<Byte> const& packet) = 0;
+    virtual void addPacketObserver(Type, PacketObserver&) = 0;
+    virtual void removePacketObserver(PacketObserver&) = 0;
 };
 
-class EITOOLKIT_EXPORT BytePacketObserver
+class EITOOLKIT_EXPORT PacketObserver
 {
 public:
-    virtual ~BytePacketObserver() {}
-    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&) = 0;
+    virtual ~PacketObserver() {}
+    virtual void onPacket(Transport::Type, std::vector<Byte> const&) = 0;
 };
 
 }

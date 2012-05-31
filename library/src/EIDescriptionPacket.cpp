@@ -3,18 +3,18 @@
 namespace EI
 {
 
-char const* const DescriptionPacket::IDENTIFIER = "description";
+char const* const DescriptionMessage::IDENTIFIER = "description";
 
-class DescriptionPacket::DescriptionPacketImpl
+class DescriptionMessage::DescriptionMessageImpl
 {
 public:
-    DescriptionPacketImpl(Description const& desc) : description(desc) {}
+    DescriptionMessageImpl(Description const& desc) : description(desc) {}
 
     Description description;
 };
 
-DescriptionPacket::DescriptionPacket(const std::string &sender, const Description &description)
-    : Packet(sender, "description"), pimpl(new DescriptionPacketImpl(description))
+DescriptionMessage::DescriptionMessage(const std::string &sender, const Description &description)
+    : Message(sender, "description"), pimpl(new DescriptionMessageImpl(description))
 {
 }
 

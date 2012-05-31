@@ -1,4 +1,4 @@
-#include "EIDataPacket.h"
+#include "EIDataMessage.h"
 
 namespace EI
 {
@@ -17,12 +17,12 @@ private:
 };
 
 DataMessage::DataMessage(std::string const& sender) :
-    Packet(sender, DataMessage::IDENTIFIER), pimpl(new DataMessageImpl())
+    Message(sender, DataMessage::IDENTIFIER), pimpl(new DataMessageImpl())
 {
 }
 
 DataMessage::DataMessage(DataMessage const& other) :
-    Packet(other.getSender(), DataMessage::IDENTIFIER), pimpl(new DataMessageImpl(*other.pimpl))
+    Message(other.getSender(), DataMessage::IDENTIFIER), pimpl(new DataMessageImpl(*other.pimpl))
 {
 
 }

@@ -15,7 +15,7 @@ namespace bs = boost;
 class Worker
 {
 public:
-    Worker(ba::ip::udp::socket& socket, Transport::Type type, BytePacketObserver& ob)
+    Worker(ba::ip::udp::socket& socket, Transport::Type type, PacketObserver& ob)
         : socket(socket), type(type), ob(ob), recv_buffer(8000)
     {}
 
@@ -35,7 +35,7 @@ private:
         {
             std::vector<Byte> out_buffer(bytes_transferred);
             copy(std::begin(recv_buffer), std::begin(recv_buffer)+bytes_transferred, std::begin(out_buffer));
-            ob.onBytePacket(type, out_buffer);
+            ob.onPacket(type, out_buffer);
             start_receive();
         }
     }
@@ -43,22 +43,22 @@ private:
 private:
     ba::ip::udp::socket& socket;
     Transport::Type type;
-    BytePacketObserver& ob;
+    PacketObserver& ob;
 
     std::vector<Byte> recv_buffer;
 };
 
-class UDPTransport::UDPTransportImpl : public BytePacketObserver
+class UDPTransport::UDPTransportImpl : public PacketObserver
 {
 public:
     UDPTransportImpl(std::map<std::string, std::string> const& options);
     ~UDPTransportImpl();
 
-    void sendBytePacket(Transport::Type, std::vector<Byte> const&);
-    void addBytePacketObserver(Transport::Type, BytePacketObserver&);
-    void removeBytePacketObserver(BytePacketObserver&);
+    void sendPacket(Transport::Type, std::vector<Byte> const&);
+    void addPacketObserver(Transport::Type, PacketObserver&);
+    void removePacketObserver(PacketObserver&);
 
-    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&);
+    virtual void onPacket(Transport::Type, std::vector<Byte> const&);
 private:
     Thread::thread thread;
     Thread::mutex mutex;
@@ -71,8 +71,8 @@ private:
     Worker dataWorker;
     Worker controlWorker;
 
-    std::vector<BytePacketObserver*> dataObservers;
-    std::vector<BytePacketObserver*> controlObservers;
+    std::vector<PacketObserver*> dataObservers;
+    std::vector<PacketObserver*> controlObservers;
 };
 
 UDPTransport::UDPTransport(std::map<std::string, std::string> const& options )
@@ -84,19 +84,19 @@ UDPTransport::~UDPTransport()
     delete pimpl;
 }
 
-void UDPTransport::sendBytePacket(Type type, std::vector<Byte> const& packet)
+void UDPTransport::sendPacket(Type type, std::vector<Byte> const& packet)
 {
-    pimpl->sendBytePacket(type, packet);
+    pimpl->sendPacket(type, packet);
 }
     
-void UDPTransport::addBytePacketObserver(Type type, BytePacketObserver& ob)
+void UDPTransport::addPacketObserver(Type type, PacketObserver& ob)
 {
-    pimpl->addBytePacketObserver(type, ob);
+    pimpl->addPacketObserver(type, ob);
 }
 
-void UDPTransport::removeBytePacketObserver(BytePacketObserver& ob)
+void UDPTransport::removePacketObserver(PacketObserver& ob)
 {
-    pimpl->removeBytePacketObserver(ob);
+    pimpl->removePacketObserver(ob);
 }
 
 UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const&)
@@ -125,7 +125,7 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
         thread.join();
 }
 
-void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type, BytePacketObserver& ob)
+void UDPTransport::UDPTransportImpl::addPacketObserver(Transport::Type type, PacketObserver& ob)
 {
     Thread::lock_guard lock(mutex);
 
@@ -140,7 +140,7 @@ void UDPTransport::UDPTransportImpl::addBytePacketObserver(Transport::Type type,
     }
 }
 
-void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver& ob)
+void UDPTransport::UDPTransportImpl::removePacketObserver(PacketObserver& ob)
 {
     Thread::lock_guard lock(mutex);
 
@@ -153,20 +153,20 @@ void UDPTransport::UDPTransportImpl::removeBytePacketObserver(BytePacketObserver
     }
 }
 
-void UDPTransport::UDPTransportImpl::onBytePacket(Transport::Type type, std::vector<Byte> const& p)
+void UDPTransport::UDPTransportImpl::onPacket(Transport::Type type, std::vector<Byte> const& p)
 {
     Thread::lock_guard lock(mutex);
 
     auto& observers = type == Transport::DATA ? dataObservers : controlObservers;
 
     std::for_each(std::begin(observers), std::end(observers),
-        [type, &p](BytePacketObserver* ob)
+        [type, &p](PacketObserver* ob)
         {
-            ob->onBytePacket(type, p);
+            ob->onPacket(type, p);
         });
 }
 
-void UDPTransport::UDPTransportImpl::sendBytePacket(Transport::Type type, std::vector<Byte> const& p)
+void UDPTransport::UDPTransportImpl::sendPacket(Transport::Type type, std::vector<Byte> const& p)
 {
     switch(type)
     {

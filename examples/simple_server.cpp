@@ -18,6 +18,6 @@ int main()
         std::getline(std::cin, message);
         EI::DataMessage p("simple_server");
         p.setString("msg",  message);
-        sender.sendPacket(p);
+        sender.sendMessage(p);
     }
 }

@@ -2,10 +2,10 @@ namespace EI
 {
 typedef char Byte;
 
-class BytePacketObserver;
+class PacketObserver;
 class ControlObserver;
 class DataObserver;
-class Packet;
+class Message;
 class Receiver;
 class Sender;
 class Transport;
@@ -59,36 +59,36 @@ public:
     std::map<std::string, std::pair<Value::Type, std::string> > values() const;
 };
 
-class Packet
+class Message
 {
 public:
-    Packet(std::string const& sender, std::string const& msgtype);
-    Packet(Packet const& other);
-    virtual ~Packet();
+    Message(std::string const& sender, std::string const& msgtype);
+    Message(Message const& other);
+    virtual ~Message();
 
     std::string const& getSender() const;
     std::string const& getMsgtype() const;
 };
 
-class DescriptionPacket : public Packet
+class DescriptionMessage : public Message
 {
 public:
-    DescriptionPacket(std::string const& sender, Description const& description);
+    DescriptionMessage(std::string const& sender, Description const& description);
 
     Description const& getDescription();
 
     static char const* const IDENTIFIER;
 };
 
-class DiscoverPacket : public Packet
+class DiscoverMessage : public Message
 {
 public:
-    DiscoverPacket(std::string const& sender);
+    DiscoverMessage(std::string const& sender);
 
     static char const* const IDENTIFIER;
 };
 
-class DataMessage : public Packet
+class DataMessage : public Message
 {
 public:
     static char const* const IDENTIFIER;
@@ -112,23 +112,23 @@ class Presentation
 {
 public:
     virtual ~Presentation();
-    void encode(Packet const&, std::vector<Byte> &) = 0;
+    void encode(Message const&, std::vector<Byte> &) = 0;
     // Shared Pointer machen probleme
-    // virtual std::shared_ptr<Packet> decode(std::vector<Byte> const&) = 0;
+    // virtual std::shared_ptr<Message> decode(std::vector<Byte> const&) = 0;
 };
 
 class DataObserver
 {
 public:
     virtual ~DataObserver() {}
-    virtual void onPacket(DataMessage const&) = 0;
+    virtual void onMessage(DataMessage const&) = 0;
 };
 
 class ControlObserver
 {
 public:
     virtual ~ControlObserver() {}
-    virtual void onPacket(Packet const&) = 0;
+    virtual void onMessage(Message const&) = 0;
 };
 
 class Receiver
@@ -155,7 +155,7 @@ public:
     Sender(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
-    void sendPacket(Packet const&);
+    void sendMessage(Message const&);
 };
 
 class Transport
@@ -165,16 +165,16 @@ public:
 
     virtual ~Transport();
 
-    virtual void sendBytePacket(Type, std::vector<Byte> const&) = 0;
-    virtual void addBytePacketObserver(Type, BytePacketObserver&) = 0;
-    virtual void removeBytePacketObserver(BytePacketObserver&) = 0;
+    virtual void sendPacket(Type, std::vector<Byte> const&) = 0;
+    virtual void addPacketObserver(Type, PacketObserver&) = 0;
+    virtual void removePacketObserver(PacketObserver&) = 0;
 };
 
-class BytePacketObserver
+class PacketObserver
 {
 public:
-    virtual ~BytePacketObserver() {}
-    virtual void onBytePacket(Transport::Type, std::vector<Byte> const&) = 0;
+    virtual ~PacketObserver() {}
+    virtual void onPacket(Transport::Type, std::vector<Byte> const&) = 0;
 };
 
 class BlockingReceiver
@@ -186,8 +186,8 @@ public:
     ~BlockingReceiver();
 
     std::vector<DataMessage> getMessages();
-    int hasPackets();
-    void waitForPackets(int milliseconds);
+    int hasMessages();
+    void waitForMessages(int milliseconds);
 };
 
 }

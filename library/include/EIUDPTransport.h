@@ -16,9 +16,9 @@ public:
     UDPTransport(std::map<std::string, std::string> const& options);
     virtual ~UDPTransport();
 
-    virtual void sendBytePacket(Type, std::vector<Byte>  const&);
-    virtual void addBytePacketObserver(Type, BytePacketObserver&);
-    virtual void removeBytePacketObserver(BytePacketObserver&);
+    virtual void sendPacket(Type, std::vector<Byte>  const&);
+    virtual void addPacketObserver(Type, PacketObserver&);
+    virtual void removePacketObserver(PacketObserver&);
 private:
     class UDPTransportImpl;
     UDPTransportImpl* const pimpl;
