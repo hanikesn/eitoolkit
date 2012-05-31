@@ -13,12 +13,12 @@ class PacketListener;
 class EITOOLKIT_EXPORT Transport
 {
 public:
-    enum Type {ALL, DATA, CONTROL};
+    enum Channel {ALL, DATA, COMMUNICATION};
 
     virtual ~Transport() {}
 
-    virtual void sendPacket(Type, std::vector<Byte> const& packet) = 0;
-    virtual void addPacketListener(Type, PacketListener&) = 0;
+    virtual void sendPacket(Channel, std::vector<Byte> const& packet) = 0;
+    virtual void addPacketListener(Channel, PacketListener&) = 0;
     virtual void removePacketListener(PacketListener&) = 0;
 };
 
@@ -26,7 +26,7 @@ class EITOOLKIT_EXPORT PacketListener
 {
 public:
     virtual ~PacketListener() {}
-    virtual void onPacket(Transport::Type, std::vector<Byte> const&) = 0;
+    virtual void onPacket(Transport::Channel, std::vector<Byte> const&) = 0;
 };
 
 }

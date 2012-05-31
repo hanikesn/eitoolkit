@@ -25,10 +25,10 @@ public:
     void addDataListener(DataListener&);
     void removeDataListener(DataListener&);
 
-    void addControlListener(ControlListener&);
-    void removeControlListener(ControlListener&);
+    void addCommunicationListener(CommunicationListener&);
+    void removeCommunicationListener(CommunicationListener&);
 
-    virtual void onPacket(Transport::Type, std::vector<Byte> const&);
+    virtual void onPacket(Transport::Channel, std::vector<Byte> const&);
 
 private:
     void init();
@@ -43,7 +43,7 @@ private:
 
     Thread::mutex mutex;
     std::vector<DataListener*> dataListeners;
-    std::vector<ControlListener*> controlListeners;
+    std::vector<CommunicationListener*> controlListeners;
 
     std::vector<Byte> buffer;
 };
@@ -80,14 +80,14 @@ void Receiver::removeDataListener(DataListener& observer)
     pimpl->removeDataListener(observer);
 }
 
-void Receiver::addControlListener(ControlListener& observer)
+void Receiver::addCommunicationListener(CommunicationListener& observer)
 {
-    pimpl->addControlListener(observer);
+    pimpl->addCommunicationListener(observer);
 }
 
-void Receiver::removeControlListener(ControlListener& observer)
+void Receiver::removeCommunicationListener(CommunicationListener& observer)
 {
-    pimpl->removeControlListener(observer);
+    pimpl->removeCommunicationListener(observer);
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(std::map<std::string, std::string> const& options)
@@ -121,7 +121,7 @@ void Receiver::ReceiverImpl::init()
 void Receiver::ReceiverImpl::discoverSenders()
 {
     presentation.encode(DiscoveryMessage("Receiver"), buffer);
-    transport.sendPacket(Transport::CONTROL, buffer);
+    transport.sendPacket(Transport::COMMUNICATION, buffer);
 }
 
 void Receiver::ReceiverImpl::addDataListener(DataListener& ob)
@@ -136,19 +136,19 @@ void Receiver::ReceiverImpl::removeDataListener(DataListener& ob)
     dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), &ob), std::end(dataListeners));
 }
 
-void Receiver::ReceiverImpl::addControlListener(ControlListener& ob)
+void Receiver::ReceiverImpl::addCommunicationListener(CommunicationListener& ob)
 {
     Thread::lock_guard lock(mutex);
     controlListeners.push_back(&ob);
 }
 
-void Receiver::ReceiverImpl::removeControlListener(ControlListener& ob)
+void Receiver::ReceiverImpl::removeCommunicationListener(CommunicationListener& ob)
 {
     Thread::lock_guard lock(mutex);
     controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), &ob), std::end(controlListeners));
 }
 
-void Receiver::ReceiverImpl::onPacket(Transport::Type type, std::vector<Byte> const& data)
+void Receiver::ReceiverImpl::onPacket(Transport::Channel type, std::vector<Byte> const& data)
 {
     std::shared_ptr<Message> p;
     try {
@@ -169,9 +169,9 @@ void Receiver::ReceiverImpl::onPacket(Transport::Type type, std::vector<Byte> co
                 ob->onMessage(std::move(*dp));
         });
         break;
-    case Transport::CONTROL:
+    case Transport::COMMUNICATION:
         std::for_each(std::begin(controlListeners), std::end(controlListeners),
-        [&p](ControlListener* ob)
+        [&p](CommunicationListener* ob)
         {
             ob->onMessage(std::move(*p));
         });

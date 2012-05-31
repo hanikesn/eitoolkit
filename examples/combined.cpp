@@ -14,12 +14,12 @@ public:
 
 };
 
-class ControlListener : public EI::ControlListener
+class CommunicationListener : public EI::CommunicationListener
 {
 public:
-    virtual ~ControlListener() {}
+    virtual ~CommunicationListener() {}
     virtual void onMessage(EI::Message const& p) {
-        std::cout << "Control: " << p.getSender() << " " << p.getMsgType() << std::endl;
+        std::cout << "Communication: " << p.getSender() << " " << p.getMsgType() << std::endl;
     }
 
 };
@@ -28,7 +28,7 @@ int main()
 {
     std::map<std::string, std::string> options;
     DataListener dataListener;
-    ControlListener controlListener;
+    CommunicationListener controlListener;
 
     EI::UDPTransport transport(options);
     EI::JSONPresentation presentation(options);
@@ -36,7 +36,7 @@ int main()
     EI::Receiver receiver(options, transport);
 
     receiver.addDataListener(dataListener);
-    receiver.addControlListener(controlListener);
+    receiver.addCommunicationListener(controlListener);
     server.sendMessage(EI::DiscoveryMessage("combined"));
     EI::DataMessage data("combined");
     data.setDouble("asd", 5.0);

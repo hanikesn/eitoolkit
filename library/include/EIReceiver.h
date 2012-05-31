@@ -19,10 +19,10 @@ public:
     virtual void onMessage(DataMessage const&) = 0;
 };
 
-class EITOOLKIT_EXPORT ControlListener
+class EITOOLKIT_EXPORT CommunicationListener
 {
 public:
-    virtual ~ControlListener() {}
+    virtual ~CommunicationListener() {}
     virtual void onMessage(Message const&) = 0;
 };
 
@@ -39,8 +39,8 @@ public:
     void addDataListener(DataListener&);
     void removeDataListener(DataListener&);
 
-    void addControlListener(ControlListener&);
-    void removeControlListener(ControlListener&);
+    void addCommunicationListener(CommunicationListener&);
+    void removeCommunicationListener(CommunicationListener&);
 private:
     // Disable copying
     Receiver(const Receiver &);

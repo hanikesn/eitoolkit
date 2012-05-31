@@ -7,7 +7,7 @@ if(SWIG_FOUND)
     BlockingReceiver
     PacketListener
     ByteVector
-    ControlListener
+    CommunicationListener
     DataListener
     DataMessage
     DataMessageVector

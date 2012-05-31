@@ -15,7 +15,7 @@ namespace bs = boost;
 class Worker
 {
 public:
-    Worker(ba::ip::udp::socket& socket, Transport::Type type, PacketListener& ob)
+    Worker(ba::ip::udp::socket& socket, Transport::Channel type, PacketListener& ob)
         : socket(socket), type(type), ob(ob), recv_buffer(8000)
     {}
 
@@ -42,7 +42,7 @@ private:
 
 private:
     ba::ip::udp::socket& socket;
-    Transport::Type type;
+    Transport::Channel type;
     PacketListener& ob;
 
     std::vector<Byte> recv_buffer;
@@ -54,11 +54,11 @@ public:
     UDPTransportImpl(std::map<std::string, std::string> const& options);
     ~UDPTransportImpl();
 
-    void sendPacket(Transport::Type, std::vector<Byte> const&);
-    void addPacketListener(Transport::Type, PacketListener&);
+    void sendPacket(Transport::Channel, std::vector<Byte> const&);
+    void addPacketListener(Transport::Channel, PacketListener&);
     void removePacketListener(PacketListener&);
 
-    virtual void onPacket(Transport::Type, std::vector<Byte> const&);
+    virtual void onPacket(Transport::Channel, std::vector<Byte> const&);
 private:
     Thread::thread thread;
     Thread::mutex mutex;
@@ -84,12 +84,12 @@ UDPTransport::~UDPTransport()
     delete pimpl;
 }
 
-void UDPTransport::sendPacket(Type type, std::vector<Byte> const& packet)
+void UDPTransport::sendPacket(Channel type, std::vector<Byte> const& packet)
 {
     pimpl->sendPacket(type, packet);
 }
     
-void UDPTransport::addPacketListener(Type type, PacketListener& ob)
+void UDPTransport::addPacketListener(Channel type, PacketListener& ob)
 {
     pimpl->addPacketListener(type, ob);
 }
@@ -105,7 +105,7 @@ UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::stri
       dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
       controlEndpoint(ba::ip::address_v4::broadcast(), 31338),
       dataWorker(dataSocket, Transport::DATA, *this),
-      controlWorker(controlSocket, Transport::CONTROL, *this)
+      controlWorker(controlSocket, Transport::COMMUNICATION, *this)
 
 {   
     dataSocket.set_option(ba::socket_base::reuse_address(true));
@@ -125,14 +125,14 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
         thread.join();
 }
 
-void UDPTransport::UDPTransportImpl::addPacketListener(Transport::Type type, PacketListener& ob)
+void UDPTransport::UDPTransportImpl::addPacketListener(Transport::Channel type, PacketListener& ob)
 {
     Thread::lock_guard lock(mutex);
 
     if(type == Transport::ALL || type == Transport::DATA)
         dataListeners.push_back(&ob);
 
-    if(type == Transport::ALL || type == Transport::CONTROL)
+    if(type == Transport::ALL || type == Transport::COMMUNICATION)
         controlListeners.push_back(&ob);
 
     if(!thread.joinable()) {
@@ -153,7 +153,7 @@ void UDPTransport::UDPTransportImpl::removePacketListener(PacketListener& ob)
     }
 }
 
-void UDPTransport::UDPTransportImpl::onPacket(Transport::Type type, std::vector<Byte> const& p)
+void UDPTransport::UDPTransportImpl::onPacket(Transport::Channel type, std::vector<Byte> const& p)
 {
     Thread::lock_guard lock(mutex);
 
@@ -166,7 +166,7 @@ void UDPTransport::UDPTransportImpl::onPacket(Transport::Type type, std::vector<
         });
 }
 
-void UDPTransport::UDPTransportImpl::sendPacket(Transport::Type type, std::vector<Byte> const& p)
+void UDPTransport::UDPTransportImpl::sendPacket(Transport::Channel type, std::vector<Byte> const& p)
 {
     switch(type)
     {
@@ -175,7 +175,7 @@ void UDPTransport::UDPTransportImpl::sendPacket(Transport::Type type, std::vecto
             throw std::exception();
         }
         break;
-    case Transport::CONTROL:
+    case Transport::COMMUNICATION:
         if(controlSocket.send_to(boost::asio::buffer(p), controlEndpoint) != p.size()) {
             throw std::exception();
         }

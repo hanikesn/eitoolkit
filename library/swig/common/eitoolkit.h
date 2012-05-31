@@ -124,10 +124,10 @@ public:
     virtual void onMessage(DataMessage const&) = 0;
 };
 
-class ControlListener
+class CommunicationListener
 {
 public:
-    virtual ~ControlListener() {}
+    virtual ~CommunicationListener() {}
     virtual void onMessage(Message const&) = 0;
 };
 
@@ -144,8 +144,8 @@ public:
     void addDataListener(DataListener&);
     void removeDataListener(DataListener&);
 
-    void addControlListener(ControlListener&);
-    void removeControlListener(ControlListener&);
+    void addCommunicationListener(CommunicationListener&);
+    void removeCommunicationListener(CommunicationListener&);
 };
 
 class Sender
@@ -161,12 +161,12 @@ public:
 class Transport
 {
 public:
-    enum Type {ALL, DATA, CONTROL};
+    enum Channel {ALL, DATA, CONTROL};
 
     virtual ~Transport();
 
-    virtual void sendPacket(Type, std::vector<Byte> const&) = 0;
-    virtual void addPacketListener(Type, PacketListener&) = 0;
+    virtual void sendPacket(Channel, std::vector<Byte> const&) = 0;
+    virtual void addPacketListener(Channel, PacketListener&) = 0;
     virtual void removePacketListener(PacketListener&) = 0;
 };
 
@@ -174,7 +174,7 @@ class PacketListener
 {
 public:
     virtual ~PacketListener() {}
-    virtual void onPacket(Transport::Type, std::vector<Byte> const&) = 0;
+    virtual void onPacket(Transport::Channel, std::vector<Byte> const&) = 0;
 };
 
 class BlockingReceiver

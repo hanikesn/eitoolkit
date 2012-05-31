@@ -20,7 +20,7 @@ public:
 
     void sendMessage(Message const&);
 
-    void onPacket(Transport::Type, std::vector<Byte> const&);
+    void onPacket(Transport::Channel, std::vector<Byte> const&);
 
 private:
     std::map<std::string, std::string> options;
@@ -61,7 +61,7 @@ Sender::SenderImpl::SenderImpl(Description const& description, std::map<std::str
 Sender::SenderImpl::SenderImpl(Description const& description, std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation)
     : options(options), transport(transport), presentation(presentation), description(description)
 {
-    transport.addPacketListener(Transport::CONTROL, *this);
+    transport.addPacketListener(Transport::COMMUNICATION, *this);
 }
 
 Sender::SenderImpl::~SenderImpl()
@@ -72,12 +72,12 @@ Sender::SenderImpl::~SenderImpl()
 void Sender::SenderImpl::sendMessage(Message const& packet)
 {
     presentation.encode(packet, buffer);
-    transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::CONTROL, buffer);
+    transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
 }
 
-void Sender::SenderImpl::onPacket(Transport::Type type, std::vector<Byte> const& bytes)
+void Sender::SenderImpl::onPacket(Transport::Channel type, std::vector<Byte> const& bytes)
 {
-    if(type != Transport::CONTROL)
+    if(type != Transport::COMMUNICATION)
         return;
 
     auto p = presentation.decode(bytes);
@@ -85,7 +85,7 @@ void Sender::SenderImpl::onPacket(Transport::Type type, std::vector<Byte> const&
     if(p->getMsgType() == DiscoveryMessage::IDENTIFIER) {
         std::vector<Byte> buffer;
         presentation.encode(DescriptionMessage("Sender", description), buffer);
-        transport.sendPacket(Transport::CONTROL, buffer);
+        transport.sendPacket(Transport::COMMUNICATION, buffer);
     }
 }
 
