@@ -1,5 +1,5 @@
-#ifndef EIDiscoverPacket_H
-#define EIDiscoverPacket_H
+#ifndef EIDiscoverMessage_H
+#define EIDiscoverMessage_H
 
 #include "EIPrerequisites.h"
 #include "EIPacket.h"
@@ -9,10 +9,10 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT DiscoverPacket : public Packet
+class EITOOLKIT_EXPORT DiscoverMessage : public Message
 {
 public:
-    DiscoverPacket(std::string const& sender);
+    DiscoverMessage(std::string const& sender);
 
     static char const* const IDENTIFIER;
 };

@@ -22,7 +22,7 @@ public:
     Sender(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
     ~Sender();
 
-    void sendPacket(const Packet&);
+    void sendMessage(const Message&);
 private:
     // Disable copying
     Sender(const Sender &);

@@ -16,8 +16,8 @@ public:
     JSONPresentation(std::map<std::string, std::string> const& options);
     ~JSONPresentation();
 
-    void encode(Packet const&, std::vector<Byte> &);
-    std::shared_ptr<Packet> decode(std::vector<Byte> const&);
+    void encode(Message const&, std::vector<Byte> &);
+    std::shared_ptr<Message> decode(std::vector<Byte> const&);
 
 private:
     class JSONPresentationImpl;

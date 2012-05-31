@@ -4,7 +4,7 @@
 #include "EIPrerequisites.h"
 #include "EITransport.h"
 #include "EIPresentation.h"
-#include "EIDataPacket.h"
+#include "EIDataMessage.h"
 
 #include <map>
 #include <string>
@@ -21,8 +21,8 @@ public:
     ~BlockingReceiver();
 
     std::vector<DataMessage> getMessages();
-    int hasPackets();
-    void waitForPackets(int milliseconds);
+    int hasMessages();
+    void waitForMessages(int milliseconds);
 
 private:
     class BlockingReceiverImpl;

@@ -10,7 +10,7 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT DataMessage : public Packet
+class EITOOLKIT_EXPORT DataMessage : public Message
 {
 public:
     static char const* const IDENTIFIER;

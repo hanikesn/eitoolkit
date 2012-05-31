@@ -4,7 +4,7 @@
 #include "EIPrerequisites.h"
 #include "EITransport.h"
 #include "EIPresentation.h"
-#include "EIDataPacket.h"
+#include "EIDataMessage.h"
 
 #include <map>
 #include <string>
@@ -16,14 +16,14 @@ class EITOOLKIT_EXPORT DataObserver
 {
 public:
     virtual ~DataObserver() {}
-    virtual void onPacket(DataMessage const&) = 0;
+    virtual void onMessage(DataMessage const&) = 0;
 };
 
 class EITOOLKIT_EXPORT ControlObserver
 {
 public:
     virtual ~ControlObserver() {}
-    virtual void onPacket(Packet const&) = 0;
+    virtual void onMessage(Message const&) = 0;
 };
 
 class EITOOLKIT_EXPORT Receiver

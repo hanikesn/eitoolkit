@@ -1,5 +1,5 @@
-#ifndef EIPacket_H__
-#define EIPacket_H__
+#ifndef EIMessage_H__
+#define EIMessage_H__
 
 #include "EIPrerequisites.h"
 
@@ -8,19 +8,19 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT Packet
+class EITOOLKIT_EXPORT Message
 {
 public:
-    Packet(std::string const& sender, std::string const& msg_type);
-    Packet(Packet const& other);
-    virtual ~Packet();
+    Message(std::string const& sender, std::string const& msg_type);
+    Message(Message const& other);
+    virtual ~Message();
 
     std::string const& getSender() const;
     std::string const& getMsgtype() const;
 private:
-    Packet& operator=(Packet const& other);
-    class PacketImpl;
-    PacketImpl* pimpl;
+    Message& operator=(Message const& other);
+    class MessageImpl;
+    MessageImpl* pimpl;
 };
 
 }

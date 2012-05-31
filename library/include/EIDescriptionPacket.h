@@ -1,5 +1,5 @@
-#ifndef EIDescriptionPacket_H
-#define EIDescriptionPacket_H
+#ifndef EIDescriptionMessage_H
+#define EIDescriptionMessage_H
 
 #include "EIPrerequisites.h"
 #include "EIPacket.h"
@@ -8,18 +8,18 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT DescriptionPacket : public Packet
+class EITOOLKIT_EXPORT DescriptionMessage : public Message
 {
 public:
-    DescriptionPacket(std::string const& sender, Description const& description);
+    DescriptionMessage(std::string const& sender, Description const& description);
 
     Description const& getDescription();
 
     static char const* const IDENTIFIER;
 
 private:
-    class DescriptionPacketImpl;
-    DescriptionPacketImpl* pimpl;
+    class DescriptionMessageImpl;
+    DescriptionMessageImpl* pimpl;
 };
 
 }
