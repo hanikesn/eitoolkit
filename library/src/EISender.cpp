@@ -11,7 +11,7 @@
 namespace EI
 {
 
-class Sender::SenderImpl : public EI::PacketObserver
+class Sender::SenderImpl : public EI::PacketListener
 {
 public:
     SenderImpl(Description const&, std::map<std::string, std::string> const& options);
@@ -61,12 +61,12 @@ Sender::SenderImpl::SenderImpl(Description const& description, std::map<std::str
 Sender::SenderImpl::SenderImpl(Description const& description, std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation)
     : options(options), transport(transport), presentation(presentation), description(description)
 {
-    transport.addPacketObserver(Transport::CONTROL, *this);
+    transport.addPacketListener(Transport::CONTROL, *this);
 }
 
 Sender::SenderImpl::~SenderImpl()
 {
-    transport.removePacketObserver(*this);
+    transport.removePacketListener(*this);
 }
 
 void Sender::SenderImpl::sendMessage(Message const& packet)

@@ -5,10 +5,10 @@ if(SWIG_FOUND)
 
   set(SWIG_CLASSES
     BlockingReceiver
-    PacketObserver
+    PacketListener
     ByteVector
-    ControlObserver
-    DataObserver
+    ControlListener
+    DataListener
     DataMessage
     DataMessageVector
     DiscoveryMessage

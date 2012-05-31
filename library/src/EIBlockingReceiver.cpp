@@ -5,7 +5,7 @@
 namespace EI
 {
 
-class BlockingReceiver::BlockingReceiverImpl : public DataObserver
+class BlockingReceiver::BlockingReceiverImpl : public DataListener
 {
 public:
     BlockingReceiverImpl(std::map<std::string, std::string> const& options) : receiver(options) {}

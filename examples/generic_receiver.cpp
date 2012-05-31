@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-class ExampleListener : public EI::DataObserver
+class ExampleListener : public EI::DataListener
 {
 public:
     void onMessage(EI::DataMessage const& p) {

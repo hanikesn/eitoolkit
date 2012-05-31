@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-class DataListener : public EI::DataObserver
+class DataListener : public EI::DataListener
 {
 public:
     virtual ~DataListener() {}
@@ -14,7 +14,7 @@ public:
 
 };
 
-class ControlListener : public EI::ControlObserver
+class ControlListener : public EI::ControlListener
 {
 public:
     virtual ~ControlListener() {}

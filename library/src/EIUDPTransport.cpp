@@ -15,7 +15,7 @@ namespace bs = boost;
 class Worker
 {
 public:
-    Worker(ba::ip::udp::socket& socket, Transport::Type type, PacketObserver& ob)
+    Worker(ba::ip::udp::socket& socket, Transport::Type type, PacketListener& ob)
         : socket(socket), type(type), ob(ob), recv_buffer(8000)
     {}
 
@@ -43,20 +43,20 @@ private:
 private:
     ba::ip::udp::socket& socket;
     Transport::Type type;
-    PacketObserver& ob;
+    PacketListener& ob;
 
     std::vector<Byte> recv_buffer;
 };
 
-class UDPTransport::UDPTransportImpl : public PacketObserver
+class UDPTransport::UDPTransportImpl : public PacketListener
 {
 public:
     UDPTransportImpl(std::map<std::string, std::string> const& options);
     ~UDPTransportImpl();
 
     void sendPacket(Transport::Type, std::vector<Byte> const&);
-    void addPacketObserver(Transport::Type, PacketObserver&);
-    void removePacketObserver(PacketObserver&);
+    void addPacketListener(Transport::Type, PacketListener&);
+    void removePacketListener(PacketListener&);
 
     virtual void onPacket(Transport::Type, std::vector<Byte> const&);
 private:
@@ -71,8 +71,8 @@ private:
     Worker dataWorker;
     Worker controlWorker;
 
-    std::vector<PacketObserver*> dataObservers;
-    std::vector<PacketObserver*> controlObservers;
+    std::vector<PacketListener*> dataListeners;
+    std::vector<PacketListener*> controlListeners;
 };
 
 UDPTransport::UDPTransport(std::map<std::string, std::string> const& options )
@@ -89,14 +89,14 @@ void UDPTransport::sendPacket(Type type, std::vector<Byte> const& packet)
     pimpl->sendPacket(type, packet);
 }
     
-void UDPTransport::addPacketObserver(Type type, PacketObserver& ob)
+void UDPTransport::addPacketListener(Type type, PacketListener& ob)
 {
-    pimpl->addPacketObserver(type, ob);
+    pimpl->addPacketListener(type, ob);
 }
 
-void UDPTransport::removePacketObserver(PacketObserver& ob)
+void UDPTransport::removePacketListener(PacketListener& ob)
 {
-    pimpl->removePacketObserver(ob);
+    pimpl->removePacketListener(ob);
 }
 
 UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const&)
@@ -125,28 +125,28 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
         thread.join();
 }
 
-void UDPTransport::UDPTransportImpl::addPacketObserver(Transport::Type type, PacketObserver& ob)
+void UDPTransport::UDPTransportImpl::addPacketListener(Transport::Type type, PacketListener& ob)
 {
     Thread::lock_guard lock(mutex);
 
     if(type == Transport::ALL || type == Transport::DATA)
-        dataObservers.push_back(&ob);
+        dataListeners.push_back(&ob);
 
     if(type == Transport::ALL || type == Transport::CONTROL)
-        controlObservers.push_back(&ob);
+        controlListeners.push_back(&ob);
 
     if(!thread.joinable()) {
         thread = Thread::thread([this](){this->io_service.run();});
     }
 }
 
-void UDPTransport::UDPTransportImpl::removePacketObserver(PacketObserver& ob)
+void UDPTransport::UDPTransportImpl::removePacketListener(PacketListener& ob)
 {
     Thread::lock_guard lock(mutex);
 
-    controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
-    dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
-    if(dataObservers.empty() && controlObservers.empty()) {
+    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), &ob), std::end(controlListeners));
+    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), &ob), std::end(dataListeners));
+    if(dataListeners.empty() && controlListeners.empty()) {
         io_service.stop();
         if(thread.joinable())
             thread.join();
@@ -157,10 +157,10 @@ void UDPTransport::UDPTransportImpl::onPacket(Transport::Type type, std::vector<
 {
     Thread::lock_guard lock(mutex);
 
-    auto& observers = type == Transport::DATA ? dataObservers : controlObservers;
+    auto& observers = type == Transport::DATA ? dataListeners : controlListeners;
 
     std::for_each(std::begin(observers), std::end(observers),
-        [type, &p](PacketObserver* ob)
+        [type, &p](PacketListener* ob)
         {
             ob->onPacket(type, p);
         });

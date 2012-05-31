@@ -12,7 +12,7 @@
 namespace EI
 {
 
-class Receiver::ReceiverImpl : public PacketObserver
+class Receiver::ReceiverImpl : public PacketListener
 {
 public:
     ReceiverImpl(std::map<std::string, std::string> const& options);
@@ -22,11 +22,11 @@ public:
 
     void discoverSenders();
 
-    void addDataListener(DataObserver&);
-    void removeDataListener(DataObserver&);
+    void addDataListener(DataListener&);
+    void removeDataListener(DataListener&);
 
-    void addControlListener(ControlObserver&);
-    void removeControlListener(ControlObserver&);
+    void addControlListener(ControlListener&);
+    void removeControlListener(ControlListener&);
 
     virtual void onPacket(Transport::Type, std::vector<Byte> const&);
 
@@ -42,8 +42,8 @@ private:
 	Presentation& presentation;
 
     Thread::mutex mutex;
-    std::vector<DataObserver*> dataObservers;
-    std::vector<ControlObserver*> controlObservers;
+    std::vector<DataListener*> dataListeners;
+    std::vector<ControlListener*> controlListeners;
 
     std::vector<Byte> buffer;
 };
@@ -70,22 +70,22 @@ void Receiver::discoverSenders()
     pimpl->discoverSenders();
 }
 
-void Receiver::addDataListener(DataObserver& observer)
+void Receiver::addDataListener(DataListener& observer)
 {
     pimpl->addDataListener(observer);
 }
 
-void Receiver::removeDataListener(DataObserver& observer)
+void Receiver::removeDataListener(DataListener& observer)
 {
     pimpl->removeDataListener(observer);
 }
 
-void Receiver::addControlListener(ControlObserver& observer)
+void Receiver::addControlListener(ControlListener& observer)
 {
     pimpl->addControlListener(observer);
 }
 
-void Receiver::removeControlListener(ControlObserver& observer)
+void Receiver::removeControlListener(ControlListener& observer)
 {
     pimpl->removeControlListener(observer);
 }
@@ -110,12 +110,12 @@ Receiver::ReceiverImpl::ReceiverImpl(std::map<std::string, std::string> const& o
 
 Receiver::ReceiverImpl::~ReceiverImpl()
 {
-    transport.removePacketObserver(*this);
+    transport.removePacketListener(*this);
 }
 
 void Receiver::ReceiverImpl::init()
 {
-    transport.addPacketObserver(Transport::ALL, *this);
+    transport.addPacketListener(Transport::ALL, *this);
 }
 
 void Receiver::ReceiverImpl::discoverSenders()
@@ -124,28 +124,28 @@ void Receiver::ReceiverImpl::discoverSenders()
     transport.sendPacket(Transport::CONTROL, buffer);
 }
 
-void Receiver::ReceiverImpl::addDataListener(DataObserver& ob)
+void Receiver::ReceiverImpl::addDataListener(DataListener& ob)
 {
     Thread::lock_guard lock(mutex);
-    dataObservers.push_back(&ob);
+    dataListeners.push_back(&ob);
 }
 
-void Receiver::ReceiverImpl::removeDataListener(DataObserver& ob)
+void Receiver::ReceiverImpl::removeDataListener(DataListener& ob)
 {
     Thread::lock_guard lock(mutex);
-    dataObservers.erase(std::remove(std::begin(dataObservers), std::end(dataObservers), &ob), std::end(dataObservers));
+    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), &ob), std::end(dataListeners));
 }
 
-void Receiver::ReceiverImpl::addControlListener(ControlObserver& ob)
+void Receiver::ReceiverImpl::addControlListener(ControlListener& ob)
 {
     Thread::lock_guard lock(mutex);
-    controlObservers.push_back(&ob);
+    controlListeners.push_back(&ob);
 }
 
-void Receiver::ReceiverImpl::removeControlListener(ControlObserver& ob)
+void Receiver::ReceiverImpl::removeControlListener(ControlListener& ob)
 {
     Thread::lock_guard lock(mutex);
-    controlObservers.erase(std::remove(std::begin(controlObservers), std::end(controlObservers), &ob), std::end(controlObservers));
+    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), &ob), std::end(controlListeners));
 }
 
 void Receiver::ReceiverImpl::onPacket(Transport::Type type, std::vector<Byte> const& data)
@@ -161,8 +161,8 @@ void Receiver::ReceiverImpl::onPacket(Transport::Type type, std::vector<Byte> co
     Thread::lock_guard lock(mutex);
     switch(type) {
     case Transport::DATA:
-        std::for_each(std::begin(dataObservers), std::end(dataObservers),
-        [&p](DataObserver* ob)
+        std::for_each(std::begin(dataListeners), std::end(dataListeners),
+        [&p](DataListener* ob)
         {
             std::shared_ptr<DataMessage> dp = std::dynamic_pointer_cast<DataMessage>(p);
             if(dp)
@@ -170,8 +170,8 @@ void Receiver::ReceiverImpl::onPacket(Transport::Type type, std::vector<Byte> co
         });
         break;
     case Transport::CONTROL:
-        std::for_each(std::begin(controlObservers), std::end(controlObservers),
-        [&p](ControlObserver* ob)
+        std::for_each(std::begin(controlListeners), std::end(controlListeners),
+        [&p](ControlListener* ob)
         {
             ob->onMessage(std::move(*p));
         });

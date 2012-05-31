@@ -2,9 +2,9 @@ namespace EI
 {
 typedef char Byte;
 
-class PacketObserver;
-class ControlObserver;
-class DataObserver;
+class PacketListener;
+class ControlListener;
+class DataListener;
 class Message;
 class Receiver;
 class Sender;
@@ -117,17 +117,17 @@ public:
     // virtual std::shared_ptr<Message> decode(std::vector<Byte> const&) = 0;
 };
 
-class DataObserver
+class DataListener
 {
 public:
-    virtual ~DataObserver() {}
+    virtual ~DataListener() {}
     virtual void onMessage(DataMessage const&) = 0;
 };
 
-class ControlObserver
+class ControlListener
 {
 public:
-    virtual ~ControlObserver() {}
+    virtual ~ControlListener() {}
     virtual void onMessage(Message const&) = 0;
 };
 
@@ -141,11 +141,11 @@ public:
 
     void discoverSenders();
 
-    void addDataListener(DataObserver&);
-    void removeDataListener(DataObserver&);
+    void addDataListener(DataListener&);
+    void removeDataListener(DataListener&);
 
-    void addControlListener(ControlObserver&);
-    void removeControlListener(ControlObserver&);
+    void addControlListener(ControlListener&);
+    void removeControlListener(ControlListener&);
 };
 
 class Sender
@@ -166,14 +166,14 @@ public:
     virtual ~Transport();
 
     virtual void sendPacket(Type, std::vector<Byte> const&) = 0;
-    virtual void addPacketObserver(Type, PacketObserver&) = 0;
-    virtual void removePacketObserver(PacketObserver&) = 0;
+    virtual void addPacketListener(Type, PacketListener&) = 0;
+    virtual void removePacketListener(PacketListener&) = 0;
 };
 
-class PacketObserver
+class PacketListener
 {
 public:
-    virtual ~PacketObserver() {}
+    virtual ~PacketListener() {}
     virtual void onPacket(Transport::Type, std::vector<Byte> const&) = 0;
 };
 

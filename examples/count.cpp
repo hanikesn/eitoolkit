@@ -5,7 +5,7 @@
 
 volatile int count = 0;
 
-class ExampleListener : public EI::DataObserver
+class ExampleListener : public EI::DataListener
 {
 public:
     void onMessage(EI::DataMessage const& p) {

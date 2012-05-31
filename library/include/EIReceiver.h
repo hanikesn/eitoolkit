@@ -12,17 +12,17 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT DataObserver
+class EITOOLKIT_EXPORT DataListener
 {
 public:
-    virtual ~DataObserver() {}
+    virtual ~DataListener() {}
     virtual void onMessage(DataMessage const&) = 0;
 };
 
-class EITOOLKIT_EXPORT ControlObserver
+class EITOOLKIT_EXPORT ControlListener
 {
 public:
-    virtual ~ControlObserver() {}
+    virtual ~ControlListener() {}
     virtual void onMessage(Message const&) = 0;
 };
 
@@ -36,11 +36,11 @@ public:
 
     void discoverSenders();
 
-    void addDataListener(DataObserver&);
-    void removeDataListener(DataObserver&);
+    void addDataListener(DataListener&);
+    void removeDataListener(DataListener&);
 
-    void addControlListener(ControlObserver&);
-    void removeControlListener(ControlObserver&);
+    void addControlListener(ControlListener&);
+    void removeControlListener(ControlListener&);
 private:
     // Disable copying
     Receiver(const Receiver &);
