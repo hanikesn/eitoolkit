@@ -17,14 +17,16 @@ public:
     enum Type {EMPTY, DOUBLE, STRING};
 
     Value();
-    Value(std::string const&);
-    Value(double);
-    Value(Value const&);
+    Value(std::string const& value);
+    Value(double value );
+
+    Value(Value const& other);
     ~Value();
 
     Type getType() const;
 
-    std::string const& asString();
+    std::string const& asString() const;
+    double asDouble() const;
 };
 
 class DataSeriesInfo
@@ -75,7 +77,7 @@ class DescriptionMessage : public Message
 public:
     DescriptionMessage(std::string const& sender, Description const& description);
 
-    Description const& getDescription();
+    Description getDescription();
 
     static char const* const IDENTIFIER;
 };
@@ -98,7 +100,7 @@ public:
     ~DataMessage();
 
     void set(std::string const& name, Value const& value);
-    Value const& get(std::string const& name) const;
+    Value get(std::string const& name) const;
     std::map<std::string, Value> getContent() const;
 
     void setString(std::string const& name, std::string const& value);

@@ -41,4 +41,10 @@ void DescriptionMessage::swap(DescriptionMessage &other) throw ()
     std::swap(pimpl, other.pimpl);
 }
 
+
+Description DescriptionMessage::getDescription() const
+{
+    return pimpl->description;
+}
+
 }

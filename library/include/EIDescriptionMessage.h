@@ -18,7 +18,7 @@ public:
     DescriptionMessage(DescriptionMessage && other);
     DescriptionMessage &operator=(DescriptionMessage other);
 
-    Description const& getDescription();
+    Description getDescription() const;
 
     static char const* const IDENTIFIER;
 private:

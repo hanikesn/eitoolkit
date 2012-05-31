@@ -23,6 +23,8 @@ public:
         HAS_MINMAX=HAS_MIN | HAS_MAX
     };
 
+    // Don't use this exists only for the brocken swig bindings
+    EITOOLKIT_DEPRECATED DataSeriesInfo();
     DataSeriesInfo(Value::Type type, Property properties, const std::string& misc);
     DataSeriesInfo(Value::Type type, Property properties, const std::string& misc, double min, double max);
 
@@ -43,12 +45,6 @@ public:
 
 private:
     void swap(DataSeriesInfo& other) throw ();
-
-#ifdef EI_FOR_SWIG
-public:
-#endif
-    DataSeriesInfo();
-private:
 
 private:
     class DataSeriesInfoImpl;

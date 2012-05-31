@@ -8,6 +8,7 @@ class Description::DescriptionImpl
 public:
     DescriptionImpl(const std::string& device_type) : device_type(device_type) {}
     const std::string device_type;
+    std::map<std::string, DataSeriesInfo> infos;
 };
 
 Description::Description(const std::string& device_type)
@@ -42,6 +43,21 @@ void Description::swap(Description &other) throw ()
     std::swap(pimpl, other.pimpl);
 }
 
+std::string Description::getDeviceType() const
+{
+    return pimpl->device_type;
+}
+
+void Description::addDataSeries(const std::string& name, const DataSeriesInfo& info)
+{
+    pimpl->infos.insert(std::pair<std::string, DataSeriesInfo>(name, info));
+}
+
+std::map<std::string, DataSeriesInfo> Description::getDataSeries() const
+{
+    return pimpl->infos;
+}
+
 class DataSeriesInfo::DataSeriesInfoImpl
 {
 public:
@@ -59,6 +75,8 @@ public:
     const double min;
     const double max;
 };
+
+
 
 
 DataSeriesInfo::DataSeriesInfo(Value::Type type, Property properties, const std::string& misc)
@@ -103,7 +121,7 @@ Value::Type DataSeriesInfo::getType() const
 
 bool DataSeriesInfo::hasProperty(Property property) const
 {
-    return pimpl->properties & property;
+    return (pimpl->properties & property) != 0;
 }
 
 DataSeriesInfo::Property DataSeriesInfo::getProperties() const

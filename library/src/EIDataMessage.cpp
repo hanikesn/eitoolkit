@@ -51,6 +51,16 @@ DataMessage& DataMessage::operator=(DataMessage other)
     return *this;
 }
 
+void DataMessage::set(std::string const& name, Value const& value)
+{
+    pimpl->set(name, value);
+}
+
+Value DataMessage::get(std::string const& name) const
+{
+    return pimpl->get(name);
+}
+
 void DataMessage::setString(std::string const& key, std::string const& value)
 {
     pimpl->set(key, Value(value));
