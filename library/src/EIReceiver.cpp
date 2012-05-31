@@ -12,6 +12,10 @@
 namespace EI
 {
 
+DataListener::~DataListener() {}
+
+CommunicationListener::~CommunicationListener() {}
+
 class Receiver::ReceiverImpl : public PacketListener
 {
 public:

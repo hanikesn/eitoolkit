@@ -13,6 +13,7 @@ class EITOOLKIT_EXPORT DiscoveryMessage : public Message
 {
 public:
     DiscoveryMessage(std::string const& sender);
+    virtual ~DiscoveryMessage();
 
     static char const* const IDENTIFIER;
 };

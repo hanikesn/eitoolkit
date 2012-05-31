@@ -15,14 +15,14 @@ namespace EI
 class EITOOLKIT_EXPORT DataListener
 {
 public:
-    virtual ~DataListener() {}
+    virtual ~DataListener();
     virtual void onMessage(DataMessage const&) = 0;
 };
 
 class EITOOLKIT_EXPORT CommunicationListener
 {
 public:
-    virtual ~CommunicationListener() {}
+    virtual ~CommunicationListener();
     virtual void onMessage(Message const&) = 0;
 };
 
@@ -30,17 +30,17 @@ class EITOOLKIT_EXPORT Receiver
 {
 public:
     Receiver(std::map<std::string, std::string> const& options);
-    Receiver(std::map<std::string, std::string> const& options, Transport&);
-    Receiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    Receiver(std::map<std::string, std::string> const& options, Transport& transport);
+    Receiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
     ~Receiver();
 
     void discoverSenders();
 
-    void addDataListener(DataListener&);
-    void removeDataListener(DataListener&);
+    void addDataListener(DataListener& listener);
+    void removeDataListener(DataListener& listener);
 
-    void addCommunicationListener(CommunicationListener&);
-    void removeCommunicationListener(CommunicationListener&);
+    void addCommunicationListener(CommunicationListener& listener);
+    void removeCommunicationListener(CommunicationListener& listener);
 private:
     // Disable copying
     Receiver(const Receiver &);

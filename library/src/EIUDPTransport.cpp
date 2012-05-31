@@ -16,7 +16,7 @@ class Worker
 {
 public:
     Worker(ba::ip::udp::socket& socket, Transport::Channel type, PacketListener& ob)
-        : socket(socket), type(type), ob(ob), recv_buffer(8000)
+        : ob(ob), socket(socket), recv_buffer(8000), type(type)
     {}
 
     void start_receive()
@@ -34,18 +34,17 @@ private:
         if (!error || error == boost::asio::error::message_size)
         {
             std::vector<Byte> out_buffer(bytes_transferred);
-            copy(std::begin(recv_buffer), std::begin(recv_buffer)+bytes_transferred, std::begin(out_buffer));
+            std::copy(std::begin(recv_buffer), std::begin(recv_buffer)+bytes_transferred, std::begin(out_buffer));
             ob.onPacket(type, out_buffer);
             start_receive();
         }
     }
 
 private:
-    ba::ip::udp::socket& socket;
-    Transport::Channel type;
     PacketListener& ob;
-
+    ba::ip::udp::socket& socket;
     std::vector<Byte> recv_buffer;
+    Transport::Channel type;
 };
 
 class UDPTransport::UDPTransportImpl : public PacketListener

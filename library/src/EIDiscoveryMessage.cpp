@@ -7,6 +7,11 @@ char const* const DiscoveryMessage::IDENTIFIER = "discover";
 
 DiscoveryMessage::DiscoveryMessage(std::string const& sender)
     : Message(sender, DiscoveryMessage::IDENTIFIER)
-{}
+{
+}
+
+DiscoveryMessage::~DiscoveryMessage()
+{
+}
 
 }

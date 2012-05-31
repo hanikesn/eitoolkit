@@ -12,6 +12,7 @@ class EITOOLKIT_EXPORT DescriptionMessage : public Message
 {
 public:
     DescriptionMessage(std::string const& sender, Description const& description);
+    virtual ~DescriptionMessage();
 
     Description const& getDescription();
 

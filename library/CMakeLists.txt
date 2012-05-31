@@ -60,9 +60,11 @@ set(SOURCE_FILES
   src/EIDiscoveryMessage.cpp
   src/EIJSONPresentation.cpp
   src/EIMessage.cpp
+  src/EIPresentation.cpp
   src/EIReceiver.cpp
   src/EISender.cpp
   src/EIThread.h
+  src/EITransport.cpp
   src/EIUDPTransport.cpp
   src/EIValue.cpp
 )

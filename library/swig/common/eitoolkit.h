@@ -120,14 +120,14 @@ public:
 class DataListener
 {
 public:
-    virtual ~DataListener() {}
+    virtual ~DataListener();
     virtual void onMessage(DataMessage const&) = 0;
 };
 
 class CommunicationListener
 {
 public:
-    virtual ~CommunicationListener() {}
+    virtual ~CommunicationListener();
     virtual void onMessage(Message const&) = 0;
 };
 
@@ -173,7 +173,7 @@ public:
 class PacketListener
 {
 public:
-    virtual ~PacketListener() {}
+    virtual ~PacketListener();
     virtual void onPacket(Transport::Channel, std::vector<Byte> const&) = 0;
 };
 

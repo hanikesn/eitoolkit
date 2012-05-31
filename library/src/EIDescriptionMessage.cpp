@@ -18,4 +18,9 @@ DescriptionMessage::DescriptionMessage(const std::string &sender, const Descript
 {
 }
 
+DescriptionMessage::~DescriptionMessage()
+{
+    delete pimpl;
+}
+
 }

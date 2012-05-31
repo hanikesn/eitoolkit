@@ -16,13 +16,11 @@ namespace EI
 class EITOOLKIT_EXPORT Sender
 {
 public:
-    /// Erstellt einen UPD Sender mit JSON Darstellung
-    /// Options: z.B. Name = asd etc.
     Sender(Description const&, std::map<std::string, std::string> const& options);
-    Sender(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    Sender(Description const&, std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
     ~Sender();
 
-    void sendMessage(const Message&);
+    void sendMessage(const Message& msg);
 private:
     // Disable copying
     Sender(const Sender &);
