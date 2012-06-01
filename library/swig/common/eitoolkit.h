@@ -157,8 +157,8 @@ public:
 class Sender
 {
 public:
-    Sender(Description const&, StringMap const& options);
-    Sender(Description const&, StringMap const& options, Transport&, Presentation&);
+    Sender(Description const& description, StringMap const& options);
+    Sender(Description const& description, StringMap const& options, Transport&, Presentation&);
     ~Sender();
 
     void sendMessage(Message const&);

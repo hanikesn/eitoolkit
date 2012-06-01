@@ -13,6 +13,9 @@ class PacketListener;
 class EITOOLKIT_EXPORT Transport
 {
 public:
+    /**
+     * @brief The Channel enum
+     */
     enum Channel {ALL, DATA, COMMUNICATION};
 
     virtual ~Transport();
