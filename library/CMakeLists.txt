@@ -69,6 +69,7 @@ set(SOURCE_FILES
   src/EITransport.cpp
   src/EIUDPTransport.cpp
   src/EIValue.cpp
+  src/helpers.h
 )
 
 configure_file (
@@ -87,7 +88,8 @@ add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(EIToolkit ${Boost_LIBRARIES} json_spirit)
 
 if(HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
-  target_link_libraries(EIToolkit pthread)
+  find_package(Threads REQUIRED)
+  target_link_libraries(EIToolkit ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 generate_export_header(EIToolkit)

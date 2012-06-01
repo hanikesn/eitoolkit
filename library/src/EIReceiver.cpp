@@ -5,6 +5,7 @@
 #include "EIUDPTransport.h"
 #include "EIDiscoveryMessage.h"
 #include "EIThread.h"
+#include "helpers.h"
 
 #include <iostream>
 #include <algorithm>
@@ -154,7 +155,7 @@ void Receiver::ReceiverImpl::removeCommunicationListener(CommunicationListener& 
 
 void Receiver::ReceiverImpl::onPacket(Transport::Channel type, ByteVector const& data)
 {
-    std::shared_ptr<Message> p;
+    std::unique_ptr<Message> p;
     try {
         p = presentation.decode(std::move(data));
     } catch(std::exception& e) {
@@ -163,21 +164,25 @@ void Receiver::ReceiverImpl::onPacket(Transport::Channel type, ByteVector const&
     }
 
     Thread::lock_guard lock(mutex);
-    switch(type) {
+    switch(type)
+    {
     case Transport::DATA:
+    {
+        std::unique_ptr<DataMessage> dp = unique_dynamic_cast<DataMessage>(p);
+        if(!dp)
+            break;
         std::for_each(std::begin(dataListeners), std::end(dataListeners),
-        [&p](DataListener* ob)
+        [&dp](DataListener* ob)
         {
-            std::shared_ptr<DataMessage> dp = std::dynamic_pointer_cast<DataMessage>(p);
-            if(dp)
-                ob->onMessage(std::move(*dp));
+            ob->onMessage(*dp);
         });
+    }
         break;
     case Transport::COMMUNICATION:
         std::for_each(std::begin(controlListeners), std::end(controlListeners),
         [&p](CommunicationListener* ob)
         {
-            ob->onMessage(std::move(*p));
+            ob->onMessage(*p);
         });
         break;
     default:

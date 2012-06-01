@@ -1,15 +1,9 @@
 #include "EIJSONPresentation.h"
 #include "EIDataMessage.h"
 #include "json_spirit.h"
+#include "helpers.h"
 
 namespace js = json_spirit;
-
-struct wrap_vector_as_istream : std::streambuf
-{
-    wrap_vector_as_istream(std::vector<EI::Byte> & vec ) {
-        this->setg(&vec[0], &vec[0], &vec[0]+vec.size() );
-    }
-};
 
 namespace EI
 {
@@ -20,7 +14,7 @@ public:
     JSONPresentationImpl(StringMap const& options);
 
     void encode(Message const&, ByteVector & out);
-    std::shared_ptr<Message> decode(ByteVector const&);
+    std::unique_ptr<Message> decode(ByteVector const&);
 };
 
 JSONPresentation::JSONPresentation(StringMap const& options) :
@@ -37,7 +31,7 @@ void JSONPresentation::encode(Message const& p, ByteVector & out)
     return pimpl->encode(p, out);
 }
 
-std::shared_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
+std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
 {
     return pimpl->decode(bytes);
 }
@@ -90,10 +84,10 @@ void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector
     }
 }
 
-static std::shared_ptr<Message> decodeDataMessage(js::mObject & obj)
+static std::unique_ptr<Message> decodeDataMessage(js::mObject & obj)
 {
     auto sender = obj["sender"].get_str();
-    auto packet = std::make_shared<DataMessage>(sender);
+    auto packet = make_unique<DataMessage>(sender);
 
     auto val = obj["values"].get_obj();
 
@@ -104,10 +98,10 @@ static std::shared_ptr<Message> decodeDataMessage(js::mObject & obj)
                     packet->setString(v.first, v.second.get_str());
     });
 
-    return packet;
+    return std::move(packet);
 }
 
-std::shared_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
+std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
 {
     auto str = std::string(bytes.begin(), bytes.end());
     js::mValue val;
@@ -122,7 +116,7 @@ std::shared_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVect
     if(msgtype==DataMessage::IDENTIFIER)
         return decodeDataMessage(obj);
     else
-        return std::make_shared<Message>(sender, msgtype);
+        return make_unique<Message>(sender, msgtype);
 }
 
 }

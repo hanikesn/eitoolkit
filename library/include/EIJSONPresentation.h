@@ -17,7 +17,7 @@ public:
     ~JSONPresentation();
 
     void encode(Message const& msg, ByteVector & out_buffer);
-    std::shared_ptr<Message> decode(ByteVector const& in_buffer);
+    std::unique_ptr<Message> decode(ByteVector const& in_buffer);
 
 private:
     // Disable copying

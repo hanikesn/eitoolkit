@@ -21,9 +21,9 @@ using namespace EI;
 %shared_ptr(EI::DiscoverPacket)
 */
 
-%feature("director") EI::DataObserver;
-%feature("director") EI::ControlObserver;
-%feature("director") EI::BytePacketObserver;
+%feature("director") EI::DataListener;
+%feature("director") EI::CommunicationListener;
+%feature("director") EI::PacketListener;
 
 // DataPacket doesn't have a default constructor, but this constructor would require one, so don't generate it
 %ignore std::vector<EI::DataMessage>::vector(size_type);
