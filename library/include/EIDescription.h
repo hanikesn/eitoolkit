@@ -51,6 +51,8 @@ private:
     DataSeriesInfoImpl* pimpl;
 };
 
+typedef std::map<std::string, DataSeriesInfo> DataSeriesInfoMap;
+
 class EITOOLKIT_EXPORT Description
 {
 public:
@@ -64,7 +66,7 @@ public:
     std::string getDeviceType() const;
 
     void addDataSeries(const std::string& name, const DataSeriesInfo& info);
-    std::map<std::string, DataSeriesInfo> getDataSeries() const;
+    DataSeriesInfoMap getDataSeries() const;
 
 private:
     void swap(Description& other) throw ();

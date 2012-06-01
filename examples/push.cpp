@@ -7,7 +7,7 @@ int main()
 {
     std::cout << "push" << std::endl;
 
-    std::map<std::string, std::string> options;
+    EI::StringMap options;
 
     EI::Sender sender(EI::Description("asd"), options);
 

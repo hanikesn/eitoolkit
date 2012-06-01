@@ -26,7 +26,7 @@ public:
 
 int main()
 {
-    std::map<std::string, std::string> options;
+    EI::StringMap options;
     DataListener dataListener;
     CommunicationListener controlListener;
 

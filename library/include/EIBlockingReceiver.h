@@ -15,9 +15,9 @@ namespace EI
 class EITOOLKIT_EXPORT BlockingReceiver
 {
 public:
-    BlockingReceiver(std::map<std::string, std::string> const& options);
-    BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport);
-    BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
+    BlockingReceiver(StringMap const& options);
+    BlockingReceiver(StringMap const& options, Transport& transport);
+    BlockingReceiver(StringMap const& options, Transport& transport, Presentation& presentation);
     ~BlockingReceiver();
 
     std::vector<DataMessage> getMessages();

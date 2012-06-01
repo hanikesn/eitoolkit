@@ -18,7 +18,7 @@ int main()
 {
     std::cout << "count" << std::endl;
 
-    std::map<std::string, std::string> options;
+    EI::StringMap options;
 
     EI::Receiver receiver(options);
 

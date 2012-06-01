@@ -8,10 +8,22 @@
 namespace EI
 {
 
+/**
+ * @brief Holds different values.
+ *
+ * This class is used to save different values in @ref DataMessage
+ */
 class EITOOLKIT_EXPORT Value
 {
 public:
-    enum Type {EMPTY, DOUBLE, STRING};
+    /**
+     * @brief The data types that can be saved in a @ref Value.
+     */
+    enum Type {
+        EMPTY, /**< No value is saved. */
+        DOUBLE, /**< A floating point number with double precision is saved. */
+        STRING /**< A floating point number with double precision is saved. */
+    };
 
     Value();
     Value(std::string const& value);
@@ -35,6 +47,10 @@ private:
     ValueImpl* pimpl;
 };
 
+
+/**
+ * @brief Prints a \ref Value to the stream
+ */
 EITOOLKIT_EXPORT std::ostream& operator<< (std::ostream& stream, const Value& value);
 
 }

@@ -6,7 +6,7 @@ int main()
 {
     std::cout << "simple_server" << std::endl;
 
-    std::map<std::string, std::string> options;
+    EI::StringMap options;
 
     EI::Description desc("asd");
 

@@ -29,9 +29,9 @@ public:
 class EITOOLKIT_EXPORT Receiver
 {
 public:
-    Receiver(std::map<std::string, std::string> const& options);
-    Receiver(std::map<std::string, std::string> const& options, Transport& transport);
-    Receiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
+    Receiver(StringMap const& options);
+    Receiver(StringMap const& options, Transport& transport);
+    Receiver(StringMap const& options, Transport& transport, Presentation& presentation);
     ~Receiver();
 
     void discoverSenders();

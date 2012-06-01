@@ -8,7 +8,7 @@ class Description::DescriptionImpl
 public:
     DescriptionImpl(const std::string& device_type) : device_type(device_type) {}
     const std::string device_type;
-    std::map<std::string, DataSeriesInfo> infos;
+    DataSeriesInfoMap infos;
 };
 
 Description::Description(const std::string& device_type)
@@ -53,7 +53,7 @@ void Description::addDataSeries(const std::string& name, const DataSeriesInfo& i
     pimpl->infos.insert(std::pair<std::string, DataSeriesInfo>(name, info));
 }
 
-std::map<std::string, DataSeriesInfo> Description::getDataSeries() const
+DataSeriesInfoMap Description::getDataSeries() const
 {
     return pimpl->infos;
 }

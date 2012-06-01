@@ -17,13 +17,13 @@ namespace EI
 class JSONPresentation::JSONPresentationImpl
 {
 public:
-    JSONPresentationImpl(std::map<std::string, std::string> const& options);
+    JSONPresentationImpl(StringMap const& options);
 
-    void encode(Message const&, std::vector<Byte> & out);
-    std::shared_ptr<Message> decode(std::vector<Byte> const&);
+    void encode(Message const&, ByteVector & out);
+    std::shared_ptr<Message> decode(ByteVector const&);
 };
 
-JSONPresentation::JSONPresentation(std::map<std::string, std::string> const& options) :
+JSONPresentation::JSONPresentation(StringMap const& options) :
     pimpl(new JSONPresentationImpl(options))
 {}
 
@@ -32,20 +32,20 @@ JSONPresentation::~JSONPresentation()
     delete pimpl;
 }
 
-void JSONPresentation::encode(Message const& p, std::vector<Byte> & out)
+void JSONPresentation::encode(Message const& p, ByteVector & out)
 {
     return pimpl->encode(p, out);
 }
 
-std::shared_ptr<Message> JSONPresentation::decode(std::vector<Byte> const& bytes)
+std::shared_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
 {
     return pimpl->decode(bytes);
 }
 
-JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(std::map<std::string, std::string> const&)
+JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(StringMap const&)
 {}
 
-static void encodeDataMessage(DataMessage const& p, std::vector<Byte> & out)
+static void encodeDataMessage(DataMessage const& p, ByteVector & out)
 {
     js::mObject obj;
     js::mObject valuesObj;
@@ -70,7 +70,7 @@ static void encodeDataMessage(DataMessage const& p, std::vector<Byte> & out)
     out.assign(result.begin(), result.end());
 }
 
-static void encodeMessage(Message const& p, std::vector<Byte> & out)
+static void encodeMessage(Message const& p, ByteVector & out)
 {
     js::mObject obj;
 
@@ -81,7 +81,7 @@ static void encodeMessage(Message const& p, std::vector<Byte> & out)
     out.assign(result.begin(), result.end());
 }
 
-void JSONPresentation::JSONPresentationImpl::encode(Message const& p, std::vector<Byte>& out)
+void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector& out)
 {
     if(p.getMsgType() == DataMessage::IDENTIFIER) {
         encodeDataMessage(dynamic_cast<DataMessage const&>(p), out);
@@ -107,7 +107,7 @@ static std::shared_ptr<Message> decodeDataMessage(js::mObject & obj)
     return packet;
 }
 
-std::shared_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(std::vector<Byte> const& bytes)
+std::shared_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
 {
     auto str = std::string(bytes.begin(), bytes.end());
     js::mValue val;

@@ -33,7 +33,7 @@ private:
     {
         if (!error || error == boost::asio::error::message_size)
         {
-            std::vector<Byte> out_buffer(bytes_transferred);
+            ByteVector out_buffer(bytes_transferred);
             std::copy(std::begin(recv_buffer), std::begin(recv_buffer)+bytes_transferred, std::begin(out_buffer));
             ob.onPacket(type, out_buffer);
             start_receive();
@@ -43,21 +43,21 @@ private:
 private:
     PacketListener& ob;
     ba::ip::udp::socket& socket;
-    std::vector<Byte> recv_buffer;
+    ByteVector recv_buffer;
     Transport::Channel type;
 };
 
 class UDPTransport::UDPTransportImpl : public PacketListener
 {
 public:
-    UDPTransportImpl(std::map<std::string, std::string> const& options);
+    UDPTransportImpl(StringMap const& options);
     ~UDPTransportImpl();
 
-    void sendPacket(Transport::Channel, std::vector<Byte> const&);
+    void sendPacket(Transport::Channel, ByteVector const&);
     void addPacketListener(Transport::Channel, PacketListener&);
     void removePacketListener(PacketListener&);
 
-    virtual void onPacket(Transport::Channel, std::vector<Byte> const&);
+    virtual void onPacket(Transport::Channel, ByteVector const&);
 private:
     Thread::thread thread;
     Thread::mutex mutex;
@@ -74,7 +74,7 @@ private:
     std::vector<PacketListener*> controlListeners;
 };
 
-UDPTransport::UDPTransport(std::map<std::string, std::string> const& options )
+UDPTransport::UDPTransport(StringMap const& options )
     : pimpl(new UDPTransportImpl(options))
 {}
 
@@ -83,7 +83,7 @@ UDPTransport::~UDPTransport()
     delete pimpl;
 }
 
-void UDPTransport::sendPacket(Channel type, std::vector<Byte> const& packet)
+void UDPTransport::sendPacket(Channel type, ByteVector const& packet)
 {
     pimpl->sendPacket(type, packet);
 }
@@ -98,7 +98,7 @@ void UDPTransport::removePacketListener(PacketListener& ob)
     pimpl->removePacketListener(ob);
 }
 
-UDPTransport::UDPTransportImpl::UDPTransportImpl(std::map<std::string, std::string> const&)
+UDPTransport::UDPTransportImpl::UDPTransportImpl(StringMap const&)
     : dataSocket(io_service, ba::ip::udp::v4()),
       controlSocket(io_service, ba::ip::udp::v4()),
       dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
@@ -152,7 +152,7 @@ void UDPTransport::UDPTransportImpl::removePacketListener(PacketListener& ob)
     }
 }
 
-void UDPTransport::UDPTransportImpl::onPacket(Transport::Channel type, std::vector<Byte> const& p)
+void UDPTransport::UDPTransportImpl::onPacket(Transport::Channel type, ByteVector const& p)
 {
     Thread::lock_guard lock(mutex);
 
@@ -165,7 +165,7 @@ void UDPTransport::UDPTransportImpl::onPacket(Transport::Channel type, std::vect
         });
 }
 
-void UDPTransport::UDPTransportImpl::sendPacket(Transport::Channel type, std::vector<Byte> const& p)
+void UDPTransport::UDPTransportImpl::sendPacket(Transport::Channel type, ByteVector const& p)
 {
     switch(type)
     {

@@ -1,6 +1,8 @@
 namespace EI
 {
 typedef char Byte;
+typedef std::map<std::string, std::string> StringMap;
+typedef std::vector<Byte> ByteVector;
 
 class PacketListener;
 class ControlListener;
@@ -48,6 +50,8 @@ public:
     double getMax() const;
 };
 
+typedef std::map<std::string, DataSeriesInfo> DataSeriesInfoMap;
+
 class Description
 {
 public:
@@ -58,7 +62,7 @@ public:
     std::string getDeviceType() const;
 
     void addDataSeries(const std::string& name, const DataSeriesInfo& info);
-    std::map<std::string, DataSeriesInfo> getDataSeries() const;
+    DataSeriesInfoMap getDataSeries() const;
 };
 
 class Message
@@ -114,9 +118,9 @@ class Presentation
 {
 public:
     virtual ~Presentation();
-    void encode(Message const&, std::vector<Byte> &) = 0;
+    void encode(Message const&, ByteVector &) = 0;
     // Shared Pointer machen probleme
-    // virtual std::shared_ptr<Message> decode(std::vector<Byte> const&) = 0;
+    // virtual std::shared_ptr<Message> decode(ByteVector const&) = 0;
 };
 
 class DataListener
@@ -136,9 +140,9 @@ public:
 class Receiver
 {
 public:
-    Receiver(std::map<std::string, std::string> const& options);
-    Receiver(std::map<std::string, std::string> const& options, Transport&);
-    Receiver(std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    Receiver(StringMap const& options);
+    Receiver(StringMap const& options, Transport&);
+    Receiver(StringMap const& options, Transport&, Presentation&);
     ~Receiver();
 
     void discoverSenders();
@@ -153,8 +157,8 @@ public:
 class Sender
 {
 public:
-    Sender(Description const&, std::map<std::string, std::string> const& options);
-    Sender(Description const&, std::map<std::string, std::string> const& options, Transport&, Presentation&);
+    Sender(Description const&, StringMap const& options);
+    Sender(Description const&, StringMap const& options, Transport&, Presentation&);
     ~Sender();
 
     void sendMessage(Message const&);
@@ -167,7 +171,7 @@ public:
 
     virtual ~Transport();
 
-    virtual void sendPacket(Channel, std::vector<Byte> const&) = 0;
+    virtual void sendPacket(Channel, ByteVector const&) = 0;
     virtual void addPacketListener(Channel, PacketListener&) = 0;
     virtual void removePacketListener(PacketListener&) = 0;
 };
@@ -176,15 +180,15 @@ class PacketListener
 {
 public:
     virtual ~PacketListener();
-    virtual void onPacket(Transport::Channel, std::vector<Byte> const&) = 0;
+    virtual void onPacket(Transport::Channel, ByteVector const&) = 0;
 };
 
 class BlockingReceiver
 {
 public:
-    BlockingReceiver(std::map<std::string, std::string> const& options);
-    BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport);
-    BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation);
+    BlockingReceiver(StringMap const& options);
+    BlockingReceiver(StringMap const& options, Transport& transport);
+    BlockingReceiver(StringMap const& options, Transport& transport, Presentation& presentation);
     ~BlockingReceiver();
 
     std::vector<DataMessage> getMessages();

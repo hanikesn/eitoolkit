@@ -16,7 +16,7 @@ int main()
 {
     std::cout << "simple_receiver" << std::endl;
 
-    std::map<std::string, std::string> options;
+    EI::StringMap options;
 
     EI::Receiver receiver(options);
 

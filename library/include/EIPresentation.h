@@ -15,8 +15,8 @@ class EITOOLKIT_EXPORT Presentation
 {
 public:
     virtual ~Presentation();
-    virtual void encode(Message const& msg, std::vector<Byte>& out_buffer) = 0;
-    virtual std::shared_ptr<Message> decode(std::vector<Byte> const& in_buffer) = 0;
+    virtual void encode(Message const& msg, ByteVector& out_buffer) = 0;
+    virtual std::shared_ptr<Message> decode(ByteVector const& in_buffer) = 0;
 };
 
 }

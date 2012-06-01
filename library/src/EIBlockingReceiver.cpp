@@ -8,9 +8,9 @@ namespace EI
 class BlockingReceiver::BlockingReceiverImpl : public DataListener
 {
 public:
-    BlockingReceiverImpl(std::map<std::string, std::string> const& options) : receiver(options) {}
-    BlockingReceiverImpl(std::map<std::string, std::string> const& options, Transport& transport) : receiver(options, transport) {}
-    BlockingReceiverImpl(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation) : receiver(options, transport, presentation) {}
+    BlockingReceiverImpl(StringMap const& options) : receiver(options) {}
+    BlockingReceiverImpl(StringMap const& options, Transport& transport) : receiver(options, transport) {}
+    BlockingReceiverImpl(StringMap const& options, Transport& transport, Presentation& presentation) : receiver(options, transport, presentation) {}
 
     void onMessage(const DataMessage &);
 
@@ -20,17 +20,17 @@ public:
     Thread::condition_variable buffer_not_empty;
 };
 
-BlockingReceiver::BlockingReceiver(std::map<std::string, std::string> const& options)
+BlockingReceiver::BlockingReceiver(StringMap const& options)
     : pimpl(new BlockingReceiverImpl(options))
 {
 }
 
-BlockingReceiver::BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport)
+BlockingReceiver::BlockingReceiver(StringMap const& options, Transport& transport)
     : pimpl(new BlockingReceiverImpl(options, transport))
 {
 }
 
-BlockingReceiver::BlockingReceiver(std::map<std::string, std::string> const& options, Transport& transport, Presentation& presentation)
+BlockingReceiver::BlockingReceiver(StringMap const& options, Transport& transport, Presentation& presentation)
     : pimpl(new BlockingReceiverImpl(options, transport, presentation))
 {
 }
