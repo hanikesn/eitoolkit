@@ -157,7 +157,7 @@ void Receiver::ReceiverImpl::onPacket(Transport::Channel type, ByteVector const&
 {
     std::unique_ptr<Message> p;
     try {
-        p = presentation.decode(std::move(data));
+        p = presentation.decode(data);
     } catch(std::exception& e) {
         std::cerr << "Error: Invalid packet: " << e.what();
         return;

@@ -71,6 +71,7 @@ Sender::SenderImpl::~SenderImpl()
 
 void Sender::SenderImpl::sendMessage(Message const& packet)
 {
+    buffer.clear();
     presentation.encode(packet, buffer);
     transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
 }

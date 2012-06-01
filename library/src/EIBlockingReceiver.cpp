@@ -77,7 +77,7 @@ std::vector<DataMessage> BlockingReceiver::getMessages()
 
     auto tmp = std::move(pimpl->buffer);
 
-    pimpl->buffer.clear();
+    pimpl->buffer = std::vector<DataMessage>();
 
     return std::move(tmp);
 }

@@ -79,13 +79,13 @@ configure_file (
 
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/EIToolkitConfig.h GENERATED)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../json_spirit)
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/../rapidjson)
 
 add_compiler_export_flags()
 
 add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
-target_link_libraries(EIToolkit ${Boost_LIBRARIES} json_spirit)
+target_link_libraries(EIToolkit ${Boost_LIBRARIES})
 
 if(HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
   find_package(Threads REQUIRED)

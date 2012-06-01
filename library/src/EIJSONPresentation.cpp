@@ -1,12 +1,33 @@
 #include "EIJSONPresentation.h"
 #include "EIDataMessage.h"
-#include "json_spirit.h"
 #include "helpers.h"
+#include "document.h"	
+#include "writer.h"
+#include "stringbuffer.h"
 
-namespace js = json_spirit;
+#include <algorithm>
+#include <iostream>
+#include <memory>
+
+namespace rs = rapidjson;
 
 namespace EI
 {
+
+class Wrapper
+{
+public:
+    Wrapper(ByteVector& out) : out(out) {}
+    ByteVector& out;
+    
+    void Put(char c)
+    {
+        out.push_back(c);
+    }
+
+    void Flush() {}
+};
+
 
 class JSONPresentation::JSONPresentationImpl
 {
@@ -15,6 +36,9 @@ public:
 
     void encode(Message const&, ByteVector & out);
     std::unique_ptr<Message> decode(ByteVector const&);
+
+	rs::Document document;
+    std::vector<Byte> buffer;
 };
 
 JSONPresentation::JSONPresentation(StringMap const& options) :
@@ -39,63 +63,61 @@ std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
 JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(StringMap const&)
 {}
 
-static void encodeDataMessage(DataMessage const& p, ByteVector & out)
+static void encodeDataMessage(DataMessage const& p, rs::Writer<Wrapper> & writer)
 {
-    js::mObject obj;
-    js::mObject valuesObj;
+    writer.String("values");
 
-    obj["msgtype"] = p.getMsgType();
-    obj["sender"] = p.getSender();
+    writer.StartObject();
 
-    auto values = p.getContent();
+    auto const& values = p.getContent();
 
     std::for_each(values.begin(), values.end(),
-                  [&valuesObj](std::pair<const std::string, Value>& pair)
+                  [&writer](std::pair<const std::string, Value> const& pair)
     {
-            if(pair.second.getType() == Value::STRING)
-                valuesObj[pair.first] = pair.second.asString();
-            else if(pair.second.getType() == Value::DOUBLE)
-                valuesObj[pair.first] = pair.second.asDouble();
+            if(pair.second.getType() == Value::STRING) {
+                writer.String(pair.first.c_str(), pair.first.length());
+                auto & val = pair.second.asString();
+                writer.String(val.c_str(), val.length());
+            } else if(pair.second.getType() == Value::DOUBLE) {
+                writer.String(pair.first.c_str(), pair.first.length());
+                writer.Double(pair.second.asDouble());
+            }
     });
 
-    obj["values"] = valuesObj;
-
-    auto result = js::write(obj);
-    out.assign(result.begin(), result.end());
-}
-
-static void encodeMessage(Message const& p, ByteVector & out)
-{
-    js::mObject obj;
-
-    obj["msgtype"] = p.getMsgType();
-    obj["sender"] = p.getSender();
-
-    auto result = js::write(obj);
-    out.assign(result.begin(), result.end());
+    writer.EndObject();
 }
 
 void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector& out)
 {
+    Wrapper buffer(out);
+    rs::Writer<Wrapper> writer(buffer);
+    auto msgtype = p.getMsgType();
+    auto sender = p.getSender();
+
+    writer.StartObject();
+    writer.String("msgtype");
+    writer.String(msgtype.c_str(), msgtype.length());
+    writer.String("sender");
+    writer.String(sender.c_str(), sender.length());
+
     if(p.getMsgType() == DataMessage::IDENTIFIER) {
-        encodeDataMessage(dynamic_cast<DataMessage const&>(p), out);
-    } else {
-        encodeMessage(p, out);
+        encodeDataMessage(dynamic_cast<DataMessage const&>(p), writer);
     }
+
+    writer.EndObject();
 }
 
-static std::unique_ptr<Message> decodeDataMessage(js::mObject & obj)
+static std::unique_ptr<Message> decodeDataMessage(rs::Document const& doc, const char* sender)
 {
-    auto sender = obj["sender"].get_str();
     std::unique_ptr<DataMessage> packet(new DataMessage(sender));
 
-    auto val = obj["values"].get_obj();
+    auto const& val = doc["values"];
 
-    std::for_each(val.begin(), val.end(),
-                  [&packet](std::pair<const std::string, js::mValue>& v)
+    std::for_each(val.MemberBegin(), val.MemberEnd(),
+        [&packet](rs::Value::Member const& v)
     {
-                  if(v.second.type() ==  js::str_type)
-                    packet->setString(v.first, v.second.get_str());
+                  if(v.value.IsString())
+                      packet->setString(v.name.GetString(), v.value.GetString());
     });
 
     return std::move(packet);
@@ -103,18 +125,20 @@ static std::unique_ptr<Message> decodeDataMessage(js::mObject & obj)
 
 std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
 {
-    auto str = std::string(bytes.begin(), bytes.end());
-    js::mValue val;
-    if(!js::read(str, val))
+    buffer.reserve(bytes.size() + 1);
+    buffer.assign(bytes.cbegin(), bytes.cend());
+    buffer.push_back(0);
+    if (document.ParseInsitu<0>(buffer.data()).HasParseError())
+    {
+        std::cerr << document.GetParseError() << ":" << document.GetErrorOffset() << "\n";
         throw std::exception();
+    }
 
-    js::mObject& obj = val.get_obj();
-
-    auto msgtype = obj["msgtype"].get_str();
-    auto sender = obj["sender"].get_str();
+    auto msgtype = document["msgtype"].GetString();
+    auto sender = document["sender"].GetString();
 
     if(msgtype==DataMessage::IDENTIFIER)
-        return decodeDataMessage(obj);
+        return decodeDataMessage(document, sender);
     else
         return std::unique_ptr<Message>(new Message(sender, msgtype));
 }
