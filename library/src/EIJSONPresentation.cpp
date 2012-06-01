@@ -87,7 +87,7 @@ void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector
 static std::unique_ptr<Message> decodeDataMessage(js::mObject & obj)
 {
     auto sender = obj["sender"].get_str();
-    auto packet = make_unique<DataMessage>(sender);
+    std::unique_ptr<DataMessage> packet(new DataMessage(sender));
 
     auto val = obj["values"].get_obj();
 
@@ -116,7 +116,7 @@ std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVect
     if(msgtype==DataMessage::IDENTIFIER)
         return decodeDataMessage(obj);
     else
-        return make_unique<Message>(sender, msgtype);
+        return std::unique_ptr<Message>(new Message(sender, msgtype));
 }
 
 }
