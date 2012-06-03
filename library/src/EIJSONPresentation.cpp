@@ -1,15 +1,19 @@
+#include <document.h>
+#include <writer.h>
+#include <stringbuffer.h>
+
 #include "EIJSONPresentation.h"
 #include "EIDataMessage.h"
 #include "helpers.h"
-#include "document.h"	
-#include "writer.h"
-#include "stringbuffer.h"
 
 #include <algorithm>
 #include <iostream>
 #include <memory>
 
 namespace rs = rapidjson;
+
+typedef rs::GenericDocument<rapidjson::UTF8<>, rapidjson::CrtAllocator> Document;
+typedef rs::GenericValue<rapidjson::UTF8<>, rapidjson::CrtAllocator> Value;
 
 namespace EI
 {
@@ -28,7 +32,6 @@ public:
     void Flush() {}
 };
 
-
 class JSONPresentation::JSONPresentationImpl
 {
 public:
@@ -37,7 +40,7 @@ public:
     void encode(Message const&, ByteVector & out);
     std::unique_ptr<Message> decode(ByteVector const&);
 
-	rs::Document document;
+    Document document;
     std::vector<Byte> buffer;
 };
 
@@ -107,14 +110,14 @@ void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector
     writer.EndObject();
 }
 
-static std::unique_ptr<Message> decodeDataMessage(rs::Document const& doc, const char* sender)
+static std::unique_ptr<Message> decodeDataMessage(Document const& doc, std::string sender)
 {
     std::unique_ptr<DataMessage> packet(new DataMessage(sender));
 
     auto const& val = doc["values"];
 
     std::for_each(val.MemberBegin(), val.MemberEnd(),
-        [&packet](rs::Value::Member const& v)
+        [&packet](::Value::Member const& v)
     {
                   if(v.value.IsString())
                       packet->setString(v.name.GetString(), v.value.GetString());
@@ -128,14 +131,14 @@ std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVect
     buffer.reserve(bytes.size() + 1);
     buffer.assign(bytes.cbegin(), bytes.cend());
     buffer.push_back(0);
-    if (document.ParseInsitu<0>(buffer.data()).HasParseError())
+    if (document.ParseInsitu<1>(buffer.data()).HasParseError())
     {
         std::cerr << document.GetParseError() << ":" << document.GetErrorOffset() << "\n";
         throw std::exception();
     }
 
-    auto msgtype = document["msgtype"].GetString();
-    auto sender = document["sender"].GetString();
+    std::string msgtype = document["msgtype"].GetString();
+    std::string sender = document["sender"].GetString();
 
     if(msgtype==DataMessage::IDENTIFIER)
         return decodeDataMessage(document, sender);
