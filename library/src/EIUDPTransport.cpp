@@ -33,8 +33,7 @@ private:
     {
         if (!error || error == boost::asio::error::message_size)
         {
-            ByteVector out_buffer(bytes_transferred);
-            std::copy(std::begin(recv_buffer), std::begin(recv_buffer)+bytes_transferred, std::begin(out_buffer));
+            out_buffer.assign(recv_buffer.begin(), recv_buffer.begin() + bytes_transferred);
             ob.onPacket(type, out_buffer);
             start_receive();
         }
@@ -44,6 +43,7 @@ private:
     PacketListener& ob;
     ba::ip::udp::socket& socket;
     ByteVector recv_buffer;
+    ByteVector out_buffer;
     Transport::Channel type;
 };
 
