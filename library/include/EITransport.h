@@ -29,7 +29,11 @@ public:
     /**
      * @brief The Channel enum
      */
-    enum Channel {ALL, DATA, COMMUNICATION};
+    enum Channel {
+        ALL,          /**< Synonym for all channels. */
+        DATA,         /**< The data channel on which @ref DataMessage "DataMessages" are sent. */
+        COMMUNICATION /**< The communication channel for all other @ref Message "messages". */
+    };
 
     virtual ~Transport();
 

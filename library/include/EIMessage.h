@@ -21,8 +21,14 @@ public:
     std::string const& getMsgType() const;
 
 protected:
-    // used to construct an empty Message
+    /**
+     * @brief Constructs a empty Message object.
+     * @note Should only be used for move construction.
+     */
     Message(void *);
+    /**
+     * @brief Swaps the contents of two Message objects.
+     */
     void swap(Message& other) throw ();
 
 private:
