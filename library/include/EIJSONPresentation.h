@@ -12,6 +12,8 @@ namespace EI
 
 /**
  * @brief The JSONPresentation class provides JSON encoding and decoding.
+ *
+ * @nocopy
  */
 class EITOOLKIT_EXPORT JSONPresentation : public Presentation
 {
