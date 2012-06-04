@@ -39,9 +39,6 @@ public:
 
     void encode(Message const&, ByteVector & out);
     std::unique_ptr<Message> decode(ByteVector const&);
-
-    Document document;
-    std::vector<Byte> buffer;
 };
 
 JSONPresentation::JSONPresentation(StringMap const& options) :
@@ -128,7 +125,8 @@ static std::unique_ptr<Message> decodeDataMessage(Document const& doc, std::stri
 
 std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
 {
-    buffer.reserve(bytes.size() + 1);
+    Document document;
+    std::vector<Byte> buffer(bytes.size() + 1);
     buffer.assign(bytes.cbegin(), bytes.cend());
     buffer.push_back(0);
     if (document.ParseInsitu<1>(buffer.data()).HasParseError())
