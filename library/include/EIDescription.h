@@ -56,6 +56,9 @@ private:
  */
 typedef std::map<std::string, DataSeriesInfo> DataSeriesInfoMap;
 
+/**
+ * @brief Provides information about a Sender.
+ */
 class EITOOLKIT_EXPORT Description
 {
 public:

@@ -85,18 +85,24 @@ class EITOOLKIT_EXPORT Receiver
 {
 public:
     /**
-     * @brief Constructs a Receiver object with the default Transport and the Presentation will be choosen automatically for each Message.
+     * @brief Constructs a Receiver object.
+     *
+     * It uses the default Transport and the Presentation will be choosen automatically for each Message.
      * @param options Various options for the Receiver. Will also be used for the construction of the default Transport and Presentation.
      */
     Receiver(StringMap const& options);
     /**
-     * @brief Constructs a Receiver object wich uses the given Transport. The Presentation will be choosen automatically for each Message.
+     * @brief Constructs a Receiver object.
+     *
+     * It uses the given Transport. The Presentation will be choosen automatically for each Message.
      * @param options Various options for the Receiver. Will also be used for the construction of the Presentation.
      * @param transport The Transport to be used.
      */
     Receiver(StringMap const& options, Transport& transport);
     /**
-     * @brief Constructs a Receiver object wich uses the given Transport and Presentation.
+     * @brief Constructs a Receiver object.
+     *
+     * It uses the given Transport and Presentation.
      * @param options Various options for the Receiver.
      * @param transport The Transport to be used.
      * @param presentation The Presentation to be used.
