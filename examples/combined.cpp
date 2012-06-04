@@ -8,7 +8,7 @@ class DataListener : public EI::DataListener
 {
 public:
     virtual ~DataListener() {}
-    virtual void onMessage(EI::DataMessage const& p) {
+    virtual void onMessage(EI::DataMessage p) {
         std::cout << "Data: " << p.getSender() << " " << p.getMsgType() << std::endl;
     }
 
@@ -18,7 +18,7 @@ class CommunicationListener : public EI::CommunicationListener
 {
 public:
     virtual ~CommunicationListener() {}
-    virtual void onMessage(EI::Message const& p) {
+    virtual void onMessage(EI::Message p) {
         std::cout << "Communication: " << p.getSender() << " " << p.getMsgType() << std::endl;
     }
 

@@ -127,14 +127,14 @@ class DataListener
 {
 public:
     virtual ~DataListener();
-    virtual void onMessage(DataMessage const&) = 0;
+    virtual void onMessage(DataMessage msg) = 0;
 };
 
 class CommunicationListener
 {
 public:
     virtual ~CommunicationListener();
-    virtual void onMessage(Message const&) = 0;
+    virtual void onMessage(Message msg) = 0;
 };
 
 class Receiver

@@ -12,20 +12,29 @@
 namespace EI
 {
 
+/**
+ * @brief The DataListener class is used as a callback interface for received @ref DataMessage DataMessages.
+ */
 class EITOOLKIT_EXPORT DataListener
 {
 public:
     virtual ~DataListener();
-    virtual void onMessage(DataMessage const&) = 0;
+    virtual void onMessage(DataMessage msg) = 0;
 };
 
+/**
+ * @brief The CommunicationListener class is used as a callback interface for received @ref Message Messages on the communication channel.
+ */
 class EITOOLKIT_EXPORT CommunicationListener
 {
 public:
     virtual ~CommunicationListener();
-    virtual void onMessage(Message const&) = 0;
+    virtual void onMessage(Message msg) = 0;
 };
 
+/**
+ * @brief The Receiver class allows you to receive @ref Message "messages" via the EIToolkit.
+ */
 class EITOOLKIT_EXPORT Receiver
 {
 public:

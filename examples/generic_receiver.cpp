@@ -6,7 +6,7 @@
 class ExampleListener : public EI::DataListener
 {
 public:
-    void onMessage(EI::DataMessage const& p) {
+    void onMessage(EI::DataMessage p) {
         std::cout << "Data: " << p.getSender() << " " << p.getMsgType() << std::endl;
         auto c = p.getContent();
         std::for_each(c.begin(), c.end(),

@@ -12,7 +12,7 @@ public:
     BlockingReceiverImpl(StringMap const& options, Transport& transport) : receiver(options, transport) {}
     BlockingReceiverImpl(StringMap const& options, Transport& transport, Presentation& presentation) : receiver(options, transport, presentation) {}
 
-    void onMessage(const DataMessage &);
+    void onMessage(DataMessage);
 
     std::vector<DataMessage> buffer;
     Receiver receiver;
@@ -40,11 +40,11 @@ BlockingReceiver::~BlockingReceiver()
     delete pimpl;
 }
 
-void BlockingReceiver::BlockingReceiverImpl::onMessage(const DataMessage & packet)
+void BlockingReceiver::BlockingReceiverImpl::onMessage(DataMessage msg)
 {
     {
         Thread::lock_guard lock(mutex);
-        buffer.push_back(packet);
+        buffer.push_back(std::move(msg));
     }
 
     buffer_not_empty.notify_one();
