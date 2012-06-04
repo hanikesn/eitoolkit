@@ -32,8 +32,6 @@ private:
 	Presentation& presentation;
 
     Description description;
-
-    ByteVector buffer;
 };
 
 Sender::Sender(Description const& description, StringMap const& options)
@@ -71,7 +69,7 @@ Sender::SenderImpl::~SenderImpl()
 
 void Sender::SenderImpl::sendMessage(Message const& packet)
 {
-    buffer.clear();
+    ByteVector buffer;
     presentation.encode(packet, buffer);
     transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
 }
