@@ -13,7 +13,9 @@ namespace EI
 {
 
 /**
- * @brief A callback interface for @ref DataMessage "DataMessages" used by the Receiver class.
+ * @brief A callback interface for @ref DataMessage "DataMessages".
+ *
+ * Used by the Receiver class.
  */
 class EITOOLKIT_EXPORT DataListener
 {
@@ -30,7 +32,9 @@ public:
 };
 
 /**
- * @brief A callback interface for @ref Message "Messages" used by the Receiver class.
+ * @brief A callback interface for @ref Message "Messages".
+ *
+ * Used by the Receiver class.
  */
 class EITOOLKIT_EXPORT CommunicationListener
 {

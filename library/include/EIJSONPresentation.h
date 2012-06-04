@@ -10,9 +10,16 @@
 namespace EI
 {
 
+/**
+ * @brief The JSONPresentation class provides JSON encoding and decoding.
+ */
 class EITOOLKIT_EXPORT JSONPresentation : public Presentation
 {
 public:
+    /**
+     * @brief Constructs a JSONPresentation object.
+     * @param options The options used. Currently none are supported.
+     */
     JSONPresentation(StringMap const& options);
     ~JSONPresentation();
 
