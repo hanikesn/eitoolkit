@@ -49,8 +49,6 @@ private:
     Thread::mutex mutex;
     std::vector<DataListener*> dataListeners;
     std::vector<CommunicationListener*> controlListeners;
-
-    ByteVector buffer;
 };
 
 Receiver::Receiver(StringMap const& options)
@@ -125,6 +123,7 @@ void Receiver::ReceiverImpl::init()
 
 void Receiver::ReceiverImpl::discoverSenders()
 {
+    ByteVector buffer;
     presentation.encode(DiscoveryMessage("Receiver"), buffer);
     transport.sendPacket(Transport::COMMUNICATION, buffer);
 }
