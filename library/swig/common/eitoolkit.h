@@ -72,8 +72,8 @@ public:
     Message(Message const& other);
     virtual ~Message();
 
-    std::string const& getSender() const;
-    std::string const& getMsgType() const;
+    std::string getSender() const;
+    std::string getMsgType() const;
 };
 
 class DescriptionMessage : public Message

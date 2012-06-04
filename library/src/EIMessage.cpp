@@ -49,13 +49,13 @@ void Message::swap(Message &other) throw ()
     std::swap(pimpl, other.pimpl);
 }
 
-std::string const& Message::getSender() const
+std::string Message::getSender() const
 {
     return pimpl->sender;
 }
 
 
-std::string const& Message::getMsgType() const
+std::string Message::getMsgType() const
 {
     return pimpl->msgtype;
 }

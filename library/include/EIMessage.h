@@ -17,8 +17,8 @@ public:
     Message& operator=(Message other);
     virtual ~Message();
 
-    std::string const& getSender() const;
-    std::string const& getMsgType() const;
+    std::string getSender() const;
+    std::string getMsgType() const;
 
 protected:
     /**
