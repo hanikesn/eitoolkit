@@ -18,7 +18,7 @@ class CommunicationListener : public EI::CommunicationListener
 {
 public:
     virtual ~CommunicationListener() {}
-    virtual void onMessage(EI::Message p) {
+    virtual void onMessage(EI::Message const& p) {
         std::cout << "Communication: " << p.getSender() << " " << p.getMsgType() << std::endl;
     }
 

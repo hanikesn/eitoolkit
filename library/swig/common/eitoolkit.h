@@ -134,7 +134,7 @@ class CommunicationListener
 {
 public:
     virtual ~CommunicationListener();
-    virtual void onMessage(Message msg) = 0;
+    virtual void onMessage(Message const& msg) = 0;
 };
 
 class Receiver
