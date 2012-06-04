@@ -17,7 +17,7 @@ class EITOOLKIT_EXPORT Message
 {
 public:
     /**
-     * @brief Constructs a message object with the given sender and MsgType
+     * @brief Constructs a message object
      * @param sender The sender of the message
      * @param msg_type The type of the message
      */
