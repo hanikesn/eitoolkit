@@ -195,9 +195,9 @@ TAB_SIZE               = 8
 
 ALIASES                += threadsafe="@note This function is @ref threadsafe \"thread-safe\"."
 ALIASES                += nocopy="@note Objects of this class can not be copied or assigned to."
-ALIASES                += copy_constructor="@internal @brief Copy constructor."
-ALIASES                += move_constructor="@internal @brief Move constructor."
-ALIASES                += assignment_operator="@internal @brief Assignment operator."
+ALIASES                += copy_constructor="@brief Copy constructor."
+ALIASES                += move_constructor="@brief Move constructor."
+ALIASES                += assignment_operator="@brief Assignment operator."
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding

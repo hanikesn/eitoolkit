@@ -23,15 +23,15 @@ public:
      */
     Message(std::string const& sender, std::string const& msg_type);
     /**
-     * @brief Copy constructor.
+     * @copy_constructor
      */
     Message(Message const& other);
     /**
-     * @brief Move constructor.
+     * @move_constructor
      */
     Message(Message&& other);
     /**
-     * @brief Assignment operator
+     * @assignment_operator
      */
     Message& operator=(Message other);
     virtual ~Message();

@@ -38,15 +38,15 @@ public:
      */
     Value(double value );
     /**
-     * @brief Move constructor.
+     * @move_constructor
      */
     Value(Value&& other);
     /**
-     * @brief Copy constructor.
+     * @copy_constructor
      */
     Value(Value const& other);
     /**
-     * @brief Assignment operator.
+     * @assignment_operator
      */
     Value& operator=(Value other);
     ~Value();
