@@ -51,6 +51,9 @@ private:
     DataSeriesInfoImpl* pimpl;
 };
 
+/**
+ * @brief A map from std::string to DataSeriesInfo.
+ */
 typedef std::map<std::string, DataSeriesInfo> DataSeriesInfoMap;
 
 class EITOOLKIT_EXPORT Description

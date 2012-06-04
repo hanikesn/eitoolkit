@@ -11,7 +11,7 @@ namespace EI
 {
 
 /**
- * @brief The JSONPresentation class provides JSON encoding and decoding.
+ * @brief A Presentation for JSON encoding and decoding.
  *
  * @nocopy
  */

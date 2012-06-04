@@ -11,7 +11,7 @@ namespace EI
 {
 
 /**
- * @brief UDPTransport is a Transport implementation using UDPv4.
+ * @brief A Transport using UDPv4.
  *
  * @nocopy
  */
