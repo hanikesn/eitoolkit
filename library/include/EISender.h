@@ -15,7 +15,6 @@ namespace EI
 
 /**
  * @brief The Sender class allows you to send @ref Message "messages" via the EIToolkit.
- * @note This class can not be copied or assigned
  *
  * Currently the default Transport is the UDPTransport and the default Presentation is the JSONPresentation.
  *
@@ -28,6 +27,8 @@ namespace EI
  * msg.setDouble("x", 42.0);
  * sender.sendMessage(msg);
  * @endcode
+ *
+ * @nocopy
  */
 class EITOOLKIT_EXPORT Sender
 {
@@ -46,7 +47,6 @@ public:
      * @param presentation The Presentation to be used.
      *
      * @warning The Transport and Presentation need to be valid for the lifetime of the Sender object.
-     *
      */
     Sender(Description const& description, StringMap const& options, Transport& transport, Presentation& presentation);
     ~Sender();
@@ -57,6 +57,8 @@ public:
      * The message will be encoded with the presentation and then sent via the transport.
      *
      * The @ref Transport::Channel "Channel" on which the message will be sent is choosen automatically.
+     *
+     * @threadsafe
      *
      * @param msg The message to be sent.
      */
