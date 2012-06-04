@@ -34,15 +34,15 @@ class EITOOLKIT_EXPORT Sender
 {
 public:
     /**
-     * @brief Sender Constructs a Sender object with the default Transport and Presentation.
+     * @brief Constructs a Sender object with the default Transport and Presentation.
      * @param description A Description object which specifies the properties of the Sender.
-     * @param options Various options for the sender. Will also be used for the construction of the default Transport and Presentation.
+     * @param options Various options for the Sender. Will also be used for the construction of the default Transport and Presentation.
      */
     Sender(Description const& description, StringMap const& options);
     /**
-     * @brief Sender Constructs a Sender object wich uses the given Transport and Presentation.
+     * @brief Constructs a Sender object wich uses the given Transport and Presentation.
      * @param description A Description object which specifies the properties of the Sender.
-     * @param options Various options for the sender.
+     * @param options Various options for the Sender.
      * @param transport The Transport to be used.
      * @param presentation The Presentation to be used.
      *
