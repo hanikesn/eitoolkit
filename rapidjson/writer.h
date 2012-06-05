@@ -42,7 +42,8 @@ public:
 	Writer& Uint64(uint64_t u64)	{ Prefix(kNumberType); WriteUint64(u64);	return *this; }
 	Writer& Double(double d)		{ Prefix(kNumberType); WriteDouble(d);		return *this; }
 
-	Writer& String(const Ch* str, SizeType length, bool copy = false) {
+    Writer& String(const Ch* str, SizeType length, bool copy = false) {
+        copy = copy;
 		Prefix(kStringType);
 		WriteString(str, length);
 		return *this;
@@ -56,6 +57,7 @@ public:
 	}
 
 	Writer& EndObject(SizeType memberCount = 0) {
+        memberCount = memberCount;
 		RAPIDJSON_ASSERT(level_stack_.GetSize() >= sizeof(Level));
 		RAPIDJSON_ASSERT(!level_stack_.template Top<Level>()->inArray);
 		level_stack_.template Pop<Level>(1);
@@ -206,7 +208,8 @@ protected:
 	void WriteStartArray()	{ os_.Put('['); }
 	void WriteEndArray()	{ os_.Put(']'); }
 
-	void Prefix(Type type) {
+    void Prefix(Type type) {
+        type = type;
 		if (level_stack_.GetSize() != 0) { // this value is not at root
 			Level* level = level_stack_.template Top<Level>();
 			if (level->valueCount > 0) {
