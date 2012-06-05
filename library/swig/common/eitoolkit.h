@@ -35,14 +35,17 @@ class DataSeriesInfo
 {
 public:
     enum Property {INTERPOLATABLE=1, STATEFUL=2, HIDDEN=4, HAS_MIN=8, HAS_MAX=16, HAS_MINMAX=24};
-    DataSeriesInfo(Value::Type type, Property properties, const std::string& misc);
-    DataSeriesInfo(Value::Type type, Property properties, const std::string& misc, double min, double max);
+
+    typedef int Properties;
+
+    DataSeriesInfo(Value::Type type, Properties properties, const std::string& misc);
+    DataSeriesInfo(Value::Type type, Properties properties, const std::string& misc, double min, double max);
 
     std::string getMisc() const;
 
     Value::Type getType() const;
 
-    Property getProperties() const;
+    Properties getProperties() const;
 
     bool hasProperty(Property property) const;
 

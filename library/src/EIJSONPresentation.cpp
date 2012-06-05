@@ -4,6 +4,7 @@
 
 #include "EIJSONPresentation.h"
 #include "EIDataMessage.h"
+#include "EIDescriptionMessage.h"
 #include "helpers.h"
 
 #include <algorithm>
@@ -87,6 +88,49 @@ static void encodeDataMessage(DataMessage const& p, rs::Writer<Wrapper> & writer
     writer.EndObject();
 }
 
+static void encodeDescriptionMessage(DescriptionMessage const& p, rs::Writer<Wrapper> & writer)
+{
+    writer.String("device");
+    writer.String(p.getDescription().getDeviceType().c_str());
+
+    writer.String("values");
+    writer.StartObject();
+
+    auto const& values = p.getDescription().getDataSeries();
+
+    std::for_each(values.begin(), values.end(),
+                  [&writer](std::pair<const std::string, DataSeriesInfo> const& pair)
+    {
+            auto const& d = pair.second;
+            writer.String(pair.first.c_str());
+            writer.StartObject();
+            writer.String("type");
+            switch(d.getType())
+            {
+            case Value::STRING:
+                writer.String("STRING");
+                break;
+            case Value::DOUBLE:
+                writer.String("DOUBLE");
+                break;
+            default:
+                writer.String("EMPTY");
+                break;
+            }
+            writer.String("properties");
+            writer.Int(d.getProperties());
+            writer.String("misc");
+            writer.String(d.getMisc().c_str());
+            writer.String("min");
+            writer.Double(d.getMin());
+            writer.String("max");
+            writer.Double(d.getMax());
+            writer.EndObject();
+    });
+
+    writer.EndObject();
+}
+
 void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector& out)
 {
     Wrapper buffer(out);
@@ -102,6 +146,8 @@ void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector
 
     if(p.getMsgType() == DataMessage::IDENTIFIER) {
         encodeDataMessage(dynamic_cast<DataMessage const&>(p), writer);
+    } else if(p.getMsgType() == DescriptionMessage::IDENTIFIER) {
+        encodeDescriptionMessage(dynamic_cast<DescriptionMessage const&>(p), writer);
     }
 
     writer.EndObject();
@@ -123,6 +169,45 @@ static std::unique_ptr<Message> decodeDataMessage(Document const& doc, std::stri
     return std::move(packet);
 }
 
+static std::unique_ptr<Message> decodeDescriptionMessage(Document const& doc, std::string sender)
+{
+    std::string device = doc["device"].GetString();
+
+    auto const& val = doc["values"];
+    if(!val.IsObject())
+        throw std::exception();
+
+    Description desc(device);
+
+    std::for_each(val.MemberBegin(), val.MemberEnd(),
+        [&desc](::Value::Member const& v)
+    {
+            auto const& obj = v.value;
+            std::string typeStr = obj["type"].GetString();
+            Value::Type type;
+            if(typeStr=="STRING")
+                type = Value::STRING;
+            else if(typeStr=="DOUBLE")
+                type = Value::DOUBLE;
+            else
+                type = Value::EMPTY;
+
+            DataSeriesInfo::Properties props = obj["properties"].GetInt();
+            std::string misc = obj["misc"].GetString();
+            double min = 0.0;
+            double max = 0.0;
+            if(obj["min"].IsDouble())
+                min = obj["min"].GetDouble();
+            if(obj["max"].IsDouble())
+                max = obj["max"].GetDouble();
+
+            desc.addDataSeries(v.name.GetString(), DataSeriesInfo(type, props, misc, min, max));
+
+    });
+
+    return std::unique_ptr<DescriptionMessage>(new DescriptionMessage(sender, desc));
+}
+
 std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
 {
     Document document;
@@ -138,8 +223,10 @@ std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVect
     std::string msgtype = document["msgtype"].GetString();
     std::string sender = document["sender"].GetString();
 
-    if(msgtype==DataMessage::IDENTIFIER)
+    if(msgtype == DataMessage::IDENTIFIER)
         return decodeDataMessage(document, sender);
+    else if(msgtype == DescriptionMessage::IDENTIFIER)
+        return decodeDescriptionMessage(document, sender);
     else
         return std::unique_ptr<Message>(new Message(sender, msgtype));
 }

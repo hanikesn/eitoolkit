@@ -44,7 +44,7 @@ public:
      * @param properties The properties of the data being sent.
      * @param misc Miscellaneous information about the data series.
      */
-    DataSeriesInfo(Value::Type type, Property properties, const std::string& misc);
+    DataSeriesInfo(Value::Type type, Properties properties, const std::string& misc);
     /**
      * @brief Constructs a DataSeriesInfo object.
      * @param type The Value::Type of the data being sent.
@@ -53,7 +53,7 @@ public:
      * @param min The minimum value of the data series.
      * @param max The maximum value of the data series.
      */
-    DataSeriesInfo(Value::Type type, Property properties, const std::string& misc, double min, double max);
+    DataSeriesInfo(Value::Type type, Properties properties, const std::string& misc, double min, double max);
 
     /**
      * @copy_constructor

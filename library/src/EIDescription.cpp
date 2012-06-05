@@ -61,7 +61,7 @@ DataSeriesInfoMap Description::getDataSeries() const
 class DataSeriesInfo::DataSeriesInfoImpl
 {
 public:
-    DataSeriesInfoImpl(Value::Type type, Property properties, const std::string& misc, double min, double max)
+    DataSeriesInfoImpl(Value::Type type, Properties properties, const std::string& misc, double min, double max)
         : type(type), properties(properties), misc(misc), min(min), max(max)
     {}
 
@@ -70,7 +70,7 @@ public:
     {}
 
     const Value::Type type;
-    const Property properties;
+    const Properties properties;
     const std::string misc;
     const double min;
     const double max;
@@ -79,13 +79,13 @@ public:
 
 
 
-DataSeriesInfo::DataSeriesInfo(Value::Type type, Property properties, const std::string& misc)
+DataSeriesInfo::DataSeriesInfo(Value::Type type, Properties properties, const std::string& misc)
     : pimpl(new DataSeriesInfoImpl(type, properties, misc, 0.0, 0.0))
 {
 
 }
 
-DataSeriesInfo::DataSeriesInfo(Value::Type type, Property properties, const std::string& misc, double min, double max)
+DataSeriesInfo::DataSeriesInfo(Value::Type type, Properties properties, const std::string& misc, double min, double max)
     : pimpl(new DataSeriesInfoImpl(type, properties, misc, min, max))
 {
 
@@ -124,7 +124,7 @@ bool DataSeriesInfo::hasProperty(Property property) const
     return (pimpl->properties & property) != 0;
 }
 
-DataSeriesInfo::Property DataSeriesInfo::getProperties() const
+DataSeriesInfo::Properties DataSeriesInfo::getProperties() const
 {
     return pimpl->properties;
 }
