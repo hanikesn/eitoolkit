@@ -94,7 +94,8 @@ endif()
 
 generate_export_header(EIToolkit)
 
-install(TARGETS EIToolkit DESTINATION lib)
+install(TARGETS EIToolkit EXPORT EIToolkit-targets DESTINATION lib)
 install(FILES ${HEADER_FILES} DESTINATION include)
+
 
 add_subdirectory(swig)
