@@ -24,15 +24,13 @@ endif()
 set(Boost_DEBUG FALSE CACHE BOOL "Set this to debug the finding of boost")
 
 find_package(Boost COMPONENTS ${BOOST_components} REQUIRED)
-if(Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIR})
-  link_directories(${Boost_LIBRARY_DIRS})
-  add_definitions(-DBOOST_ALL_NO_LIB)
-  # for boost::asio
-  if(WIN32)
-    add_definitions(-D_WIN32_WINNT=0x0501)
-  endif()
-endif(Boost_FOUND)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+add_definitions(-DBOOST_ALL_NO_LIB)
+# for boost::asio
+if(WIN32)
+  add_definitions(-D_WIN32_WINNT=0x0501)
+endif()
 
 set(HEADER_FILES
   include/EIBlockingReceiver.h
@@ -72,6 +70,14 @@ set(SOURCE_FILES
   src/helpers.h
 )
 
+find_package(Protobuf)
+if(PROTOBUF_FOUND)
+  include_directories(PROTOBUF_INCLUDE_DIRS)
+  protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS protobuf/EIMessage.proto)
+  list(APPEND SOURCE_FILES src/EIProtobufPresentation.cpp ${PROTO_SRCS})
+  list(APPEND HEADER_FILES include/EIProtobufPresentation.h ${PROTO_HDRS})
+endif()
+
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/EIToolkitConfig.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/EIToolkitConfig.h"
@@ -86,6 +92,9 @@ add_compiler_export_flags()
 add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(EIToolkit ${Boost_LIBRARIES})
+if(PROTOBUF_FOUND)
+  target_link_libraries(EIToolkit ${PROTOBUF_LIBRARIES})
+endif()
 
 if(HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
   # Check gcc version
