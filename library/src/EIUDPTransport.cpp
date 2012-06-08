@@ -126,6 +126,8 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
 
 void UDPTransport::UDPTransportImpl::addPacketListener(Transport::Channel type, PacketListener* ob)
 {
+    if(!ob)
+        return;
     Thread::lock_guard lock(mutex);
 
     if(type == Transport::ALL || type == Transport::DATA)
