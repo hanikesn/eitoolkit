@@ -87,7 +87,7 @@ add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(EIToolkit ${Boost_LIBRARIES})
 
-if(HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
+if(NOT HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
   find_package(Threads REQUIRED)
   target_link_libraries(EIToolkit ${CMAKE_THREAD_LIBS_INIT})
 endif()

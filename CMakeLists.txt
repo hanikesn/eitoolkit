@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 2.8.6)
-project (EIToolkit)
+cmake_minimum_required(VERSION 2.8.6)
+project(EIToolkit)
 
 set(EIToolkit_VERSION_MAJOR 0)
 set(EIToolkit_VERSION_MINOR 1)
@@ -8,10 +8,6 @@ set(EIToolkit_VERSION_PATCH 1)
 set(EIToolkit_VERSION_STRING "${EIToolkit_MAJOR_VERSION}.${EIToolkit_MINOR_VERSION}.${EIToolkit_PATCH_VERSION}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
-
-if(CMAKE_CXX_COMPILER MATCHES ".*clang")
-  set(CMAKE_COMPILER_IS_CLANGXX 1)
-endif()
 
 include(CPack)
 
