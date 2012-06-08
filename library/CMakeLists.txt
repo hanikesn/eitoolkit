@@ -67,6 +67,8 @@ set(SOURCE_FILES
   src/EITransport.cpp
   src/EIUDPTransport.cpp
   src/EIValue.cpp
+  src/PresentationManager.h
+  src/PresentationManager.cpp
   src/helpers.h
 )
 
@@ -76,6 +78,7 @@ if(PROTOBUF_FOUND)
   protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS protobuf/EIMessage.proto)
   list(APPEND SOURCE_FILES src/EIProtobufPresentation.cpp ${PROTO_SRCS})
   list(APPEND HEADER_FILES include/EIProtobufPresentation.h ${PROTO_HDRS})
+  set(HAVE_PROTOBUF 1)
 endif()
 
 configure_file (

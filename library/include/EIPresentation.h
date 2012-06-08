@@ -34,6 +34,11 @@ public:
      * @return A pointer to the decoded message. Ownership is transfered to the callee.
      */
     virtual std::unique_ptr<Message> decode(ByteVector const& in_buffer) = 0;
+
+    /**
+     * @brief Returns a unique identifier byte, that is used to identify this presentation.
+     */
+    virtual Byte getIdentifier() = 0;
 };
 
 }

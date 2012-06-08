@@ -6,6 +6,7 @@
 #include "EIDiscoveryMessage.h"
 #include "EIThread.h"
 #include "helpers.h"
+#include "PresentationManager.h"
 
 #include <iostream>
 #include <algorithm>
@@ -31,10 +32,9 @@ public:
     StringMap options;
 
 	std::unique_ptr<Transport> own_transport;
-	std::unique_ptr<Presentation> own_presentation;
 
 	Transport& transport;
-	Presentation& presentation;
+    PresentationManager presentation;
 
     Thread::mutex mutex;
     std::vector<DataListener*> dataListeners;
@@ -66,17 +66,17 @@ Receiver::~Receiver()
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options)
-    : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)), transport(*own_transport), presentation(*own_presentation)
+    : options(options), own_transport(new UDPTransport(options)), transport(*own_transport), presentation(options, 0)
 {
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options, Transport& transport)
-    : options(options), own_presentation(new JSONPresentation(options)), transport(transport), presentation(*own_presentation)
+    : options(options), transport(transport), presentation(options, 0)
 {
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options, Transport& transport, Presentation& presentation)
-	: options(options), transport(transport), presentation(presentation)
+    : options(options), transport(transport), presentation(options, &presentation)
 {
 }
 

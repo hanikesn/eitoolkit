@@ -5,6 +5,7 @@
 #include "EIDescriptionMessage.h"
 #include "EIDiscoveryMessage.h"
 #include "EIDataMessage.h"
+#include "PresentationManager.h"
 
 #include <memory>
 
@@ -22,10 +23,9 @@ public:
     StringMap options;
 
 	std::unique_ptr<UDPTransport> own_transport;
-	std::unique_ptr<Presentation> own_presentation;
 
 	Transport& transport;
-	Presentation& presentation;
+    PresentationManager presentation;
 
     Description description;
 };
@@ -49,13 +49,13 @@ Sender::~Sender()
 }
 
 Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& options)
-    : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)), transport(*own_transport), presentation(*own_presentation), description(description)
+    : options(options), own_transport(new UDPTransport(options)), transport(*own_transport), presentation(options, 0), description(description)
 {
 
 }
 
 Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& options, Transport& transport, Presentation& presentation)
-    : options(options), transport(transport), presentation(presentation), description(description)
+    : options(options), transport(transport), presentation(options, &presentation), description(description)
 {
 }
 

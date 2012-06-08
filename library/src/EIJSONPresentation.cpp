@@ -19,6 +19,8 @@ typedef rs::GenericValue<rapidjson::UTF8<>, rapidjson::CrtAllocator> Value;
 namespace EI
 {
 
+const Byte JSONPresentation::IDENTIFIER;
+
 class Wrapper
 {
 public:
@@ -37,9 +39,6 @@ class JSONPresentation::JSONPresentationImpl
 {
 public:
     JSONPresentationImpl(StringMap const& options);
-
-    void encode(Message const&, ByteVector & out);
-    std::unique_ptr<Message> decode(ByteVector const&);
 };
 
 JSONPresentation::JSONPresentation(StringMap const& options) :
@@ -51,18 +50,13 @@ JSONPresentation::~JSONPresentation()
     delete pimpl;
 }
 
-void JSONPresentation::encode(Message const& p, ByteVector & out)
-{
-    return pimpl->encode(p, out);
-}
-
-std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
-{
-    return pimpl->decode(bytes);
-}
-
 JSONPresentation::JSONPresentationImpl::JSONPresentationImpl(StringMap const&)
 {}
+
+Byte JSONPresentation::getIdentifier()
+{
+    return IDENTIFIER;
+}
 
 static void encodeDataMessage(DataMessage const& p, rs::Writer<Wrapper> & writer)
 {
@@ -131,7 +125,7 @@ static void encodeDescriptionMessage(DescriptionMessage const& p, rs::Writer<Wra
     writer.EndObject();
 }
 
-void JSONPresentation::JSONPresentationImpl::encode(Message const& p, ByteVector& out)
+void JSONPresentation::encode(Message const& p, ByteVector& out)
 {
     Wrapper buffer(out);
     rs::Writer<Wrapper> writer(buffer);
@@ -208,7 +202,7 @@ static std::unique_ptr<Message> decodeDescriptionMessage(Document const& doc, st
     return std::unique_ptr<DescriptionMessage>(new DescriptionMessage(sender, desc));
 }
 
-std::unique_ptr<Message> JSONPresentation::JSONPresentationImpl::decode(ByteVector const& bytes)
+std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
 {
     Document document;
     std::vector<Byte> buffer(bytes.size() + 1);

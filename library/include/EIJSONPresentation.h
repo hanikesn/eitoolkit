@@ -27,6 +27,9 @@ public:
 
     void encode(Message const& msg, ByteVector & out_buffer);
     std::unique_ptr<Message> decode(ByteVector const& in_buffer);
+    Byte getIdentifier();
+
+    static const Byte IDENTIFIER = 0x01;
 
 private:
     // Disable copying

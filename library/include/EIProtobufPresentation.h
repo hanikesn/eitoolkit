@@ -1,4 +1,4 @@
-#ifndef EIJSONPresentation_H
+#ifndef EIProtobufPresentation_H
 #define EIProtobufPresentation_H
 
 #include <EIPrerequisites.h>
@@ -27,6 +27,9 @@ public:
 
     void encode(Message const& msg, ByteVector & out_buffer);
     std::unique_ptr<Message> decode(ByteVector const& in_buffer);
+    Byte getIdentifier();
+
+    static const Byte IDENTIFIER = 0x02;
 
 private:
     // Disable copying

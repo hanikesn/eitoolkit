@@ -3,3 +3,4 @@
 #define EIToolkit_VERSION_MINOR @EIToolkit_VERSION_MINOR@
 #define EIToolkit_VERSION_PATCH @EIToolkit_VERSION_PATCH@
 #cmakedefine HAVE_THREAD_H @HAVE_THREAD_H@
+#cmakedefine HAVE_PROTOBUF @HAVE_PROTOBUF@
