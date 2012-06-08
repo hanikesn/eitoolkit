@@ -23,21 +23,11 @@ public:
     ReceiverImpl(StringMap const& options);
     ReceiverImpl(StringMap const& options, Transport&);
     ReceiverImpl(StringMap const& options, Transport&, Presentation&);
-    ~ReceiverImpl();
 
-    void discoverSenders();
-
-    void addDataListener(DataListener*);
-    void removeDataListener(DataListener*);
-
-    void addCommunicationListener(CommunicationListener*);
-    void removeCommunicationListener(CommunicationListener*);
+    void init();
 
     virtual void onPacket(Transport::Channel, ByteVector const&);
 
-private:
-    void init();
-private:
     StringMap options;
 
 	std::unique_ptr<Transport> own_transport;
@@ -53,67 +43,41 @@ private:
 
 Receiver::Receiver(StringMap const& options)
     : pimpl(new ReceiverImpl(options))
-{}
+{
+    pimpl->init();
+}
 
 Receiver::Receiver(StringMap const& options, Transport& transport)
     : pimpl(new ReceiverImpl(options, transport))
-{}
+{
+    pimpl->init();
+}
 
 Receiver::Receiver(StringMap const& options, Transport& transport, Presentation& presentation)
     : pimpl(new ReceiverImpl(options, transport, presentation))
-{}
+{
+    pimpl->init();
+}
 
 Receiver::~Receiver()
 {
+    pimpl->transport.removePacketListener(pimpl);
 	delete pimpl;
-}
-
-void Receiver::discoverSenders()
-{
-    pimpl->discoverSenders();
-}
-
-void Receiver::addDataListener(DataListener* observer)
-{
-    pimpl->addDataListener(observer);
-}
-
-void Receiver::removeDataListener(DataListener* observer)
-{
-    pimpl->removeDataListener(observer);
-}
-
-void Receiver::addCommunicationListener(CommunicationListener *observer)
-{
-    pimpl->addCommunicationListener(observer);
-}
-
-void Receiver::removeCommunicationListener(CommunicationListener* observer)
-{
-    pimpl->removeCommunicationListener(observer);
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options)
     : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)), transport(*own_transport), presentation(*own_presentation)
 {
-    init();
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options, Transport& transport)
     : options(options), own_presentation(new JSONPresentation(options)), transport(transport), presentation(*own_presentation)
 {
-    init();
 }
 
 Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options, Transport& transport, Presentation& presentation)
 	: options(options), transport(transport), presentation(presentation)
 {
-    init();
-}
-
-Receiver::ReceiverImpl::~ReceiverImpl()
-{
-    transport.removePacketListener(this);
 }
 
 void Receiver::ReceiverImpl::init()
@@ -121,35 +85,39 @@ void Receiver::ReceiverImpl::init()
     transport.addPacketListener(Transport::ALL, this);
 }
 
-void Receiver::ReceiverImpl::discoverSenders()
+void Receiver::discoverSenders()
 {
     ByteVector buffer;
-    presentation.encode(DiscoveryMessage("Receiver"), buffer);
-    transport.sendPacket(Transport::COMMUNICATION, buffer);
+    pimpl->presentation.encode(DiscoveryMessage("Receiver"), buffer);
+    pimpl->transport.sendPacket(Transport::COMMUNICATION, buffer);
 }
 
-void Receiver::ReceiverImpl::addDataListener(DataListener* ob)
+void Receiver::addDataListener(DataListener* ob)
 {
-    Thread::lock_guard lock(mutex);
-    dataListeners.push_back(ob);
+    if(!ob)
+        return;
+    Thread::lock_guard lock(pimpl->mutex);
+    pimpl->dataListeners.push_back(ob);
 }
 
-void Receiver::ReceiverImpl::removeDataListener(DataListener *ob)
+void Receiver::removeDataListener(DataListener *ob)
 {
-    Thread::lock_guard lock(mutex);
-    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), ob), std::end(dataListeners));
+    Thread::lock_guard lock(pimpl->mutex);
+    pimpl->dataListeners.erase(std::remove(pimpl->dataListeners.begin(), pimpl->dataListeners.end(), ob), pimpl->dataListeners.end());
 }
 
-void Receiver::ReceiverImpl::addCommunicationListener(CommunicationListener* ob)
+void Receiver::addCommunicationListener(CommunicationListener* ob)
 {
-    Thread::lock_guard lock(mutex);
-    controlListeners.push_back(ob);
+    if(!ob)
+        return;
+    Thread::lock_guard lock(pimpl->mutex);
+    pimpl->controlListeners.push_back(ob);
 }
 
-void Receiver::ReceiverImpl::removeCommunicationListener(CommunicationListener* ob)
+void Receiver::removeCommunicationListener(CommunicationListener* ob)
 {
-    Thread::lock_guard lock(mutex);
-    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), ob), std::end(controlListeners));
+    Thread::lock_guard lock(pimpl->mutex);
+    pimpl->controlListeners.erase(std::remove(pimpl->controlListeners.begin(), pimpl->controlListeners.end(), ob), pimpl->controlListeners.end());
 }
 
 void Receiver::ReceiverImpl::onPacket(Transport::Channel type, ByteVector const& data)
