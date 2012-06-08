@@ -16,13 +16,9 @@ class Sender::SenderImpl : public EI::PacketListener
 public:
     SenderImpl(Description const&, StringMap const& options);
     SenderImpl(Description const&, StringMap const& options, Transport&, Presentation&);
-    ~SenderImpl();
-
-    void sendMessage(Message const&);
 
     void onPacket(Transport::Channel, ByteVector const&);
 
-private:
     StringMap options;
 
 	std::unique_ptr<UDPTransport> own_transport;
@@ -36,42 +32,38 @@ private:
 
 Sender::Sender(Description const& description, StringMap const& options)
     : pimpl(new SenderImpl(description, options))
-{}
+{
+    pimpl->transport.addPacketListener(Transport::COMMUNICATION, pimpl);
+}
 
 Sender::Sender(Description const& description, StringMap const& options, Transport& transport, Presentation& presentation)
     : pimpl(new SenderImpl(description, options, transport, presentation))
-{}
-
-void Sender::sendMessage(Message const& packet)
 {
-    pimpl->sendMessage(packet);
+    pimpl->transport.addPacketListener(Transport::COMMUNICATION, pimpl);
 }
 
 Sender::~Sender()
 {
+    pimpl->transport.removePacketListener(pimpl);
 	delete pimpl;
 }
 
 Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& options)
     : options(options), own_transport(new UDPTransport(options)), own_presentation(new JSONPresentation(options)), transport(*own_transport), presentation(*own_presentation), description(description)
-{}
+{
+
+}
 
 Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& options, Transport& transport, Presentation& presentation)
     : options(options), transport(transport), presentation(presentation), description(description)
 {
-    transport.addPacketListener(Transport::COMMUNICATION, this);
 }
 
-Sender::SenderImpl::~SenderImpl()
-{
-    transport.removePacketListener(this);
-}
-
-void Sender::SenderImpl::sendMessage(Message const& packet)
+void Sender::sendMessage(Message const& packet)
 {
     ByteVector buffer;
-    presentation.encode(packet, buffer);
-    transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
+    pimpl->presentation.encode(packet, buffer);
+    pimpl->transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
 }
 
 void Sender::SenderImpl::onPacket(Transport::Channel type, ByteVector const& bytes)
