@@ -87,9 +87,13 @@ add_library(EIToolkit SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(EIToolkit ${Boost_LIBRARIES})
 
-if(NOT HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
-  find_package(Threads REQUIRED)
-  target_link_libraries(EIToolkit ${CMAKE_THREAD_LIBS_INIT})
+if(HAVE_THREAD_H AND CMAKE_COMPILER_IS_GNUCXX)
+  # Check gcc version
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+  if(GCC_VERSION VERSION_LESS 4.7)
+    find_package(Threads REQUIRED)
+    target_link_libraries(EIToolkit ${CMAKE_THREAD_LIBS_INIT})
+  endif()
 endif()
 
 generate_export_header(EIToolkit)
