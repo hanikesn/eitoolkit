@@ -52,8 +52,8 @@ int main()
     EI::Sender server(desc, options, transport, presentation);
     EI::Receiver receiver(options, transport);
 
-    receiver.addDataListener(dataListener);
-    receiver.addCommunicationListener(controlListener);
+    receiver.addDataListener(&dataListener);
+    receiver.addCommunicationListener(&controlListener);
     receiver.discoverSenders();
     EI::DataMessage data("combined");
     data.setDouble("asd", 5.0);

@@ -27,11 +27,11 @@ public:
 
     void discoverSenders();
 
-    void addDataListener(DataListener&);
-    void removeDataListener(DataListener&);
+    void addDataListener(DataListener*);
+    void removeDataListener(DataListener*);
 
-    void addCommunicationListener(CommunicationListener&);
-    void removeCommunicationListener(CommunicationListener&);
+    void addCommunicationListener(CommunicationListener*);
+    void removeCommunicationListener(CommunicationListener*);
 
     virtual void onPacket(Transport::Channel, ByteVector const&);
 
@@ -73,22 +73,22 @@ void Receiver::discoverSenders()
     pimpl->discoverSenders();
 }
 
-void Receiver::addDataListener(DataListener& observer)
+void Receiver::addDataListener(DataListener* observer)
 {
     pimpl->addDataListener(observer);
 }
 
-void Receiver::removeDataListener(DataListener& observer)
+void Receiver::removeDataListener(DataListener* observer)
 {
     pimpl->removeDataListener(observer);
 }
 
-void Receiver::addCommunicationListener(CommunicationListener& observer)
+void Receiver::addCommunicationListener(CommunicationListener *observer)
 {
     pimpl->addCommunicationListener(observer);
 }
 
-void Receiver::removeCommunicationListener(CommunicationListener& observer)
+void Receiver::removeCommunicationListener(CommunicationListener* observer)
 {
     pimpl->removeCommunicationListener(observer);
 }
@@ -113,12 +113,12 @@ Receiver::ReceiverImpl::ReceiverImpl(StringMap const& options, Transport& transp
 
 Receiver::ReceiverImpl::~ReceiverImpl()
 {
-    transport.removePacketListener(*this);
+    transport.removePacketListener(this);
 }
 
 void Receiver::ReceiverImpl::init()
 {
-    transport.addPacketListener(Transport::ALL, *this);
+    transport.addPacketListener(Transport::ALL, this);
 }
 
 void Receiver::ReceiverImpl::discoverSenders()
@@ -128,28 +128,28 @@ void Receiver::ReceiverImpl::discoverSenders()
     transport.sendPacket(Transport::COMMUNICATION, buffer);
 }
 
-void Receiver::ReceiverImpl::addDataListener(DataListener& ob)
+void Receiver::ReceiverImpl::addDataListener(DataListener* ob)
 {
     Thread::lock_guard lock(mutex);
-    dataListeners.push_back(&ob);
+    dataListeners.push_back(ob);
 }
 
-void Receiver::ReceiverImpl::removeDataListener(DataListener& ob)
+void Receiver::ReceiverImpl::removeDataListener(DataListener *ob)
 {
     Thread::lock_guard lock(mutex);
-    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), &ob), std::end(dataListeners));
+    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), ob), std::end(dataListeners));
 }
 
-void Receiver::ReceiverImpl::addCommunicationListener(CommunicationListener& ob)
+void Receiver::ReceiverImpl::addCommunicationListener(CommunicationListener* ob)
 {
     Thread::lock_guard lock(mutex);
-    controlListeners.push_back(&ob);
+    controlListeners.push_back(ob);
 }
 
-void Receiver::ReceiverImpl::removeCommunicationListener(CommunicationListener& ob)
+void Receiver::ReceiverImpl::removeCommunicationListener(CommunicationListener* ob)
 {
     Thread::lock_guard lock(mutex);
-    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), &ob), std::end(controlListeners));
+    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), ob), std::end(controlListeners));
 }
 
 void Receiver::ReceiverImpl::onPacket(Transport::Channel type, ByteVector const& data)

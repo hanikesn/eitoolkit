@@ -32,11 +32,11 @@ public:
     /**
      * @brief Constructs a Value object holding a string.
      */
-    Value(std::string const& value);
+    explicit Value(std::string const& value);
     /**
      * @brief Value Constructs a Value object holding a double.
      */
-    Value(double value );
+    explicit Value(double value );
     /**
      * @move_constructor
      */

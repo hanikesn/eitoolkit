@@ -26,7 +26,7 @@ int main()
     EI::Receiver receiver(options);
 
     ExampleListener listener;
-    receiver.addDataListener(listener);
+    receiver.addDataListener(&listener);
 
     std::cin.get();
 }

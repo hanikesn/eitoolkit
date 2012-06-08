@@ -128,12 +128,12 @@ public:
      * @param listener The listener should live as long as the Receiver or should be removed before the Receiver is destroyed.
      * @threadsafe
      */
-    void addDataListener(DataListener& listener);
+    void addDataListener(DataListener* listener);
     /**
      * @brief Remove a DataListener.
      * @threadsafe
      */
-    void removeDataListener(DataListener& listener);
+    void removeDataListener(DataListener* listener);
 
     /**
      * @brief Add a listener for @ref Message Messages on the communication channel.
@@ -143,12 +143,12 @@ public:
      * @param listener The listener should live as long as the Receiver or should be removed before the Receiver is destroyed.
      * @threadsafe
      */
-    void addCommunicationListener(CommunicationListener& listener);
+    void addCommunicationListener(CommunicationListener* listener);
     /**
      * @brief Remove a CommunicationListener.
      * @threadsafe
      */
-    void removeCommunicationListener(CommunicationListener& listener);
+    void removeCommunicationListener(CommunicationListener* listener);
 private:
     // Disable copying
     Receiver(const Receiver &);

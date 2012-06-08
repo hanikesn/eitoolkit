@@ -59,12 +59,12 @@ Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& 
 Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& options, Transport& transport, Presentation& presentation)
     : options(options), transport(transport), presentation(presentation), description(description)
 {
-    transport.addPacketListener(Transport::COMMUNICATION, *this);
+    transport.addPacketListener(Transport::COMMUNICATION, this);
 }
 
 Sender::SenderImpl::~SenderImpl()
 {
-    transport.removePacketListener(*this);
+    transport.removePacketListener(this);
 }
 
 void Sender::SenderImpl::sendMessage(Message const& packet)

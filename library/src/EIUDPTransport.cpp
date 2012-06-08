@@ -15,7 +15,7 @@ namespace bs = boost;
 class Worker
 {
 public:
-    Worker(ba::ip::udp::socket& socket, Transport::Channel type, PacketListener& ob)
+    Worker(ba::ip::udp::socket& socket, Transport::Channel type, PacketListener* ob)
         : ob(ob), socket(socket), recv_buffer(8000), type(type)
     {}
 
@@ -34,13 +34,13 @@ private:
         if (!error || error == boost::asio::error::message_size)
         {
             out_buffer.assign(recv_buffer.begin(), recv_buffer.begin() + bytes_transferred);
-            ob.onPacket(type, out_buffer);
+            ob->onPacket(type, out_buffer);
             start_receive();
         }
     }
 
 private:
-    PacketListener& ob;
+    PacketListener* ob;
     ba::ip::udp::socket& socket;
     ByteVector recv_buffer;
     ByteVector out_buffer;
@@ -54,8 +54,8 @@ public:
     ~UDPTransportImpl();
 
     void sendPacket(Transport::Channel, ByteVector const&);
-    void addPacketListener(Transport::Channel, PacketListener&);
-    void removePacketListener(PacketListener&);
+    void addPacketListener(Transport::Channel, PacketListener*);
+    void removePacketListener(PacketListener*);
 
     virtual void onPacket(Transport::Channel, ByteVector const&);
 private:
@@ -88,12 +88,12 @@ void UDPTransport::sendPacket(Channel type, ByteVector const& packet)
     pimpl->sendPacket(type, packet);
 }
     
-void UDPTransport::addPacketListener(Channel type, PacketListener& ob)
+void UDPTransport::addPacketListener(Channel type, PacketListener* ob)
 {
     pimpl->addPacketListener(type, ob);
 }
 
-void UDPTransport::removePacketListener(PacketListener& ob)
+void UDPTransport::removePacketListener(PacketListener* ob)
 {
     pimpl->removePacketListener(ob);
 }
@@ -103,8 +103,8 @@ UDPTransport::UDPTransportImpl::UDPTransportImpl(StringMap const&)
       controlSocket(io_service, ba::ip::udp::v4()),
       dataEndpoint(ba::ip::address_v4::broadcast(), 31337),
       controlEndpoint(ba::ip::address_v4::broadcast(), 31338),
-      dataWorker(dataSocket, Transport::DATA, *this),
-      controlWorker(controlSocket, Transport::COMMUNICATION, *this)
+      dataWorker(dataSocket, Transport::DATA, this),
+      controlWorker(controlSocket, Transport::COMMUNICATION, this)
 
 {   
     dataSocket.set_option(ba::socket_base::reuse_address(true));
@@ -124,27 +124,27 @@ UDPTransport::UDPTransportImpl::~UDPTransportImpl()
         thread.join();
 }
 
-void UDPTransport::UDPTransportImpl::addPacketListener(Transport::Channel type, PacketListener& ob)
+void UDPTransport::UDPTransportImpl::addPacketListener(Transport::Channel type, PacketListener* ob)
 {
     Thread::lock_guard lock(mutex);
 
     if(type == Transport::ALL || type == Transport::DATA)
-        dataListeners.push_back(&ob);
+        dataListeners.push_back(ob);
 
     if(type == Transport::ALL || type == Transport::COMMUNICATION)
-        controlListeners.push_back(&ob);
+        controlListeners.push_back(ob);
 
     if(!thread.joinable()) {
         thread = Thread::thread([this](){this->io_service.run();});
     }
 }
 
-void UDPTransport::UDPTransportImpl::removePacketListener(PacketListener& ob)
+void UDPTransport::UDPTransportImpl::removePacketListener(PacketListener* ob)
 {
     Thread::lock_guard lock(mutex);
 
-    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), &ob), std::end(controlListeners));
-    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), &ob), std::end(dataListeners));
+    controlListeners.erase(std::remove(std::begin(controlListeners), std::end(controlListeners), ob), std::end(controlListeners));
+    dataListeners.erase(std::remove(std::begin(dataListeners), std::end(dataListeners), ob), std::end(dataListeners));
     if(dataListeners.empty() && controlListeners.empty()) {
         io_service.stop();
         if(thread.joinable())

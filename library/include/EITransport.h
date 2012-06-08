@@ -51,11 +51,11 @@ public:
      * @param channel The channel to listen on.
      * @param listener The listener should live as long as the Transport or should be removed before the Transport is destroyed.
      */
-    virtual void addPacketListener(Channel channel, PacketListener& listener) = 0;
+    virtual void addPacketListener(Channel channel, PacketListener* listener) = 0;
     /**
      * @brief Remove a PacketListener.
      */
-    virtual void removePacketListener(PacketListener& listener) = 0;
+    virtual void removePacketListener(PacketListener* listener) = 0;
 };
 
 /**

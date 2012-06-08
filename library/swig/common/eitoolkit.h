@@ -150,11 +150,11 @@ public:
 
     void discoverSenders();
 
-    void addDataListener(DataListener&);
-    void removeDataListener(DataListener&);
+    void addDataListener(DataListener*);
+    void removeDataListener(DataListener*);
 
-    void addCommunicationListener(CommunicationListener&);
-    void removeCommunicationListener(CommunicationListener&);
+    void addCommunicationListener(CommunicationListener*);
+    void removeCommunicationListener(CommunicationListener*);
 };
 
 class Sender
@@ -175,8 +175,8 @@ public:
     virtual ~Transport();
 
     virtual void sendPacket(Channel, ByteVector const&) = 0;
-    virtual void addPacketListener(Channel, PacketListener&) = 0;
-    virtual void removePacketListener(PacketListener&) = 0;
+    virtual void addPacketListener(Channel, PacketListener*) = 0;
+    virtual void removePacketListener(PacketListener*) = 0;
 };
 
 class PacketListener

@@ -29,8 +29,8 @@ public:
     virtual ~UDPTransport();
 
     virtual void sendPacket(Channel channel, ByteVector const& packet);
-    virtual void addPacketListener(Channel channel, PacketListener& packet);
-    virtual void removePacketListener(PacketListener& packet);
+    virtual void addPacketListener(Channel channel, PacketListener* packet);
+    virtual void removePacketListener(PacketListener* packet);
 private:
     // Disable copying
     UDPTransport(const UDPTransport &);
