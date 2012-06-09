@@ -88,7 +88,7 @@ std::map<std::string, Value> DataMessage::getContent() const
 
 void DataMessage::DataMessageImpl::set(const std::string & key, const Value & value)
 {
-    values.insert(std::pair<const std::string, Value>(key, value));
+    values[key] = value;
 }
 
 std::map<std::string, Value> const& DataMessage::DataMessageImpl::getValues() const
