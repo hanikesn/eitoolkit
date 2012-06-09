@@ -5,9 +5,9 @@ namespace EI
 
 PresentationManager::PresentationManager(StringMap const& options, Presentation* pres)
     : pres(pres),
-      jsonPresentation(options),
+      jsonPresentation(options)
 #ifdef HAVE_PROTOBUF
-      protobufPresentation(options)
+      ,protobufPresentation(options)
 #endif
 {
 
