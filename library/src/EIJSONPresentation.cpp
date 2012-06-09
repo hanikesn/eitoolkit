@@ -5,6 +5,7 @@
 #include "EIJSONPresentation.h"
 #include "EIDataMessage.h"
 #include "EIDescriptionMessage.h"
+#include "EIDiscoveryMessage.h"
 #include "helpers.h"
 
 #include <algorithm>
@@ -221,6 +222,8 @@ std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
         return decodeDataMessage(document, sender);
     else if(msgtype == DescriptionMessage::IDENTIFIER)
         return decodeDescriptionMessage(document, sender);
+    else if(msgtype == DiscoveryMessage::IDENTIFIER)
+        return std::unique_ptr<DiscoveryMessage>(new DiscoveryMessage(sender));
     else
         return std::unique_ptr<Message>(new Message(sender, msgtype));
 }

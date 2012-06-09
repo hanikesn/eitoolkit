@@ -45,5 +45,8 @@
 #include "EIDataMessage.h"
 #include "EIDiscoveryMessage.h"
 #include "EIDescriptionMessage.h"
+#ifdef HAVE_PROTOBUF
+#include "EIProtobufPresentation.h"
+#endif
 
 #endif

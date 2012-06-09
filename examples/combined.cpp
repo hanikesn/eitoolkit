@@ -1,6 +1,4 @@
 #include <EIToolkit.h>
-#include <EIUDPTransport.h>
-#include <EIJSONPresentation.h>
 
 #include <iostream>
 #include <algorithm>
@@ -46,7 +44,7 @@ int main()
     msg = EI::DiscoveryMessage("asd");
 
     EI::UDPTransport transport(options);
-    EI::JSONPresentation presentation(options);
+    EI::ProtobufPresentation presentation(options);
     EI::Description desc("test");
     desc.addDataSeries("x", EI::DataSeriesInfo(EI::Value::DOUBLE, EI::DataSeriesInfo::INTERPOLATABLE,"asd"));
     EI::Sender server(desc, options, transport, presentation);

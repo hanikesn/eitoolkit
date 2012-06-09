@@ -19,8 +19,6 @@ std::unique_ptr<Message> PresentationManager::decode(const ByteVector &in_buffer
         throw std::exception();
 
     ByteVector buffer(in_buffer.begin()+1, in_buffer.end());
-    if(pres)
-        return pres->decode(buffer);
 
     switch(in_buffer.front())
     {

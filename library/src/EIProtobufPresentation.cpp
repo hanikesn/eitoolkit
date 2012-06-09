@@ -1,4 +1,7 @@
 #include "EIProtobufPresentation.h"
+#include "EIDataMessage.h"
+#include "EIDescriptionMessage.h"
+#include "EIDiscoveryMessage.h"
 
 #include "EIMessage.pb.h"
 
@@ -19,6 +22,7 @@ ProtobufPresentation::ProtobufPresentation(const StringMap &options)
 
 ProtobufPresentation::~ProtobufPresentation()
 {
+    google::protobuf::ShutdownProtobufLibrary();
     delete pimpl;
 }
 
@@ -29,12 +33,42 @@ Byte ProtobufPresentation::getIdentifier()
 
 void ProtobufPresentation::encode(const Message &msg, ByteVector &out_buffer)
 {
+    Protobuf::Message tmp;
+    tmp.set_sender(msg.getSender());
+    tmp.set_msgtype(msg.getMsgType());
 
+    auto const& buf = tmp.SerializeAsString();
+
+    std::copy(buf.begin(), buf.end(), std::back_inserter<ByteVector>(out_buffer));
+}
+
+static std::unique_ptr<DataMessage> decodeDataMessage(Protobuf::Message const& msg)
+{
+    return 0;
+}
+
+static std::unique_ptr<DescriptionMessage> decodeDescriptionMessage(Protobuf::Message const& msg)
+{
+    return 0;
 }
 
 std::unique_ptr<Message> ProtobufPresentation::decode(const ByteVector &in_buffer)
 {
-    return 0;
+    Protobuf::Message msg;
+    if(!msg.ParseFromArray(in_buffer.data(), in_buffer.size()))
+        throw std::exception();
+
+    auto const& sender = msg.sender();
+    auto const& msgtype = msg.msgtype();
+
+    /*if(msgtype == DataMessage::IDENTIFIER)
+        return decodeDataMessage(msg);
+    else if(msgtype == DescriptionMessage::IDENTIFIER)
+        return decodeDescriptionMessage(msg);
+    else if(msgtype == DiscoveryMessage::IDENTIFIER)
+        return std::unique_ptr<DiscoveryMessage>(new DiscoveryMessage(sender));
+    else*/
+        return std::unique_ptr<Message>(new Message(sender, msgtype));
 }
 
 }
