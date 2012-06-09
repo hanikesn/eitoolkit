@@ -41,9 +41,11 @@ void ProtobufPresentation::encode(const Message &msg, ByteVector &out_buffer)
     tmp.set_sender(msg.getSender());
     tmp.set_msgtype(msg.getMsgType());
 
-    auto const& buf = tmp.SerializeAsString();
+    auto size = out_buffer.size();
+    auto bytesize = tmp.ByteSize();
 
-    std::copy(buf.begin(), buf.end(), std::back_inserter<ByteVector>(out_buffer));
+    bool res = tmp.SerializeToArray(out_buffer.data()+size, out_buffer.size()-size);
+    assert(res);
 }
 
 static std::unique_ptr<DataMessage> decodeDataMessage(Protobuf::Message const& msg)
