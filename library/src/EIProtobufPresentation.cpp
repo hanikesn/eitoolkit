@@ -44,6 +44,8 @@ void ProtobufPresentation::encode(const Message &msg, ByteVector &out_buffer)
     auto size = out_buffer.size();
     auto bytesize = tmp.ByteSize();
 
+    out_buffer.resize(size+bytesize);
+
     bool res = tmp.SerializeToArray(out_buffer.data()+size, out_buffer.size()-size);
     assert(res);
 }
