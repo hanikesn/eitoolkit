@@ -74,7 +74,7 @@ set(SOURCE_FILES
 
 find_package(Protobuf)
 if(PROTOBUF_FOUND)
-  include_directories(PROTOBUF_INCLUDE_DIRS)
+  include_directories(${PROTOBUF_INCLUDE_DIRS})
   protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS protobuf/EIMessage.proto)
   list(APPEND SOURCE_FILES src/EIProtobufPresentation.cpp ${PROTO_SRCS})
   list(APPEND HEADER_FILES include/EIProtobufPresentation.h ${PROTO_HDRS})
