@@ -8,7 +8,11 @@
 namespace EI
 {
 
+// MSVC gets link errors
+#ifndef _MSC_VER
 const Byte ProtobufPresentation::IDENTIFIER;
+#endif
+
 
 class ProtobufPresentation::ProtobufPresentationImpl {
 

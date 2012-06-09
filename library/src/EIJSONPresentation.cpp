@@ -20,7 +20,10 @@ typedef rs::GenericValue<rapidjson::UTF8<>, rapidjson::CrtAllocator> Value;
 namespace EI
 {
 
+// MSVC gets link errors
+#ifndef _MSC_VER
 const Byte JSONPresentation::IDENTIFIER;
+#endif
 
 class Wrapper
 {
