@@ -10,7 +10,8 @@ PresentationManager::PresentationManager(StringMap const& options, Presentation*
       ,protobufPresentation(options)
 #endif
 {
-
+    auto it = options.find("useProtobuf");
+    useProtobuf = it != options.end();
 }
 
 std::unique_ptr<Message> PresentationManager::decode(const ByteVector &in_buffer)
@@ -43,6 +44,13 @@ void PresentationManager::encode(const Message &msg, ByteVector &out_buffer)
         out_buffer.push_back(pres->getIdentifier());
         return pres->encode(msg, out_buffer);
     }
+
+#ifdef HAVE_PROTOBUF
+    if(useProtobuf) {
+        out_buffer.push_back(ProtobufPresentation::IDENTIFIER);
+        return protobufPresentation.encode(msg, out_buffer);
+    }
+#endif
 
     out_buffer.push_back(JSONPresentation::IDENTIFIER);
     return jsonPresentation.encode(msg, out_buffer);

@@ -22,6 +22,7 @@ private:
     Presentation* pres;
 
     JSONPresentation jsonPresentation;
+    bool useProtobuf;
 #ifdef HAVE_PROTOBUF
     ProtobufPresentation protobufPresentation;
 #endif
