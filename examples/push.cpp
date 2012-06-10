@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <ctime>
+#include <boost/chrono.hpp>
+
+typedef boost::chrono::high_resolution_clock Clock;
 
 int main()
 {
@@ -13,8 +16,6 @@ int main()
 
     EI::Sender sender(EI::Description("asd"), options);
 
-    int start = clock();
-
     int cnt = 0;
 
     const std::string msg1("msg");
@@ -24,9 +25,10 @@ int main()
     const std::string msg5("msg4");
     const std::string msg6("msg5");
 
+    Clock::time_point start = Clock::now();
 
     EI::DataMessage p("simple_server");
-    while(clock() < start + CLOCKS_PER_SEC*5)
+    while(Clock::now() < start + boost::chrono::seconds(5))
     {
         p.setString(msg1,  "message");
         p.setString(msg2,  "message");
