@@ -9,10 +9,9 @@ int main()
 
     EI::StringMap options;
 
-    EI::UDPTransport transport(options);
-    EI::ProtobufPresentation presentation(options);
+    options["useProtobuf"];
 
-    EI::Sender sender(EI::Description("asd"), options, transport, presentation);
+    EI::Sender sender(EI::Description("asd"), options);
 
     int start = clock();
 
