@@ -44,7 +44,7 @@ int main()
     msg = EI::DiscoveryMessage("asd");
 
     EI::UDPTransport transport(options);
-    EI::ProtobufPresentation presentation(options);
+    EI::JSONPresentation presentation(options);
     EI::Description desc("test");
     desc.addDataSeries("x", EI::DataSeriesInfo(EI::Value::DOUBLE, EI::DataSeriesInfo::INTERPOLATABLE,"asd"));
     EI::Sender server(desc, options, transport, presentation);
