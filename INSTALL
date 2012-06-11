@@ -86,17 +86,17 @@ most likely want to use 'Unix Makefiles'; for Visual Studio select the
 appropriate version and platform (Win32 | Win64); on Apple use Xcode.
 Click 'Finish'. CMake will now gather some information about your
 build environment and try to locate the dependencies (+).
+Then you can select the options you want to enable. Warning: Some
+options are only visible if other options are selected. You must run
+CMake again for those to appear.
+When everything worked correctly you can now click on 'Generate' to
+generate the project files.
 
 (+) If you receive errors about dependencies not being found, even though
 you have successfully installed or compiled them in step 3, then you may
 need to tell CMake where to look. On Unix platforms CMake should usually
 be able to pick up all the dependencies if they are installed in standard
-locations. You can specify the directory for each dependency individually.
-Click on 'Add entry' to add a new CMake variable, then select 'PATH' as
-the type. The name of the variable is XXX_HOME, where XXX is to be replaced
-by the dependency package, e. g. ZLIB_HOME, ZZIP_HOME or FREETYPE_HOME.
-For the value, specify the directory where the dependency can be found
-and click Ok. Once you are done, hit 'Configure' again.
+locations. Once you are done, hit 'Configure' again.
 
 
 6. Building the EIToolkit

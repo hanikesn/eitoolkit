@@ -74,8 +74,8 @@ set(SOURCE_FILES
   src/helpers.h
 )
 
-option(OPTION_PROTOBUF "Build with the protobuf presentation.")
-if(OPTION_PROTOBUF)
+option(ENABLE_PROTOBUF "Build with the protobuf presentation.")
+if(ENABLE_PROTOBUF)
   find_package(Protobuf REQUIRED)
   if(PROTOBUF_FOUND)
     include_directories(${PROTOBUF_INCLUDE_DIRS})

@@ -9,8 +9,6 @@ set(EIToolkit_VERSION_STRING "${EIToolkit_MAJOR_VERSION}.${EIToolkit_MINOR_VERSI
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
-include(CPack)
-
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
@@ -19,12 +17,12 @@ endif()
 
 add_subdirectory(library)
 
-option(OPTION_DOCUMENTATION "Build documentation")
-if(OPTION_DOCUMENTATION)
+option(ENABLE_DOCUMENTATION "Build documentation")
+if(ENABLE_DOCUMENTATION)
   add_subdirectory(doc)
 endif()
-option(OPTION_EXAMPLES "Build examples")
-if(OPTION_EXAMPLES)
+option(ENABLE_EXAMPLES "Build examples")
+if(ENABLE_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
