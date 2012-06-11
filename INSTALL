@@ -12,7 +12,8 @@ CMake is a cross-platform build system - or perhaps more accurately a
 build configurator. It is a program which, from a set of CMake scripts,
 creates a native build system for your platform that allows you to 
 build the EIToolkit. 
-The build process is configurable via CMake.
+The build process is configurable via CMake. The EIToolkit provides several
+options which you can use to customise your build. 
 
 
 2. Getting CMake
@@ -24,7 +25,7 @@ platforms. Furthermore, if you are on a Linux system, chances are high
 that your distributor offers a package for CMake. You need a CMake
 version >= 2.8.6.
 For Ubuntu, type the following in a console to install CMake:
-> sudo apt-get install cmake-gui
+> sudo apt-get install cmake-qt-gui
 
 
 3. Getting dependencies
@@ -34,28 +35,30 @@ The EIToolkit requires the boost library, but there are other dependencies for
 the bindings and other encodings. You can get source or binary packages for
 each from their respective websites listed below.
 Linux distributions usually offer packages for each dependency. On Ubuntu
-Precise, the following command will install all of the dependencies
-excluding the ones needed for the bindings:
-> sudo apt-get install libboost-system-dev \
->   libboost-thread-dev libboost-chrono-dev \
->   swig doxygen
+Precise, the following command will install the dependencies for the core library: (+)
+> sudo apt-get install build-essential libboost-system-dev libboost-thread-dev
+
 If you cannot obtain prebuilt binaries of a dependency for your platform,
 please refer to the list below and get a source package from the website,
 then build it according to its documentation.
 
 Required dependencies:
-* Boost: http://www.boost.org (+)
+* Boost: http://www.boost.org (++)
 
 Optional dependencies:
 * Doxygen (for the API documentation): http://www.stack.nl/~dimitri/doxygen/
 * Swig (for the bindings): http://www.swig.org/
-* A JDK (for the Java bindings): http://www.oracle.com/technetwork/java/javase/downloads/index.html (++)
+* A JDK (for the Java bindings): http://www.oracle.com/technetwork/java/javase/downloads/index.html (+++)
 * A CSharp compiler: Mono or the C# Compiler from Visual Studio
 
-(+) Only the boost-system, boost-chrono and if your compiler doesn't
-support the <thread> header boost-thread. For Visual C++ you can
-find binary installers at http://www.boostpro.com.
-(++) On Windows get the 32 bit Java SE Development Kit 6
+(+) Warning if you want to build the examples you need boost-chrono so you need the 1.48 version
+of all the boost libs:
+libboost-system1.48-dev libboost-thread1.48-dev libboost-chrono1.48-dev
+(++) Only the boost-system and if your compiler doesn't support the <thread>
+header boost-thread are required. For the examples boost-chrono is also required.
+For Visual C++ you can find binary installers at http://www.boostpro.com.
+Install the "Multithreaded" and "Multithreaded debug" versions.
+(+++) On Windows get the 32 bit Java SE Development Kit 6
 
 
 4. Preparing the build environment
