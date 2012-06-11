@@ -1,6 +1,6 @@
-find_package(JNI)
+find_package(JNI REQUIRED)
 
-if(JNI_FOUND)
+if(ENABLE_JAVA)
   include_directories(${JNI_INCLUDE_DIRS})
 
   set(CMAKE_SWIG_FLAGS -package de.uni_stuttgart.eitoolkit -Wall)
@@ -36,4 +36,4 @@ if(JNI_FOUND)
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_java_jni.jar DESTINATION java)
   endif()
-endif(JNI_FOUND)
+endif()
