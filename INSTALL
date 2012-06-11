@@ -1,0 +1,151 @@
+GUIDE TO BUILDING THE EITOOLKIT
+========================================================================
+
+The EIToolkit uses CMake as its build system on all supported platforms. This
+guide will explain to you how to use CMake to build the EIToolkit from source.
+
+
+1. What is CMake?
+-------------------
+
+CMake is a cross-platform build system - or perhaps more accurately a
+build configurator. It is a program which, from a set of CMake scripts,
+creates a native build system for your platform that allows you to 
+build the EIToolkit. 
+The build process is configurable via CMake.
+
+
+2. Getting CMake
+------------------
+
+CMake is available from http://www.cmake.org (Resources -> Downloads).
+You can get its sources, but there are precompiled binaries for all
+platforms. Furthermore, if you are on a Linux system, chances are high
+that your distributor offers a package for CMake. You need a CMake
+version >= 2.8.6.
+For Ubuntu, type the following in a console to install CMake:
+> sudo apt-get install cmake-gui
+
+
+3. Getting dependencies
+-------------------------
+
+The EIToolkit requires the boost library, but there are other dependencies for
+the bindings and other encodings. You can get source or binary packages for
+each from their respective websites listed below.
+Linux distributions usually offer packages for each dependency. On Ubuntu
+Precise, the following command will install all of the dependencies
+excluding the ones needed for the bindings:
+> sudo apt-get install libboost-system-dev \
+>   libboost-thread-dev libboost-chrono-dev \
+>   swig doxygen
+If you cannot obtain prebuilt binaries of a dependency for your platform,
+please refer to the list below and get a source package from the website,
+then build it according to its documentation.
+
+Required dependencies:
+* Boost: http://www.boost.org (+)
+
+Optional dependencies:
+* Doxygen (for the API documentation): http://www.stack.nl/~dimitri/doxygen/
+* Swig (for the bindings): http://www.swig.org/
+* A JDK (for the Java bindings): http://www.oracle.com/technetwork/java/javase/downloads/index.html (++)
+* A CSharp compiler: Mono or the C# Compiler from Visual Studio
+
+(+) Only the boost-system, boost-chrono and if your compiler doesn't
+support the <thread> header boost-thread. For Visual C++ you can
+find binary installers at http://www.boostpro.com.
+(++) On Windows get the 32 bit Java SE Development Kit 6
+
+
+4. Preparing the build environment
+------------------------------------
+
+You should now create a build directory for the EIToolkit somewhere outside
+the EIToolkit's sources. This is the directory where CMake will create the
+build system for your chosen platform and compiler, and this is also
+where the EIToolkit libraries will be compiled. This way, the EIToolkit source
+dir stays clean, and you can have multiple build directories all
+working from the same Ogre source.
+
+
+5. Running CMake
+------------------
+
+Now start the program cmake-gui by either typing the name in a console
+or selecting it from the start menu. In the field 'Where is the source
+code' enter the path to the EIToolkit source directory (the directory which
+contains this file). In the field 'Where to build the binaries' enter
+the path to the build directory you created in step 4.
+Hit 'Configure'. A dialog will appear asking you to select a generator.
+Choose the appropriate one for your platform and compiler. On Unix, you
+most likely want to use 'Unix Makefiles'; for Visual Studio select the
+appropriate version and platform (Win32 | Win64); on Apple use Xcode.
+Click 'Finish'. CMake will now gather some information about your
+build environment and try to locate the dependencies (+).
+
+(+) If you receive errors about dependencies not being found, even though
+you have successfully installed or compiled them in step 3, then you may
+need to tell CMake where to look. On Unix platforms CMake should usually
+be able to pick up all the dependencies if they are installed in standard
+locations. You can specify the directory for each dependency individually.
+Click on 'Add entry' to add a new CMake variable, then select 'PATH' as
+the type. The name of the variable is XXX_HOME, where XXX is to be replaced
+by the dependency package, e. g. ZLIB_HOME, ZZIP_HOME or FREETYPE_HOME.
+For the value, specify the directory where the dependency can be found
+and click Ok. Once you are done, hit 'Configure' again.
+
+
+6. Building the EIToolkit
+---------------------------
+
+Go to your chosen build directory. CMake has generated a build system for
+you which you will now use to build the EIToolkit. If you are using Visual Studio,
+you should find the file EIToolkit.sln. Open it and compile the target
+'BUILD_ALL'. Similarly you will find an Xcode project to build Ogre
+on MacOS. If you are using a Makefile generator, then instead open a
+console and cd to your build directory, then call the appropriate make
+program. E. g. on Linux type
+> make
+to start the build process. 
+If you have doxygen installed and CMake picked it up, then there will
+be an additional build target called doc which you can optionally build.
+This will freshly generate the API documentation for Ogre's classes from
+the header files. In Visual Studio, just select and build the target
+'DOC', on Linux type:
+> make doc
+
+
+7. Installing the EIToolkit
+-----------------------------
+
+Once the build is complete, you can optionally have the build system
+copy the built libraries and headers to a clean location. We recommend
+you do this step as it will make it easier to use the EIToolkit in your projects.
+In Visual Studio, just select and build the target 'INSTALL'.
+For Makefile based generators, type:
+> make install  (or sudo make install, if root privileges are required)
+On Linux the EIToolkit will by default be installed to /usr/local on windows
+to the Program Files folder. You can change the install location by changing
+the variable CMAKE_INSTALL_PREFIX in CMake.
+
+
+8. Using the EIToolkit
+------------------------
+You don't need to install the EIToolkit to use it in your own projects.
+CMake will automatically pick up the version form the build directory.
+You just need to use the following CMakeLists.txt file. It will create
+a Project named Example with a binary named example from the example.cpp
+source file.
+
+cmake_minimum_required(VERSION 2.6)
+project(Example)
+find_package(EIToolkit REQUIRED)
+include_directories(${EIToolkit_INCLUDE_DIR})
+add_executable(example example.cpp)
+target_link_libraries(example EIToolkit)
+
+
+9. Credits
+------------
+Shamelessly copied from Ogre3D.
