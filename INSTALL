@@ -24,7 +24,7 @@ You can get its sources, but there are precompiled binaries for all
 platforms. Furthermore, if you are on a Linux system, chances are high
 that your distributor offers a package for CMake. You need a CMake
 version >= 2.8.6.
-For Ubuntu, type the following in a console to install CMake:
+For Ubuntu type the following in a terminal to install CMake:
 > sudo apt-get install cmake-qt-gui
 
 
@@ -51,14 +51,14 @@ Optional dependencies:
 * A JDK (for the Java bindings): http://www.oracle.com/technetwork/java/javase/downloads/index.html (+++)
 * A CSharp compiler: Mono or the C# Compiler from Visual Studio
 
-(+) Warning if you want to build the examples you need boost-chrono so you need the 1.48 version
-of all the boost libs:
+(+) Warning: If you want to build the examples, you need boost-chrono, i.e. you
+need the 1.48 version of all the boost libs:
 libboost-system1.48-dev libboost-thread1.48-dev libboost-chrono1.48-dev
-(++) Only the boost-system and if your compiler doesn't support the <thread>
+(++) #FIXME# Only the boost-system and if your compiler doesn't support the <thread>
 header boost-thread are required. For the examples boost-chrono is also required.
 For Visual C++ you can find binary installers at http://www.boostpro.com.
 Install the "Multithreaded" and "Multithreaded debug" versions.
-(+++) On Windows get the 32 bit Java SE Development Kit 6
+(+++) On Windows get the 32-bit Java SE Development Kit 6.
 
 
 4. Preparing the build environment
@@ -68,8 +68,8 @@ You should now create a build directory for the EIToolkit somewhere outside
 the EIToolkit's sources. This is the directory where CMake will create the
 build system for your chosen platform and compiler, and this is also
 where the EIToolkit libraries will be compiled. This way, the EIToolkit source
-dir stays clean, and you can have multiple build directories all
-working from the same Ogre source.
+directory stays clean, and you can have multiple build directories all
+working from the same #FIXME# Ogre source.
 
 
 5. Running CMake
@@ -86,15 +86,15 @@ most likely want to use 'Unix Makefiles'; for Visual Studio select the
 appropriate version and platform (Win32 | Win64); on Apple use Xcode.
 Click 'Finish'. CMake will now gather some information about your
 build environment and try to locate the dependencies (+).
-Then you can select the options you want to enable. Warning: Some
-options are only visible if other options are selected. You must run
-CMake again for those to appear.
-When everything worked correctly you can now click on 'Generate' to
-generate the project files.
+Then you can select the options you want to enable.
+Warning: Some options are only visible if other options are selected. You
+must run CMake again for those to appear.
+If everything worked correctly, you can now click 'Generate' to generate
+the project files.
 
-(+) If you receive errors about dependencies not being found, even though
-you have successfully installed or compiled them in step 3, then you may
-need to tell CMake where to look. On Unix platforms CMake should usually
+(+) If you receive errors about dependencies not being found even though
+you have successfully installed or compiled them in step 3, you may
+need to tell CMake where to look. On Unix platforms, CMake should usually
 be able to pick up all the dependencies if they are installed in standard
 locations. Once you are done, hit 'Configure' again.
 
@@ -104,8 +104,8 @@ locations. Once you are done, hit 'Configure' again.
 
 Go to your chosen build directory. CMake has generated a build system for
 you which you will now use to build the EIToolkit. If you are using Visual Studio,
-you should find the file EIToolkit.sln. Open it and compile the target
-'BUILD_ALL'. Similarly you will find an Xcode project to build Ogre
+you should find the file EIToolkit.sln there. Open it and compile the target
+'BUILD_ALL'. Similarly you will find an Xcode project to build #FIXME# Ogre
 on MacOS. If you are using a Makefile generator, then instead open a
 console and cd to your build directory, then call the appropriate make
 program. E. g. on Linux type
@@ -113,8 +113,8 @@ program. E. g. on Linux type
 to start the build process. 
 If you have doxygen installed and CMake picked it up, then there will
 be an additional build target called doc which you can optionally build.
-This will freshly generate the API documentation for Ogre's classes from
-the header files. In Visual Studio, just select and build the target
+This will freshly generate the API documentation for #FIXME# Ogre's classes from
+the header files. In Visual Studio just select and build the target
 'DOC', on Linux type:
 > make doc
 
@@ -125,20 +125,21 @@ the header files. In Visual Studio, just select and build the target
 Once the build is complete, you can optionally have the build system
 copy the built libraries and headers to a clean location. We recommend
 you do this step as it will make it easier to use the EIToolkit in your projects.
-In Visual Studio, just select and build the target 'INSTALL'.
-For Makefile based generators, type:
+In Visual Studio just select and build the target 'INSTALL'.
+For Makefile-based generators type:
 > make install  (or sudo make install, if root privileges are required)
-On Linux the EIToolkit will by default be installed to /usr/local on windows
+On Linux the EIToolkit will by default be installed to /usr/local; on Windows
 to the Program Files folder. You can change the install location by changing
 the variable CMAKE_INSTALL_PREFIX in CMake.
 
 
 8. Using the EIToolkit
 ------------------------
+
 You don't need to install the EIToolkit to use it in your own projects.
-CMake will automatically pick up the version form the build directory.
+CMake will automatically pick up the version from the build directory.
 You just need to use the following CMakeLists.txt file. It will create
-a Project named Example with a binary named example from the example.cpp
+a project named Example with a binary named example from the example.cpp
 source file.
 
 cmake_minimum_required(VERSION 2.6)
@@ -151,4 +152,5 @@ target_link_libraries(example EIToolkit)
 
 9. Credits
 ------------
+
 Shamelessly copied from Ogre3D.
