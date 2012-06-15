@@ -160,8 +160,11 @@ static std::unique_ptr<Message> decodeDataMessage(Document const& doc, std::stri
     std::for_each(val.MemberBegin(), val.MemberEnd(),
         [&packet](::Value::Member const& v)
     {
-                  if(v.value.IsString())
-                      packet->setString(v.name.GetString(), v.value.GetString());
+        if(v.value.IsString()) {
+            packet->setString(v.name.GetString(), v.value.GetString());
+        } else if(v.value.IsDouble()) {
+            packet->setDouble(v.name.GetString(), v.value.GetDouble());
+        }
     });
 
     return std::move(packet);
@@ -175,7 +178,7 @@ static std::unique_ptr<Message> decodeDescriptionMessage(Document const& doc, st
     if(!val.IsObject())
         throw std::exception();
 
-    Description desc(device);
+    Description desc(sender, device);
 
     std::for_each(val.MemberBegin(), val.MemberEnd(),
         [&desc](::Value::Member const& v)
