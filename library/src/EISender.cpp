@@ -75,7 +75,7 @@ void Sender::SenderImpl::onPacket(Transport::Channel type, ByteVector const& byt
 
     if(p->getMsgType() == DiscoveryMessage::IDENTIFIER) {
         ByteVector buffer;
-        presentation.encode(DescriptionMessage("Sender", description), buffer);
+        presentation.encode(DescriptionMessage(description.getSender(), description), buffer);
         transport.sendPacket(Transport::COMMUNICATION, buffer);
     }
 }

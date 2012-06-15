@@ -45,7 +45,7 @@ int main()
 
     EI::UDPTransport transport(options);
     EI::JSONPresentation presentation(options);
-    EI::Description desc("test");
+    EI::Description desc("asd" ,"test");
     desc.addDataSeries("x", EI::DataSeriesInfo(EI::Value::DOUBLE, EI::DataSeriesInfo::INTERPOLATABLE,"asd"));
     EI::Sender server(desc, options, transport, presentation);
     EI::Receiver receiver(options, transport);

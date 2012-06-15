@@ -8,7 +8,7 @@ int main()
 
     EI::StringMap options;
 
-    EI::Description desc("asd");
+    EI::Description desc("asd", "asd");
 
     EI::Sender sender(desc, options);
 

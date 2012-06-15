@@ -14,7 +14,7 @@ int main()
 
     options["useProtobuf"];
 
-    EI::Sender sender(EI::Description("asd"), options);
+    EI::Sender sender(EI::Description("asd", "asd"), options);
 
     int cnt = 0;
 

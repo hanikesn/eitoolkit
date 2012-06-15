@@ -6,13 +6,14 @@ namespace EI
 class Description::DescriptionImpl
 {
 public:
-    DescriptionImpl(const std::string& device_type) : device_type(device_type) {}
+    DescriptionImpl(std::string const& sender, std::string const& device_type) : sender(sender), device_type(device_type) {}
+    const std::string sender;
     const std::string device_type;
     DataSeriesInfoMap infos;
 };
 
-Description::Description(const std::string& device_type)
-    : pimpl(new DescriptionImpl(device_type))
+Description::Description(std::string const& sender, std::string const& device_type)
+    : pimpl(new DescriptionImpl(sender, device_type))
 {
 }
 
@@ -41,6 +42,11 @@ Description& Description::operator=(Description other)
 void Description::swap(Description &other) throw ()
 {
     std::swap(pimpl, other.pimpl);
+}
+
+std::string Description::getSender() const
+{
+    return pimpl->sender;
 }
 
 std::string Description::getDeviceType() const

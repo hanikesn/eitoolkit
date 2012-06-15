@@ -117,13 +117,14 @@ class EITOOLKIT_EXPORT Description
 public:
     /**
      * @brief Constructs Description object.
+     * @param sender The name of the sender.
      * @param device_type The type of the device. E.g.: "Kinect", "Accelerometer" etc.
      */
-    Description(const std::string& device_type);
+    Description(std::string const& sender, std::string const& device_type);
     /**
      * @brief Copy constructor
      */
-    Description(const Description& other);
+    Description(Description const& other);
     /**
      * @brief Move constructor
      */
@@ -134,6 +135,10 @@ public:
     Description& operator=(Description other);
     ~Description();
 
+    /**
+     * @brief Get the name of the sender.
+     */
+    std::string getSender() const;
     /**
      * @brief Get the type of the device. E.g.: "Kinect", "Accelerometer" etc.
      */

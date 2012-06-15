@@ -58,10 +58,11 @@ typedef std::map<std::string, DataSeriesInfo> DataSeriesInfoMap;
 class Description
 {
 public:
-    Description(const std::string& device_type);
-    Description(const Description& other);
+    Description(std::string const& sender, std::string const& device_type);
+    Description(Description const& other);
     ~Description();
 
+    std::string getSender() const;
     std::string getDeviceType() const;
 
     void addDataSeries(const std::string& name, const DataSeriesInfo& info);
