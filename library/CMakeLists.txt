@@ -28,7 +28,7 @@ find_package(Boost COMPONENTS ${BOOST_components} REQUIRED)
 mark_as_advanced (Boost_LIB_DIAGNOSTIC_DEFINITIONS Boost_DIR)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
-add_definitions(-DBOOST_ALL_NO_LIB)
+add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_ASIO_SEPARATE_COMPILATION)
 # for boost::asio
 if(WIN32)
   add_definitions(-D_WIN32_WINNT=0x0501)
@@ -71,6 +71,7 @@ set(SOURCE_FILES
   src/EIValue.cpp
   src/PresentationManager.h
   src/PresentationManager.cpp
+  src/boost_asio_impl.cpp
   src/helpers.h
 )
 
