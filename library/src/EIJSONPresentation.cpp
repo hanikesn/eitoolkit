@@ -129,7 +129,7 @@ static void encodeDescriptionMessage(DescriptionMessage const& p, rs::Writer<Wra
     writer.EndObject();
 }
 
-void JSONPresentation::encode(Message const& p, ByteVector& out)
+void JSONPresentation::encode(Message const& p, ByteVector& out) throw (EI::Exception)
 {
     Wrapper buffer(out);
     rs::Writer<Wrapper> writer(buffer);
@@ -176,7 +176,7 @@ static std::unique_ptr<Message> decodeDescriptionMessage(Document const& doc, st
 
     auto const& val = doc["values"];
     if(!val.IsObject())
-        throw std::exception();
+        throw EI_EXCEPTION("Invalid Packet");
 
     Description desc(sender, device);
 
@@ -209,7 +209,7 @@ static std::unique_ptr<Message> decodeDescriptionMessage(Document const& doc, st
     return std::unique_ptr<DescriptionMessage>(new DescriptionMessage(sender, desc));
 }
 
-std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
+std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes) throw (EI::Exception)
 {
     Document document;
     std::vector<Byte> buffer(bytes.size() + 1);
@@ -218,7 +218,7 @@ std::unique_ptr<Message> JSONPresentation::decode(ByteVector const& bytes)
     if (document.ParseInsitu<1>(buffer.data()).HasParseError())
     {
         std::cerr << document.GetParseError() << ":" << document.GetErrorOffset() << "\n";
-        throw std::exception();
+        throw EI_EXCEPTION("JSON parse error.");
     }
 
     std::string msgtype = document["msgtype"].GetString();

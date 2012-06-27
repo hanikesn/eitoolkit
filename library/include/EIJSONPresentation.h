@@ -25,8 +25,8 @@ public:
     JSONPresentation(StringMap const& options);
     ~JSONPresentation();
 
-    void encode(Message const& msg, ByteVector & out_buffer);
-    std::unique_ptr<Message> decode(ByteVector const& in_buffer);
+    void encode(Message const& msg, ByteVector & out_buffer) throw (EI::Exception);
+    std::unique_ptr<Message> decode(ByteVector const& in_buffer) throw (EI::Exception);
     Byte getIdentifier();
 
     static const Byte IDENTIFIER = 0x01;

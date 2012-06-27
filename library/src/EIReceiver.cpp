@@ -89,7 +89,11 @@ void Receiver::discoverSenders()
 {
     ByteVector buffer;
     pimpl->presentation.encode(DiscoveryMessage("Receiver"), buffer);
-    pimpl->transport.sendPacket(Transport::COMMUNICATION, buffer);
+    try {
+        pimpl->transport.sendPacket(Transport::COMMUNICATION, buffer);
+    } catch (EI::Exception const& e) {
+        std::cerr << e.what() << "\n";
+    }
 }
 
 void Receiver::addDataListener(DataListener* ob)

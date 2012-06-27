@@ -28,7 +28,7 @@ public:
      */
     virtual ~UDPTransport();
 
-    virtual void sendPacket(Channel channel, ByteVector const& packet);
+    virtual void sendPacket(Channel channel, ByteVector const& packet) throw (EI::Exception);
     virtual void addPacketListener(Channel channel, PacketListener* packet);
     virtual void removePacketListener(PacketListener* packet);
 private:

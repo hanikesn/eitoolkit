@@ -36,15 +36,16 @@
  */
 
 #include "EIPrerequisites.h"
-#include "EISender.h"
-#include "EIReceiver.h"
 #include "EIBlockingReceiver.h"
-#include "EIUDPTransport.h"
+#include "EIDataMessage.h"
+#include "EIDescriptionMessage.h"
+#include "EIDiscoveryMessage.h"
+#include "EIException.h"
 #include "EIJSONPresentation.h"
 #include "EIMessage.h"
-#include "EIDataMessage.h"
-#include "EIDiscoveryMessage.h"
-#include "EIDescriptionMessage.h"
+#include "EIReceiver.h"
+#include "EISender.h"
+#include "EIUDPTransport.h"
 #ifdef HAVE_PROTOBUF
 #include "EIProtobufPresentation.h"
 #endif

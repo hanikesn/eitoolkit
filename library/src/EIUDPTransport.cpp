@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "EIThread.h"
 #include <boost/asio/ip/udp.hpp>
+#include <boost/system/system_error.hpp>
 
 namespace EI
 {
@@ -83,7 +84,7 @@ UDPTransport::~UDPTransport()
     delete pimpl;
 }
 
-void UDPTransport::sendPacket(Channel type, ByteVector const& packet)
+void UDPTransport::sendPacket(Channel type, ByteVector const& packet) throw (EI::Exception)
 {
     pimpl->sendPacket(type, packet);
 }
@@ -169,20 +170,21 @@ void UDPTransport::UDPTransportImpl::onPacket(Transport::Channel type, ByteVecto
 
 void UDPTransport::UDPTransportImpl::sendPacket(Transport::Channel type, ByteVector const& p)
 {
-    switch(type)
-    {
-    case Transport::DATA:
-        if(dataSocket.send_to(boost::asio::buffer(p), dataEndpoint) != p.size()) {
-            throw std::exception();
+    try {
+        switch(type)
+        {
+        case Transport::DATA:
+            dataSocket.send_to(boost::asio::buffer(p), dataEndpoint);
+            break;
+        case Transport::COMMUNICATION:
+            controlSocket.send_to(boost::asio::buffer(p), controlEndpoint);
+            break;
+        case Transport::ALL:
+            break;
         }
-        break;
-    case Transport::COMMUNICATION:
-        if(controlSocket.send_to(boost::asio::buffer(p), controlEndpoint) != p.size()) {
-            throw std::exception();
-        }
-        break;
-    case Transport::ALL:
-        break;
+    } catch(boost::system::system_error const& e) {
+        std::cerr << e.what() << "\n";
+        throw EI_EXCEPTION("Error while sending.");
     }
 }
 

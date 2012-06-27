@@ -7,6 +7,7 @@
 #include "EIDataMessage.h"
 #include "PresentationManager.h"
 
+#include <iostream>
 #include <memory>
 
 namespace EI
@@ -63,7 +64,11 @@ void Sender::sendMessage(Message const& packet)
 {
     ByteVector buffer;
     pimpl->presentation.encode(packet, buffer);
-    pimpl->transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
+    try {
+        pimpl->transport.sendPacket(packet.getMsgType() == DataMessage::IDENTIFIER ? Transport::DATA :  Transport::COMMUNICATION, buffer);
+    } catch(EI::Exception const& e) {
+        std::cerr << e.what() << "\n";
+    }
 }
 
 void Sender::SenderImpl::onPacket(Transport::Channel type, ByteVector const& bytes)

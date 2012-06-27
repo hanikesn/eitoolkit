@@ -3,6 +3,7 @@
 
 #include "EIPrerequisites.h"
 #include "EIMessage.h"
+#include "EIException.h"
 
 #include <vector>
 #include <memory>
@@ -26,14 +27,14 @@ public:
      * @param msg The message to encode.
      * @param out_buffer The buffer where encoded bytes are written into. To save recurring allocations this not a return value.
      */
-    virtual void encode(Message const& msg, ByteVector& out_buffer) = 0;
+    virtual void encode(Message const& msg, ByteVector& out_buffer) throw (EI::Exception) = 0;
 
     /**
      * @brief Decodes a message.
      * @param in_buffer The bytes to decode.
      * @return A pointer to the decoded message. Ownership is transfered to the callee.
      */
-    virtual std::unique_ptr<Message> decode(ByteVector const& in_buffer) = 0;
+    virtual std::unique_ptr<Message> decode(ByteVector const& in_buffer) throw (EI::Exception) = 0;
 
     /**
      * @brief Returns a unique identifier byte, that is used to identify this presentation.

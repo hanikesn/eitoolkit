@@ -3,6 +3,7 @@
 
 #include "EIPrerequisites.h"
 
+#include "EIException.h"
 #include <vector>
 
 namespace EI
@@ -42,7 +43,7 @@ public:
      * @param channel The channel over which to send the packet. With ALL the packet will be sent over both channels.
      * @param packet The packet to be sent.
      */
-    virtual void sendPacket(Channel channel, ByteVector const& packet) = 0;
+    virtual void sendPacket(Channel channel, ByteVector const& packet) throw(EI::Exception) = 0;
     /**
      * @brief Add a listener for packets.
      *

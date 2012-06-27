@@ -40,6 +40,7 @@ set(HEADER_FILES
   include/EIDescription.h
   include/EIDescriptionMessage.h
   include/EIDiscoveryMessage.h
+  include/EIException.h
   include/EIJSONPresentation.h
   include/EIMessage.h
   include/EIPrerequisites.h
@@ -60,6 +61,7 @@ set(SOURCE_FILES
   src/EIDescription.cpp
   src/EIDescriptionMessage.cpp
   src/EIDiscoveryMessage.cpp
+  src/EIException.cpp
   src/EIJSONPresentation.cpp
   src/EIMessage.cpp
   src/EIPresentation.cpp
