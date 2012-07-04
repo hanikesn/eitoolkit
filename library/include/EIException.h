@@ -8,12 +8,21 @@
 namespace EI
 {
 
+/**
+ * @brief When thrown, provides information about an error that has occurred inside the toolkit.
+ */
 class EITOOLKIT_EXPORT Exception : public virtual std::exception
 {
 public:
+    /**
+     * @brief Default constructor.
+     */
     Exception(const char * file, const char * line, const char * msg) throw ();
     ~Exception () throw ();
 
+    /**
+     * @brief Override std::exception::what.
+     */
     const char* what() const throw ();
 private:
     const char* const file;

@@ -29,6 +29,9 @@ public:
     std::unique_ptr<Message> decode(ByteVector const& in_buffer);
     Byte getIdentifier();
 
+    /**
+     * @brief Unique ID for this presentation
+     */
     static const Byte IDENTIFIER = 0x02;
 
 private:
