@@ -1,4 +1,4 @@
-# Backup files
+﻿# Backup files
 *~
 
 # Compiled Documents
@@ -34,3 +34,9 @@ CMakeLists.txt.user
 Makefile
 
 *.pro.user
+
+# C#
+*.csproj.user
+*.suo
+
+*.dll
