@@ -10,7 +10,7 @@ int main()
     std::string name = "sinus sender";
 
     EI::Description desc(name, "dummy");
-    std::string val = "slow";
+    std::string val = "fast";
     desc.addDataSeries(val, EI::DataSeriesInfo(EI::Value::DOUBLE, EI::DataSeriesInfo::INTERPOLATABLE | EI::DataSeriesInfo::HAS_MINMAX, "", -1.0, 1.0));
 
     EI::Sender sender(desc, EI::StringMap());
@@ -23,6 +23,6 @@ int main()
     {
         p.setDouble(val, sin(boost::chrono::duration<double>(start - Clock::now()).count()));
         sender.sendMessage(p);
-        boost::this_thread::sleep(boost::posix_time::milliseconds(250));
+        boost::this_thread::sleep(boost::posix_time::milliseconds(10));
     }
 }
