@@ -100,6 +100,13 @@ void UDPTransport::removePacketListener(PacketListener* ob)
     pimpl->removePacketListener(ob);
 }
 
+#ifdef _MSC_VER
+#pragma warning(push)
+// VC warns uns about the use of this in the intializer list. But this is safe because we only
+// store the pointer in the Worker classes and don't access anything else.
+#pragma warning(disable: 4355)
+#endif
+
 UDPTransport::UDPTransportImpl::UDPTransportImpl(StringMap const&)
     : dataSocket(io_service, ba::ip::udp::v4()),
       controlSocket(io_service, ba::ip::udp::v4()),
@@ -119,6 +126,9 @@ UDPTransport::UDPTransportImpl::UDPTransportImpl(StringMap const&)
     controlSocket.bind(ba::ip::udp::endpoint(ba::ip::address_v4::any(), 31338));
     controlWorker.start_receive();
 }
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 UDPTransport::UDPTransportImpl::~UDPTransportImpl()
 {
