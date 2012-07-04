@@ -57,7 +57,7 @@ macro(usedoxygen_set_default name value type docstring)
 	endif()
 endmacro()
 
-find_package(Doxygen)
+find_package(Doxygen REQUIRED)
 
 if(DOXYGEN_FOUND)
 	find_file(DOXYFILE_IN "Doxyfile.in"

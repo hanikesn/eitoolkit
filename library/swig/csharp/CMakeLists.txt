@@ -7,7 +7,7 @@ swig_link_libraries(eitoolkit_csharp EIToolkit)
 
 install(TARGETS eitoolkit_csharp DESTINATION csharp)
 
-if(ENABLE_CHARP)
+if(ENABLE_CSHARP)
   enable_language(CSharp)
   foreach(class ${SWIG_CLASSES})
     list(APPEND CSHARP_SOURCE_FILES "${CMAKE_CURRENT_BINARY_DIR}/${class}.cs")
