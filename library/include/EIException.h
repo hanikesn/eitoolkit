@@ -8,7 +8,7 @@
 namespace EI
 {
 
-class EITOOLKIT_EXPORT Exception : std::exception
+class EITOOLKIT_EXPORT Exception : public virtual std::exception
 {
 public:
     Exception(const char * file, const char * line, const char * msg) throw ();
