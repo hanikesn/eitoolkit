@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.6)
 project(EIToolkit)
 
+include(CMakeDependentOption)
+
 set(EIToolkit_VERSION_MAJOR 0)
 set(EIToolkit_VERSION_MINOR 1)
 set(EIToolkit_VERSION_PATCH 1)
@@ -14,6 +16,10 @@ if(NOT CMAKE_BUILD_TYPE)
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
       FORCE)
 endif()
+
+option(ENABLE_BINDINGS "Build bindings")
+cmake_dependent_option(ENABLE_JAVA "Build the Java bindings" OFF "ENABLE_BINDINGS" OFF)
+cmake_dependent_option(ENABLE_CSHARP "Build the CSharp bindings" OFF "ENABLE_BINDINGS" OFF)
 
 add_subdirectory(library)
 

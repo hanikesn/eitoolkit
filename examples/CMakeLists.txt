@@ -29,9 +29,9 @@ target_link_libraries(generic_receiver EIToolkit)
 target_link_libraries(sinus_sender EIToolkit ${Boost_LIBRARIES})
 
 if(WIN32)
-add_custom_target(CopyDLL ALL DEPENDS EIToolkit
+add_custom_target(CopyDLLExamples ALL DEPENDS EIToolkit
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE_DIR:EIToolkit>/EIToolkit.dll
+        $<TARGET_FILE:EIToolkit>
         $<TARGET_FILE_DIR:combined>
 		COMMENT "Copying dlls")
 endif()

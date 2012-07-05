@@ -3,6 +3,20 @@ set(DOXYFILE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/library/include/")
 
 include(UseDoxygen)
 
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc DESTINATION ".")
+get_target_property(LOC_EI EIToolkit LOCATION)
+get_target_property(LOC_EI_CSHARP eitoolkit_csharp LOCATION)
+get_property(LOC_EI_CSHARP_NET TARGET eitoolkit_csharp_net PROPERTY _assembly)
+file(TO_CMAKE_PATH "${LOC_EI_CSHARP_NET}" LOC_EI_CSHARP_NET)
+
+string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI ${LOC_EI})
+string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI_CSHARP ${LOC_EI_CSHARP})
+
+if(WIN32 AND ENABLE_CSHARP)
+	install(FILES ${LOC_EI} DESTINATION doc/examples/csharp/)
+	install(FILES ${LOC_EI_CSHARP} DESTINATION doc/examples/csharp/)
+	install(FILES ${LOC_EI_CSHARP_NET} DESTINATION doc/examples/csharp/)
+endif()
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc DESTINATION .)
 
 install(DIRECTORY "examples" DESTINATION "doc")
