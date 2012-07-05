@@ -10,7 +10,7 @@ namespace push
     {
         static void Main(string[] args)
         {
-            Sender sender = new Sender(new Description("csharp"),  new StringMap());
+            Sender sender = new Sender(new Description("csharp", "dummy"),  new StringMap());
 
             DataMessage msg = new DataMessage("csharp");
 
