@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using de.uni_stuttgart.eitoolkit;
 
 namespace push
@@ -10,18 +7,24 @@ namespace push
     {
         static void Main(string[] args)
         {
-            Sender sender = new Sender(new Description("csharp", "dummy"),  new StringMap());
-
-            DataMessage msg = new DataMessage("csharp");
+            Description desc = new Description("Dummy 1", "dummy");
+            desc.addDataSeries("val", new DataSeriesInfo(Value.Type.DOUBLE, 0, ""));
 
             int cnt = 0;
 
-            long start = DateTime.Now.Ticks;
-            while (DateTime.Now.Ticks < start + 5 * TimeSpan.TicksPerSecond)
+            using (Sender sender = new Sender(desc, new StringMap()))
             {
-                sender.sendMessage(msg);
-                cnt++;
+                DataMessage msg = sender.createDataMessage();
+
+                long start = DateTime.Now.Ticks;
+                while (DateTime.Now.Ticks < start + 5 * TimeSpan.TicksPerSecond)
+                {
+                    msg.setDouble("val", 42.0);
+                    sender.sendMessage(msg);
+                    cnt++;
+                }
             }
+
             System.Console.Out.WriteLine(cnt);
             System.Console.ReadLine();
         }

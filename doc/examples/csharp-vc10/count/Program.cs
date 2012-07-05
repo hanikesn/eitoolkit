@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using de.uni_stuttgart.eitoolkit;
 
 namespace count
@@ -15,6 +12,7 @@ namespace count
             public override void onMessage(DataMessage msg)
             {
                 String str = msg.getSender();
+                double val = msg.getDouble("val");
                 count++;
             }
         }
@@ -22,10 +20,13 @@ namespace count
         static void Main(string[] args)
         {
             DataListener listener = new Listener();
-            Receiver receiver = new Receiver(new StringMap());
-            receiver.addDataListener(listener);
 
-            System.Console.ReadLine();
+            using (Receiver receiver = new Receiver(new StringMap()))
+            {
+                receiver.addDataListener(listener);
+
+                System.Console.ReadLine();
+            }
             System.Console.WriteLine(count);
             System.Console.ReadLine();
         }
