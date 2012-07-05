@@ -7,7 +7,7 @@ namespace push
     {
         static void Main(string[] args)
         {
-            Description desc = new Description("Dummy 1", "dummy");
+            Description desc = new Description("C# Dummy", "dummy");
             desc.addDataSeries("val", new DataSeriesInfo(Value.Type.DOUBLE, 0, ""));
 
             int cnt = 0;

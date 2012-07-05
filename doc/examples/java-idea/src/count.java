@@ -12,8 +12,9 @@ public class count {
 
         DataListener listener = new DataListener(){
             @Override
-            public void onMessage(DataMessage dataMessage) {
-                String str = dataMessage.getSender();
+            public void onMessage(DataMessage msg) {
+                String str = msg.getSender();
+                double val = msg.getDouble("val");
                 cnt.incrementAndGet();
             }
         };
@@ -22,6 +23,7 @@ public class count {
 
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
+        receiver.delete();
         System.out.println(cnt.get());
     }
 }

@@ -1,23 +1,24 @@
-import de.uni_stuttgart.eitoolkit.DataMessage;
-import de.uni_stuttgart.eitoolkit.Description;
-import de.uni_stuttgart.eitoolkit.Sender;
-import de.uni_stuttgart.eitoolkit.StringMap;
+import de.uni_stuttgart.eitoolkit.*;
 
 public class push {
     public static void main(String[] args) {
-        Sender sender = new Sender(new Description("Kinect"), new StringMap());
-
-        DataMessage msg = new DataMessage("Kinect 123");
+        Description desc = new Description("Java Dummy", "dummy");
+        desc.addDataSeries("val", new DataSeriesInfo(Value.Type.DOUBLE, 0, ""));
 
         int cnt = 0;
 
+        Sender sender = new Sender(desc, new StringMap());
+
+        DataMessage msg = sender.createDataMessage();
+
         long start = System.currentTimeMillis();
         while(System.currentTimeMillis() < start + 5000) {
-            msg.setString("x", "asd");
-            msg.setDouble("y", 325.0);
+            msg.setDouble("val", 42.0);
             sender.sendMessage(msg);
             cnt++;
         }
+
+        sender.delete();
         System.out.println(cnt);
     }
 }
