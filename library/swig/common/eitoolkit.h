@@ -165,6 +165,8 @@ public:
     Sender(Description const& description, StringMap const& options, Transport&, Presentation&);
     ~Sender();
 
+    DataMessage createDataMessage();
+
     void sendMessage(Message const&);
 };
 

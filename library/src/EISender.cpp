@@ -46,7 +46,12 @@ Sender::Sender(Description const& description, StringMap const& options, Transpo
 Sender::~Sender()
 {
     pimpl->transport.removePacketListener(pimpl);
-	delete pimpl;
+    delete pimpl;
+}
+
+DataMessage Sender::createDataMessage()
+{
+    return DataMessage(pimpl->description.getSender());
 }
 
 Sender::SenderImpl::SenderImpl(Description const& description, StringMap const& options)

@@ -5,6 +5,7 @@
 #include "EITransport.h"
 #include "EIPresentation.h"
 #include "EIMessage.h"
+#include "EIDataMessage.h"
 #include "EIDescription.h"
 
 #include <map>
@@ -50,6 +51,11 @@ public:
      */
     Sender(Description const& description, StringMap const& options, Transport& transport, Presentation& presentation);
     ~Sender();
+
+    /**
+     * @brief Create a new DataMessage.
+     */
+    DataMessage createDataMessage();
 
     /**
      * @brief Sends a message.
