@@ -36,7 +36,6 @@ Makefile
 *.pro.user
 
 # C#
-*.csproj.user
 *.suo
 
 *.dll
