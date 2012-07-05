@@ -220,6 +220,10 @@ function(csharp_add_library target)
         list(APPEND _csc_opts "/debug")
     endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
+    if (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+        list(APPEND _csc_opts "/optimize")
+    endif ()
+
     get_library_output_dir(outdir)
     if (NOT IS_ABSOLUTE "${outdir}")
         message(FATAL_ERROR "Directory \"${outdir}\" is not an absolute path!")
