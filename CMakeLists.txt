@@ -7,7 +7,7 @@ set(EIToolkit_VERSION_MAJOR 0)
 set(EIToolkit_VERSION_MINOR 1)
 set(EIToolkit_VERSION_PATCH 1)
 
-set(EIToolkit_VERSION_STRING "${EIToolkit_MAJOR_VERSION}.${EIToolkit_MINOR_VERSION}.${EIToolkit_PATCH_VERSION}")
+set(EIToolkit_VERSION_STRING "${EIToolkit_VERSION_MAJOR}.${EIToolkit_VERSION_MINOR}.${EIToolkit_VERSION_PATCH}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -27,9 +27,9 @@ option(ENABLE_DOCUMENTATION "Build documentation")
 if(ENABLE_DOCUMENTATION)
   add_subdirectory(doc)
 endif()
-option(ENABLE_EXAMPLES "Build examples")
-if(ENABLE_EXAMPLES)
-  add_subdirectory(examples)
+option(ENABLE_TESTS "Build tests")
+if(ENABLE_TESTS)
+  add_subdirectory(tests)
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EIToolkitConfigVersion.cmake.in

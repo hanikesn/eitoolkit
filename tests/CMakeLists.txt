@@ -35,7 +35,7 @@ target_link_libraries(slow_discrete_sender EIToolkit ${Boost_LIBRARIES})
 target_link_libraries(sinus_sender_fast EIToolkit ${Boost_LIBRARIES})
 
 if(WIN32)
-add_custom_target(CopyDLLExamples ALL DEPENDS EIToolkit
+add_custom_target(CopyDLLTests ALL DEPENDS EIToolkit
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:EIToolkit>
         $<TARGET_FILE_DIR:combined>
