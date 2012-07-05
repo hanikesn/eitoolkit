@@ -10,7 +10,7 @@ int main()
     std::string name = "sinus sender";
 
     EI::Description desc(name, "dummy");
-    std::string val = "slow";
+    std::string val = "regular";
     desc.addDataSeries(val, EI::DataSeriesInfo(EI::Value::DOUBLE, EI::DataSeriesInfo::INTERPOLATABLE | EI::DataSeriesInfo::HAS_MINMAX, "", -1.0, 1.0));
 
     EI::Sender sender(desc, EI::StringMap());
