@@ -5,25 +5,24 @@ include(UseDoxygen)
 
 get_target_property(LOC_EI EIToolkit LOCATION)
 
-get_target_property(LOC_EI_CSHARP eitoolkit_csharp LOCATION)
-get_property(LOC_EI_CSHARP_NET TARGET eitoolkit_csharp_net PROPERTY _assembly)
-file(TO_CMAKE_PATH "${LOC_EI_CSHARP_NET}" LOC_EI_CSHARP_NET)
-
-string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI ${LOC_EI})
-string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI_CSHARP ${LOC_EI_CSHARP})
-
 if(WIN32 AND ENABLE_CSHARP)
+	get_target_property(LOC_EI_CSHARP eitoolkit_csharp LOCATION)
+	get_property(LOC_EI_CSHARP_NET TARGET eitoolkit_csharp_net PROPERTY _assembly)
+	file(TO_CMAKE_PATH "${LOC_EI_CSHARP_NET}" LOC_EI_CSHARP_NET)
+
+	string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI ${LOC_EI})
+	string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI_CSHARP ${LOC_EI_CSHARP})
+
 	install(FILES ${LOC_EI} DESTINATION doc/examples/csharp-vc10/)
 	install(FILES ${LOC_EI_CSHARP} DESTINATION doc/examples/csharp-vc10/)
 	install(FILES ${LOC_EI_CSHARP_NET} DESTINATION doc/examples/csharp-vc10/)
 endif()
 
-get_target_property(LOC_EI_JAVA eitoolkit_java LOCATION)
-get_property(LOC_EI_JAVA_JAR TARGET eitoolkit_java_jni PROPERTY JAR_FILE)
-
-string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI_JAVA ${LOC_EI_JAVA})
-
 if(ENABLE_JAVA)
+	get_target_property(LOC_EI_JAVA eitoolkit_java LOCATION)
+	get_property(LOC_EI_JAVA_JAR TARGET eitoolkit_java_jni PROPERTY JAR_FILE)
+
+	string(REGEX REPLACE "\\$\\\(Configuration\\\)" "\${BUILD_TYPE}" LOC_EI_JAVA ${LOC_EI_JAVA})
 	if(WIN32)
 		install(FILES ${LOC_EI} DESTINATION doc/examples/java-idea/)
 	endif()
