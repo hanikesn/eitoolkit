@@ -27,13 +27,13 @@ if(ENABLE_JAVA)
   source_group(Generated FILES ${JAVA_SOURCE_FILES})
   set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${JAVA_SOURCE_FILES}")
 
-  find_package(Java COMPONENTS Development)
+  find_package(Java COMPONENTS Development REQUIRED)
   if(Java_Development_FOUND)
     include(UseJava)
 
     add_jar(eitoolkit_java_jni ${JAVA_SOURCE_FILES})
     add_dependencies(eitoolkit_java_jni eitoolkit_java)
 
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eitoolkit_java_jni.jar DESTINATION java)
+    install_jar(eitoolkit_java_jni java)
   endif()
 endif()
