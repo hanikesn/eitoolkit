@@ -7,7 +7,7 @@ typedef boost::chrono::high_resolution_clock Clock;
 
 int main()
 {
-    std::string name = "sinus sender";
+    std::string name = "sinus sender 2";
 
     EI::Description desc(name, "dummy");
     std::string val = "fast";
