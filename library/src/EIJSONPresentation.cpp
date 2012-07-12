@@ -162,7 +162,7 @@ static std::unique_ptr<Message> decodeDataMessage(Document const& doc, std::stri
     {
         if(v.value.IsString()) {
             packet->setString(v.name.GetString(), v.value.GetString());
-        } else if(v.value.IsDouble()) {
+        } else if(v.value.IsNumber()) {
             packet->setDouble(v.name.GetString(), v.value.GetDouble());
         }
     });
