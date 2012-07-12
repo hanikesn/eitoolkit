@@ -10,7 +10,6 @@ using namespace EI;
 %}
 
 
-%include <enums.swg>
 %include <std_shared_ptr.i>
 %include <stl.i>
 

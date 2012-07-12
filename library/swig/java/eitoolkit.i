@@ -2,6 +2,8 @@
 
 %javaconst(1);
 
+%include <enumtypeunsafe.swg>
+
 %include "../common/eitoolkit.i"
 
 %pragma(java) jniclasscode=%{
