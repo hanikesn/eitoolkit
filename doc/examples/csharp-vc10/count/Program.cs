@@ -12,7 +12,9 @@ namespace count
             public override void onMessage(DataMessage msg)
             {
                 String str = msg.getSender();
-                double val = msg.getDouble("val");
+                String val1 = msg.getString("val1");
+                double val2 = msg.getDouble("val2");
+                double val3 = msg.getDouble("val3");
                 count++;
             }
         }
