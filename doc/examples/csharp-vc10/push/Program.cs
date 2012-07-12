@@ -8,7 +8,9 @@ namespace push
         static void Main(string[] args)
         {
             Description desc = new Description("C# Dummy", "dummy");
-            desc.addDataSeries("val", new DataSeriesInfo(Value.Type.DOUBLE, 0, ""));
+            desc.addDataSeries("val1", new DataSeriesInfo(Value.Type.STRING, 0, ""));
+            desc.addDataSeries("val2", new DataSeriesInfo(Value.Type.DOUBLE, (int)DataSeriesInfo.Property.INTERPOLATABLE, ""));
+            desc.addDataSeries("val3", new DataSeriesInfo(Value.Type.DOUBLE, (int)(DataSeriesInfo.Property.INTERPOLATABLE | DataSeriesInfo.Property.HAS_MINMAX), "", 0.0, 1.0));
 
             int cnt = 0;
 
@@ -19,7 +21,9 @@ namespace push
                 long start = DateTime.Now.Ticks;
                 while (DateTime.Now.Ticks < start + 5 * TimeSpan.TicksPerSecond)
                 {
-                    msg.setDouble("val", 42.0);
+                    msg.setString("val1", "hello");
+                    msg.setDouble("val2", 42.0);
+                    msg.setDouble("val3", 0.5);
                     sender.sendMessage(msg);
                     cnt++;
                 }
