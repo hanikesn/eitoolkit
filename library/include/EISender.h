@@ -22,8 +22,10 @@ namespace EI
  * Options for the the Sender, Transport and Presentation can be configured via the options the parameter of the constuctor.
  *
  * @section Example
+ *
+ * A very simple example. You should also add information about the dataSeries to the description.
  * @code
- * EI::Sender sender(EI::Description("Sender"), EI::StringMap());
+ * EI::Sender sender(EI::Description("Sender", "dummy"), EI::StringMap());
  * EI::DataMessage msg("Sender");
  * msg.setDouble("x", 42.0);
  * sender.sendMessage(msg);
