@@ -18,9 +18,9 @@ int main()
 
     const std::string id = "val";
 
-    int cnt = 0;
-
     EI::DataMessage msg = sender.createDataMessage();
+
+    int seconds = 0;
 
     while(true)
     {
@@ -32,18 +32,20 @@ int main()
                 rec.waitForMessages(10000);
                 std::vector<EI::DataMessage> msgs = rec.getMessages();
                 std::for_each(msgs.begin(), msgs.end(), 
-                    [&waiting](const EI::DataMessage& msg)
+                    [&waiting, &seconds](const EI::DataMessage& msg)
                     {
                         if(msg.getSender() == "count")
                         {
+                            seconds = msg.getDouble("seconds");
                             waiting = false;
                         }
                     }
                 );
             }
         }
+        int cnt = 0;
         Clock::time_point start = Clock::now();
-        while(Clock::now() < start + boost::chrono::seconds(5))
+        while(Clock::now() < start + boost::chrono::seconds(seconds))
         {
             msg.setDouble(id,  100.0);
  

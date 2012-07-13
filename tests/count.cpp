@@ -32,7 +32,9 @@ int main()
 
     {
         EI::Sender sender(EI::Description("count", "dummy"), options, transport, presentation);
-        sender.sendMessage(sender.createDataMessage());
+        EI::DataMessage msg = sender.createDataMessage();
+        msg.setDouble("seconds", 15);
+        sender.sendMessage(msg);
         boost::this_thread::sleep(boost::posix_time::milliseconds(250));
     }
 
