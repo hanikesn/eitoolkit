@@ -23,20 +23,24 @@ public:
 BlockingReceiver::BlockingReceiver(StringMap const& options)
     : pimpl(new BlockingReceiverImpl(options))
 {
+    pimpl->receiver.addDataListener(pimpl);
 }
 
 BlockingReceiver::BlockingReceiver(StringMap const& options, Transport& transport)
     : pimpl(new BlockingReceiverImpl(options, transport))
 {
+    pimpl->receiver.addDataListener(pimpl);
 }
 
 BlockingReceiver::BlockingReceiver(StringMap const& options, Transport& transport, Presentation& presentation)
     : pimpl(new BlockingReceiverImpl(options, transport, presentation))
 {
+    pimpl->receiver.addDataListener(pimpl);
 }
 
 BlockingReceiver::~BlockingReceiver()
 {
+    pimpl->receiver.removeDataListener(pimpl);
     delete pimpl;
 }
 
