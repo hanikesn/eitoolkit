@@ -3,6 +3,9 @@
 #include <iostream>
 #include <algorithm>
 
+#include <boost/chrono.hpp>
+#include <boost/thread.hpp>
+
 volatile int count = 0;
 
 class ExampleListener : public EI::DataListener
@@ -20,10 +23,18 @@ int main()
 
     EI::StringMap options;
 
-    EI::Receiver receiver(options);
+    EI::UDPTransport transport(options);
+    EI::JSONPresentation presentation(options);
+    EI::Receiver receiver(options, transport, presentation);
 
     ExampleListener listener;
     receiver.addDataListener(&listener);
+
+    {
+        EI::Sender sender(EI::Description("count", "dummy"), options, transport, presentation);
+        sender.sendMessage(sender.createDataMessage());
+        boost::this_thread::sleep(boost::posix_time::milliseconds(250));
+    }
 
     std::cin.get();
 
