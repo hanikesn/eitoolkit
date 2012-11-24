@@ -19,6 +19,9 @@ set(BOOST_components system)
 
 if(NOT HAVE_THREAD_H)
   list(APPEND BOOST_components thread)
+  if(MSVC)
+    list(APPEND BOOST_components chrono)
+  endif()
 endif()
 
 set(Boost_DEBUG FALSE CACHE BOOL "Set this to debug the finding of boost")
