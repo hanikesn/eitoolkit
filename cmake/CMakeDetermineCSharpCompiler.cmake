@@ -83,7 +83,11 @@ endif (CMAKE_CSharp_COMPILER)
 # CMAKE_CURRENT_LIST_DIR is only supported in 2.8.3 and up
 get_filename_component(script_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
-# configure variables set in this file for fast reload later on
+if (${CMAKE_VERSION} VERSION_LESS "2.8.10")
+  set (COMPILER_SUPPORT_SUBDIRECTORY "")
+else (${CMAKE_VERSION} VERSION_LESS "2.8.10")
+  set (COMPILER_SUPPORT_SUBDIRECTORY "/${CMAKE_VERSION}")
+endif (${CMAKE_VERSION} VERSION_LESS "2.8.10")
+
 configure_file(${script_dir}/CMakeCSharpCompiler.cmake.in
-  ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeCSharpCompiler.cmake IMMEDIATE @ONLY)
-set(CMAKE_CSharp_COMPILER_ENV_VAR "CSC")
+  ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}${COMPILER_SUPPORT_SUBDIRECTORY}/CMakeCSharpCompiler.cmake IMMEDIATE @ONLY)
