@@ -78,6 +78,7 @@ mark_as_advanced(CMAKE_CSharp_COMPILER)
 
 if (CMAKE_CSharp_COMPILER)
     set (CMAKE_CSharp_COMPILER_LOADED 1)
+    set (CMAKE_CSharp_COMPILER_ENV_VAR "CSC")
 endif (CMAKE_CSharp_COMPILER)
 
 # CMAKE_CURRENT_LIST_DIR is only supported in 2.8.3 and up
